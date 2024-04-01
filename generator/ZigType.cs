@@ -1,4 +1,3 @@
-using System.Reflection;
 using System.Reflection.Metadata;
 
 namespace ZigWin32;
