@@ -20,4 +20,10 @@ pub fn build(b: *std.Build) void {
 
     const test_step = b.step("test", "Run unit tests");
     test_step.dependOn(&run_unit_tests.step);
+
+    const generate = b.addSystemCommand(&.{ "dotnet", "run", "--project", "generator" });
+    generate.addFileArg(.{ .path = "src/win32.zig" });
+
+    const generate_step = b.step("generate", "Generate src/win32.zig");
+    generate_step.dependOn(&generate.step);
 }
