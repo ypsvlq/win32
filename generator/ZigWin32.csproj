@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.SDK.Win32Metadata" Version="59.0.13-preview" />
+    <PackageReference Include="Microsoft.Windows.SDK.Win32Metadata" Version="60.0.34-preview" />
   </ItemGroup>
 
   <ItemGroup>
