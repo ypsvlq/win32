@@ -102,7 +102,6 @@ class Generator {
         output.WriteLine("""
             const std = @import("std");
             const arch = @import("builtin").cpu.arch;
-            const win32 = @This();
             const FlexibleArrayType = std.zig.c_translation.FlexibleArrayType;
             pub const GUID = std.os.windows.GUID;
             pub const WINAPI = std.os.windows.WINAPI;
@@ -146,7 +145,7 @@ class Generator {
                 }
                 indent--;
                 output.WriteLine($$"""
-                        else => @compileError("{{name}}" ++ " unsupported for target architecture"),
+                        else => @compileError("{{name}} unsupported for target architecture"),
                     };
                     """);
             } else {
@@ -347,7 +346,7 @@ class Generator {
                     Indent();
                 }
                 if (fieldType.Name == fieldName) {
-                    fieldType.Name = $"win32.{fieldType.Name}";
+                    fieldType.Name = $"@This().{fieldType.Name}";
                 }
                 fieldType.Shape = new();
                 output.WriteLine($"pub fn {fieldName}(self: anytype) FlexibleArrayType(@TypeOf(self), {fieldType}) {{");
