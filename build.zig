@@ -5,13 +5,13 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
 
     _ = b.addModule("win32", .{
-        .root_source_file = .{ .path = "src/win32.zig" },
+        .root_source_file = b.path("src/win32.zig"),
         .target = target,
         .optimize = optimize,
     });
 
     const unit_tests = b.addTest(.{
-        .root_source_file = .{ .path = "src/win32.zig" },
+        .root_source_file = b.path("src/win32.zig"),
         .target = target,
         .optimize = optimize,
     });
@@ -22,7 +22,7 @@ pub fn build(b: *std.Build) void {
     test_step.dependOn(&run_unit_tests.step);
 
     const generate = b.addSystemCommand(&.{ "dotnet", "run", "--project", "generator" });
-    generate.addFileArg(.{ .path = "src/win32.zig" });
+    generate.addFileArg(b.path("src/win32.zig"));
 
     const generate_step = b.step("generate", "Generate src/win32.zig");
     generate_step.dependOn(&generate.step);
