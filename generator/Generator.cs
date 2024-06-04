@@ -226,6 +226,10 @@ class Generator {
                             pub const GetClassLongPtrW = GetClassLongW;
                             pub const GetWindowLongPtrA = GetWindowLongA;
                             pub const GetWindowLongPtrW = GetWindowLongW;
+                            pub const SetClassLongPtrA = SetClassLongA;
+                            pub const SetClassLongPtrW = SetClassLongW;
+                            pub const SetWindowLongPtrA = SetWindowLongA;
+                            pub const SetWindowLongPtrW = SetWindowLongW;
                     """);
             }
             foreach (var method in list) {
