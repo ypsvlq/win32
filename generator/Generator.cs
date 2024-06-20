@@ -244,6 +244,8 @@ class Generator {
             };
             """);
 
+        var constants = new SortedList<string, string>();
+
         foreach (var (prefix, list) in enums) {
             foreach (var type in list) {
                 var values = type.GetFields().Select(reader.GetFieldDefinition);
@@ -254,7 +256,7 @@ class Generator {
                         name = $"{prefix}_{name}";
                     }
                     var value = valueType.ReadBlob(reader.GetBlobReader(reader.GetConstant(field.GetDefaultValue()).Value));
-                    output.WriteLine($"pub const {name} = {value};");
+                    constants.Add(name, value);
                 }
             }
         }
@@ -264,22 +266,20 @@ class Generator {
                 case "CONDITION_VARIABLE_INIT":
                 case "INIT_ONCE_STATIC_INIT":
                 case "SRWLOCK_INIT":
-                    output.WriteLine($"pub const {name} = .{{ .Ptr = null }};");
+                    constants.Add(name, ".{ .Ptr = null }");
                     continue;
             }
+            var value = "";
             var type = field.DecodeSignature(zigTypeDecoder, null);
             var attributes = new Attributes(reader, field);
-            var suffix = types.ContainsKey(name) ? "_" : "";
-            output.Write($"pub const {name}{suffix} = ");
             if (typedefs.TryGetValue(type.Name, out var typedef)) {
-                var value = reader.GetFieldDefinition(typedef.GetFields().First());
-                type = value.DecodeSignature(zigTypeDecoder, null);
+                type = reader.GetFieldDefinition(typedef.GetFields().First()).DecodeSignature(zigTypeDecoder, null);
             }
             switch (type.Name) {
                 case "String":
                     var unicode = !attributes.ContainsKey("NativeEncoding");
-                    if (unicode) output.Write("L(");
-                    var value = "";
+                    if (unicode) value += "L(";
+                    value += "\"";
                     foreach (var c in Encoding.Unicode.GetString(reader.GetBlobBytes(reader.GetConstant(field.GetDefaultValue()).Value))) {
                         value += c switch {
                             '\\' => @"\\",
@@ -288,33 +288,35 @@ class Generator {
                             _ => c.ToString(),
                         };
                     }
-                    output.Write($"\"{value}\"");
-                    if (unicode) output.Write(')');
+                    value += "\"";
+                    if (unicode) value += ")";
                     break;
                 case "GUID":
-                    GenerateGuid(attributes["Guid"].FixedArguments);
+                    value = ZigGuid(attributes["Guid"].FixedArguments);
                     break;
                 case "anyopaque":
-                    output.Write($"@as(?*anyopaque, @ptrFromInt({type.ReadBlob(reader.GetBlobReader(reader.GetConstant(field.GetDefaultValue()).Value))}))");
+                    value = $"@as(?*anyopaque, @ptrFromInt({type.ReadBlob(reader.GetBlobReader(reader.GetConstant(field.GetDefaultValue()).Value))}))";
                     break;
                 case "PROPERTYKEY":
                 case "DEVPROPKEY":
                     var list = ((string)attributes["Constant"].FixedArguments[0])[1..].Replace("}", "").Split(',', StringSplitOptions.TrimEntries);
-                    output.Write($"{type}{{ .fmtid = ");
-                    GenerateGuid(list);
-                    output.Write($", .pid = {list[11]} }}");
+                    value = $"{type}{{ .fmtid = {ZigGuid(list)}, .pid = {list[11]} }}";
                     break;
                 case "SID_IDENTIFIER_AUTHORITY":
                     var bytes = ((string)attributes["Constant"].FixedArguments[0])[1..^1];
-                    output.Write($"SID_IDENTIFIER_AUTHORITY{{ .Value = .{{ {bytes} }} }}");
+                    value = $"SID_IDENTIFIER_AUTHORITY{{ .Value = .{{ {bytes} }} }}";
                     break;
                 default:
-                    output.Write(type.ReadBlob(reader.GetBlobReader(reader.GetConstant(field.GetDefaultValue()).Value)));
+                    value = type.ReadBlob(reader.GetBlobReader(reader.GetConstant(field.GetDefaultValue()).Value));
                     break;
             }
-            output.WriteLine(';');
+            var suffix = types.ContainsKey(name) ? "_" : "";
+            constants.Add($"{name}{suffix}", value);
         }
 
+        foreach (var (name, value) in constants) {
+            output.WriteLine($"pub const {name} = {value};");
+        }
     }
 
     void GenerateType(TypeWithAttributes info) {
@@ -520,7 +522,11 @@ class Generator {
     }
 
     void GenerateGuid(object[] guid) {
-        output.Write($"GUID{{ .Data1 = {guid[0]}, .Data2 = {guid[1]}, .Data3 = {guid[2]}, .Data4 = .{{ {guid[3]}, {guid[4]}, {guid[5]}, {guid[6]}, {guid[7]}, {guid[8]}, {guid[9]}, {guid[10]} }} }}");
+        output.Write(ZigGuid(guid));
+    }
+
+    static string ZigGuid(object[] guid) {
+        return $"GUID{{ .Data1 = {guid[0]}, .Data2 = {guid[1]}, .Data3 = {guid[2]}, .Data4 = .{{ {guid[3]}, {guid[4]}, {guid[5]}, {guid[6]}, {guid[7]}, {guid[8]}, {guid[9]}, {guid[10]} }} }}";
     }
 
     string ZigName(StringHandle handle, HashSet<string>? badNames = null) {
