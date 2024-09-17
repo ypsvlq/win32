@@ -13,12 +13,8 @@ class ZigType(string name) {
         if (Shape.Rank > 0) {
             result += $"[{Shape.Sizes[0]}]";
         }
-        for (int i = 0; i < Pointers; i++) {
-            if (Name == "anyopaque" && i == Pointers - 1) {
-                result += "?*";
-            } else {
-                result += "[*c]";
-            }
+        for (int i = 1; i <= Pointers; i++) {
+            result += (Name == "anyopaque" && i == Pointers) ? "?*" : "[*c]";
         }
         if (Const && Pointers > 0) {
             result += "const ";
