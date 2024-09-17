@@ -151,10 +151,12 @@ class Generator {
             } else {
                 var info = list[0];
                 if (info.Attributes.TryGetValue("Guid", out var attribute)) {
-                    output.Write($"pub const CLSID_{name} = ");
-                    GenerateGuid(attribute.FixedArguments);
-                    output.WriteLine(';');
                     if (info.Type.GetFields().Count == 0) {
+                        output.Write("pub const ");
+                        if (!name.Contains('_')) output.Write("CLSID_");
+                        output.Write($"{name} = ");
+                        GenerateGuid(attribute.FixedArguments);
+                        output.WriteLine(';');
                         continue;
                     }
                 }
