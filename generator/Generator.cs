@@ -399,13 +399,13 @@ class Generator {
         if (level == 0) {
             output.WriteLine($$"""
                 pub const {{self}} = extern struct {
-                    lpVtbl: *VTable,
-                    const VTable = extern struct {
+                    lpVtbl: *const Vtbl,
+                    pub const Vtbl = extern struct {
                 """);
             indent += 2;
             if (maybeParent is TypeReference) {
                 Indent();
-                output.WriteLine($"base: {zigTypeDecoder.GetName(reader, maybeParent.Value)}.VTable,");
+                output.WriteLine($"parent: {zigTypeDecoder.GetName(reader, maybeParent.Value)}.Vtbl,");
             }
 
             foreach (var method in vtable) {
@@ -443,7 +443,7 @@ class Generator {
             indent++;
             Indent();
             output.Write("return self.lpVtbl.");
-            for (int i = 0; i < level; i++) output.Write("base.");
+            for (int i = 0; i < level; i++) output.Write("parent.");
             output.Write($"{name}(self");
             foreach (var parameter in method.GetParameters().Select(reader.GetParameter).Select(parameter => parameter.Name).Select(name => ZigName(name, badNames)).Where(name => name.Length > 0)) {
                 output.Write($", {parameter}");
