@@ -336,6 +336,9 @@ class Generator {
         }
 
         var keyword = info.Type.Attributes.HasFlag(TypeAttributes.ExplicitLayout) ? "union" : "struct";
+        var pack = info.Type.GetLayout().PackingSize;
+        var align = pack == 0 ? "" : $" align({pack})";
+
         output.Write($"extern {keyword} {{");
         indent++;
 
@@ -374,7 +377,7 @@ class Generator {
                     fieldType.Const = fieldAttributes.ContainsKey("Const");
                     output.Write(fieldType);
                 }
-                output.Write(',');
+                output.Write($"{align},");
             }
         }
 
