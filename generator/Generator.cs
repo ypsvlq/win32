@@ -104,7 +104,6 @@ class Generator {
             const arch = @import("builtin").cpu.arch;
             const FlexibleArrayType = std.zig.c_translation.FlexibleArrayType;
             pub const GUID = std.os.windows.GUID;
-            pub const WINAPI = std.os.windows.WINAPI;
             pub const L = std.unicode.utf8ToUtf16LeStringLiteral;
             test {
                 @setEvalBranchQuota(1000000);
@@ -517,10 +516,10 @@ class Generator {
 
         if (callingConvention != 0) {
             var callconv = callingConvention switch {
-                CallingConvention.Winapi => "WINAPI",
-                CallingConvention.Cdecl => ".C",
+                CallingConvention.Winapi => "winapi",
+                CallingConvention.Cdecl => "c",
             };
-            output.Write($"callconv({callconv}) ");
+            output.Write($"callconv(.{callconv}) ");
         }
 
         output.Write(new Attributes(reader, method).ContainsKey("DoesNotReturn") ? "noreturn" : signature.ReturnType);
