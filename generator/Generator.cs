@@ -474,7 +474,7 @@ class Generator {
         var import = method.GetImport();
         var dll = Path.GetFileNameWithoutExtension(reader.GetString(reader.GetModuleReference(import.Module).Name)).ToLowerInvariant();
 
-        if (unknownDlls.Contains(dll)) {
+        if (missingDlls.Contains(dll)) {
             return;
         } else if (dll == "forceinline") {
             Indent();
@@ -559,7 +559,7 @@ class Generator {
         aarch64 = 4,
     }
 
-    readonly HashSet<string> unknownDlls = [
+    readonly HashSet<string> missingDlls = [
         "amsi",
         "api-ms-win-appmodel-runtime-l1-1-6",
         "api-ms-win-core-ioring-l1-1-0",
@@ -571,7 +571,6 @@ class Generator {
         "api-ms-win-service-core-l1-1-5",
         "api-ms-win-wsl-api-l1-1-0",
         "bcp47mrm",
-        "bcryptprimitives",
         "certadm",
         "certpoleng",
         "chakra",
@@ -607,7 +606,6 @@ class Generator {
         "msdelta",
         "mspatchc",
         "netsh",
-        "ninput",
         "ntdllk",
         "ondemandconnroutehelper",
         "opmxbox",
