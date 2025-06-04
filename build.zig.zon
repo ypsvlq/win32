@@ -1,5 +1,6 @@
 .{
-    .name = "win32",
+    .name = .win32,
     .version = "0.0.0",
-    .paths = .{ "build.zig", "build.zig.zon", "src" },
+    .fingerprint = 0xb50ba1d16d2e75e1,
+    .paths = .{ "build.zig", "build.zig.zon", "src", "LICENSE.txt" },
 }
