@@ -26,8 +26,8 @@ class ZigType(string name) {
     public string ReadBlob(BlobReader reader) {
         if (Pointers > 0) {
             return reader.Length switch {
-                4 => reader.ReadUInt32().ToString(),
-                2 => reader.ReadUInt16().ToString(),
+                4 => reader.ReadInt32().ToString(),
+                2 => reader.ReadInt16().ToString(),
             };
         }
         return Name switch {

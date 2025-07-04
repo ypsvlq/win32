@@ -319,8 +319,13 @@ class Generator {
                     break;
                 default:
                     value = type.ReadBlob(reader.GetBlobReader(reader.GetConstant(field.GetDefaultValue()).Value));
-                    if (type.Name == "anyopaque") {
-                        value = $"@ptrFromInt({value})";
+                    if (type.Pointers > 0) {
+                        if (value[0] == '-') {
+                            value = $"@as(usize, @bitCast(@as(isize, {value})))";
+                        }
+                        if (type.Name == "anyopaque") {
+                            value = $"@ptrFromInt({value})";
+                        }
                     }
                     break;
             }
