@@ -43,4 +43,11 @@ class ZigType(string name) {
             "f64" => reader.ReadDouble().ToString(),
         };
     }
+
+    public bool IsPrimitive() {
+        return Pointers > 0 || Name switch {
+            "void" or "bool" or "i8" or "u8" or "i16" or "u16" or "i32" or "u32" or "i64" or "u64" or "f32" or "f64" or "isize" or "usize" => true,
+            _ => false,
+        };
+    }
 };

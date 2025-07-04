@@ -438,7 +438,7 @@ class Generator {
                     counts[method.Name] = ++count;
                 }
                 output.Write(": *const fn (self: *const anyopaque");
-                GenerateMethodSignature(method, CallingConvention.Winapi, ", ");
+                GenerateMethodSignature(method, CallingConvention.ThisCall, ", ");
                 output.WriteLine(',');
             }
             counts = counts.Keys.ToDictionary(x => x, _ => 1);
@@ -460,17 +460,33 @@ class Generator {
             Indent();
             var prefix = used.Add(name) ? "" : $"{reader.GetString(type.Name)}_";
             output.Write($"pub fn {prefix}{name}(self: *const {self}");
-            GenerateMethodSignature(method, 0, ", ", badNames);
+            var signature = GenerateMethodSignature(method, 0, ", ", badNames);
+            var returnType = signature.ReturnType;
+            if (typedefs.TryGetValue(returnType.ToString(), out var typedef)) {
+                returnType = reader.GetFieldDefinition(typedef.GetFields().First()).DecodeSignature(zigTypeDecoder, null);
+            }
+            var primitive = returnType.IsPrimitive();
             output.WriteLine(" {");
             indent++;
             Indent();
-            output.Write("return self.lpVtbl.");
+            if (!primitive) {
+                output.WriteLine($"var result: {returnType} = undefined;");
+                Indent();
+            } else {
+                output.Write("return ");
+            }
+            output.Write("self.lpVtbl.");
             for (int i = 0; i < level; i++) output.Write("parent.");
             output.Write($"{name}(self");
+            if (!primitive) output.Write(", &result");
             foreach (var parameter in method.GetParameters().Select(reader.GetParameter).Select(parameter => parameter.Name).Select(name => ZigName(name, badNames)).Where(name => name.Length > 0)) {
                 output.Write($", {parameter}");
             }
             output.WriteLine(");");
+            if (!primitive) {
+                Indent();
+                output.WriteLine("return result;");
+            }
             indent--;
             Indent();
             output.WriteLine("}");
@@ -516,11 +532,24 @@ class Generator {
         output.WriteLine(';');
     }
 
-    void GenerateMethodSignature(MethodDefinition method, CallingConvention callingConvention, string prefix = "", HashSet<string>? badNames = null) {
+    MethodSignature<ZigType> GenerateMethodSignature(MethodDefinition method, CallingConvention callingConvention, string prefix = "", HashSet<string>? badNames = null) {
         var signature = method.DecodeSignature(zigTypeDecoder, null);
         var parameters = method.GetParameters().Select(reader.GetParameter).Where(parameter => reader.GetString(parameter.Name).Length > 0);
         var names = parameters.Select(parameter => parameter.Name).Select(name => ZigName(name, badNames));
         var hasNames = prefix != "" || names.Any(name => !name.StartsWith("param"));
+
+        var returnTypeName = new Attributes(reader, method).ContainsKey("DoesNotReturn") ? "noreturn" : signature.ReturnType.ToString();
+
+        if (callingConvention == CallingConvention.ThisCall) {
+            var returnType = signature.ReturnType;
+            if (typedefs.TryGetValue(returnType.ToString(), out var typedef)) {
+                returnType = reader.GetFieldDefinition(typedef.GetFields().First()).DecodeSignature(zigTypeDecoder, null);
+            }
+            if (!returnType.IsPrimitive()) {
+                output.Write($", result: *{returnType}");
+                returnTypeName = "void";
+            }
+        }
 
         foreach (var (name, parameter, type) in names.Zip(parameters, signature.ParameterTypes)) {
             type.Const = new Attributes(reader, parameter).ContainsKey("Const");
@@ -536,13 +565,15 @@ class Generator {
 
         if (callingConvention != 0) {
             var callconv = callingConvention switch {
-                CallingConvention.Winapi => "winapi",
+                CallingConvention.Winapi or CallingConvention.ThisCall => "winapi",
                 CallingConvention.Cdecl => "c",
             };
             output.Write($"callconv(.{callconv}) ");
         }
 
-        output.Write(new Attributes(reader, method).ContainsKey("DoesNotReturn") ? "noreturn" : signature.ReturnType);
+        output.Write(returnTypeName);
+
+        return signature;
     }
 
     static string ZigGuid(object[] guid) {
