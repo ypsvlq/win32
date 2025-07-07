@@ -10,12 +10,12 @@ class Generator {
     readonly MetadataReader reader;
     readonly StreamWriter output;
     readonly ZigTypeDecoder zigTypeDecoder = new();
-    readonly SortedList<string, List<TypeWithAttributes>> types = [];
-    readonly SortedList<string, TypeDefinition> typedefs = [];
-    readonly SortedList<string, List<TypeWithAttributes>> interfaces = [];
-    readonly SortedList<string, List<TypeDefinition>> enums = [];
-    readonly SortedList<string, List<MethodDefinition>> methods = [];
-    readonly SortedList<string, FieldDefinition> fields = [];
+    readonly SortedDictionary<string, List<TypeWithAttributes>> types = [];
+    readonly SortedDictionary<string, TypeDefinition> typedefs = [];
+    readonly SortedDictionary<string, List<TypeWithAttributes>> interfaces = [];
+    readonly SortedDictionary<string, List<TypeDefinition>> enums = [];
+    readonly SortedDictionary<string, List<MethodDefinition>> methods = [];
+    readonly SortedDictionary<string, FieldDefinition> fields = [];
     readonly Dictionary<string, int> names = [];
 
     public Generator(StreamWriter writer) {
@@ -260,7 +260,7 @@ class Generator {
             };
             """);
 
-        var constants = new SortedList<string, (string, string)>();
+        var constants = new SortedDictionary<string, (string, string)>();
 
         foreach (var (prefix, list) in enums) {
             foreach (var type in list) {
