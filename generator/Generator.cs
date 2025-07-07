@@ -182,21 +182,127 @@ class Generator {
             }
         }
 
-        foreach (var (name, list) in interfaces) {
-            switch (name) {
-                case "ICompositionCapabilitiesInteropFactory":
-                case "ICompositorDesktopInterop":
-                case "ICompositorInterop":
-                case "ICompositorInterop2":
-                case "IGraphicsEffectD2D1Interop":
-                    continue;
-            }
+        foreach (var list in interfaces.Values) {
             foreach (var info in list) {
                 var self = zigTypeDecoder.GetName(reader, info.Type);
+
                 if (info.Attributes.TryGetValue("Guid", out var attribute)) {
                     output.WriteLine($"pub const IID_{self}: GUID = {ZigGuid(attribute.FixedArguments)};");
                 }
-                GenerateInterface(self, info.Type);
+
+                switch (self) {
+                    case "ICompositionCapabilitiesInteropFactory":
+                    case "ICompositorDesktopInterop":
+                    case "ICompositorInterop":
+                    case "ICompositorInterop2":
+                    case "IGraphicsEffectD2D1Interop":
+                        continue;
+                }
+
+                output.WriteLine($$"""
+                    pub const {{self}} = extern struct {
+                        lpVtbl: *const Vtbl,
+                        pub const Vtbl = extern struct {
+                    """);
+                indent += 2;
+
+                Stack<List<MethodDefinition>> interfaceStack = [];
+                TypeDefinition type = info.Type;
+                while (true) {
+                    interfaceStack.Push([.. type.GetMethods().Select(reader.GetMethodDefinition)]);
+
+                    var implementations = type.GetInterfaceImplementations();
+                    if (implementations.Count == 0) break;
+
+                    var parent = implementations.Select(reader.GetInterfaceImplementation)
+                        .Select(implementation => (TypeReferenceHandle)implementation.Interface)
+                        .Select(reader.GetTypeReference)
+                        .Single();
+                    type = interfaces[reader.GetString(parent.Name)].Single(info => info.Type.Namespace == parent.Namespace).Type;
+                }
+
+                var overloads = interfaceStack.SelectMany(x => x)
+                    .Select(method => method.Name)
+                    .GroupBy(x => x)
+                    .Where(group => group.Count() > 1)
+                    .ToDictionary(group => group.Key, _ => 1);
+
+                HashSet<string> badNames = [];
+
+                foreach (var methods in interfaceStack) {
+                    foreach (var method in methods) {
+                        var name = ZigName(method.Name);
+                        badNames.Add(name);
+                        Indent();
+                        output.Write($"{name}");
+                        if (overloads.TryGetValue(method.Name, out var count)) {
+                            output.Write($"_{count}");
+                            overloads[method.Name]++;
+                        }
+                        output.Write($": *const fn (self: *{self}");
+                        GenerateMethodSignature(method, CallingConvention.ThisCall, ", ");
+                        output.WriteLine(',');
+                    }
+                }
+                indent--;
+                Indent();
+                output.WriteLine("};");
+
+                overloads = overloads.Keys.ToDictionary(x => x, _ => 1);
+
+                foreach (var methods in interfaceStack) {
+                    foreach (var method in methods) {
+                        var name = ZigName(method.Name);
+                        if (overloads.TryGetValue(method.Name, out var count)) {
+                            name += $"_{count}";
+                            overloads[method.Name]++;
+                        }
+
+                        Indent();
+                        output.Write($"pub fn {name}(self: *{self}");
+                        var signature = GenerateMethodSignature(method, 0, ", ", badNames);
+                        output.WriteLine(" {");
+                        indent++;
+
+                        var returnType = signature.ReturnType;
+                        if (typedefs.TryGetValue(returnType.ToString(), out var typedef)) {
+                            returnType = reader.GetFieldDefinition(typedef.GetFields().First()).DecodeSignature(zigTypeDecoder, null);
+                        }
+                        var primitive = returnType.IsPrimitive();
+
+                        Indent();
+                        if (!primitive) {
+                            output.WriteLine($"var result: {returnType} = undefined;");
+                            Indent();
+                        } else {
+                            output.Write("return ");
+                        }
+
+                        output.Write($"self.lpVtbl.{name}(self");
+                        if (!primitive) output.Write(", &result");
+                        var parameters = method.GetParameters()
+                            .Select(reader.GetParameter)
+                            .Select(parameter => parameter.Name)
+                            .Select(name => ZigName(name, badNames))
+                            .Where(name => name.Length > 0);
+                        foreach (var parameter in parameters) {
+                            output.Write($", {parameter}");
+                        }
+                        output.WriteLine(");");
+
+                        if (!primitive) {
+                            Indent();
+                            output.WriteLine("return result;");
+                        }
+
+                        indent--;
+                        Indent();
+                        output.WriteLine("}");
+                    }
+                }
+
+                indent--;
+                output.WriteLine("};");
             }
         }
 
@@ -406,101 +512,6 @@ class Generator {
             Indent();
         }
         output.Write('}');
-    }
-
-    void GenerateInterface(string self, TypeDefinition type, int level = 0, HashSet<string>? maybeUsed = null) {
-        var vtable = type.GetMethods().Select(reader.GetMethodDefinition);
-        var counts = vtable.Select(method => method.Name).GroupBy(x => x).Where(group => group.Count() > 1).ToDictionary(group => group.Key, _ => 1);
-        var used = maybeUsed ?? [];
-        var maybeParent = type.GetInterfaceImplementations()
-                              .Select(reader.GetInterfaceImplementation)
-                              .Select(i => (TypeReferenceHandle)i.Interface)
-                              .Select(handle => (TypeReference?)reader.GetTypeReference(handle))
-                              .SingleOrDefault();
-
-        if (level == 0) {
-            output.WriteLine($$"""
-                pub const {{self}} = extern struct {
-                    lpVtbl: *const Vtbl,
-                    pub const Vtbl = extern struct {
-                """);
-            indent += 2;
-            if (maybeParent is TypeReference) {
-                Indent();
-                output.WriteLine($"parent: {zigTypeDecoder.GetName(reader, maybeParent.Value)}.Vtbl,");
-            }
-
-            foreach (var method in vtable) {
-                Indent();
-                output.Write($"{ZigName(method.Name)}");
-                if (counts.TryGetValue(method.Name, out int count)) {
-                    output.Write($"_{count}");
-                    counts[method.Name] = ++count;
-                }
-                output.Write(": *const fn (self: *const anyopaque");
-                GenerateMethodSignature(method, CallingConvention.ThisCall, ", ");
-                output.WriteLine(',');
-            }
-            counts = counts.Keys.ToDictionary(x => x, _ => 1);
-
-            indent--;
-            Indent();
-            output.WriteLine("};");
-        }
-
-        var badNames = vtable.Select(method => method.Name).Select(reader.GetString).ToHashSet();
-
-        foreach (var method in vtable) {
-            var name = ZigName(method.Name);
-            if (counts.TryGetValue(method.Name, out int count)) {
-                name += $"_{count}";
-                counts[method.Name] = ++count;
-            }
-
-            Indent();
-            var prefix = used.Add(name) ? "" : $"{reader.GetString(type.Name)}_";
-            output.Write($"pub fn {prefix}{name}(self: *const {self}");
-            var signature = GenerateMethodSignature(method, 0, ", ", badNames);
-            var returnType = signature.ReturnType;
-            if (typedefs.TryGetValue(returnType.ToString(), out var typedef)) {
-                returnType = reader.GetFieldDefinition(typedef.GetFields().First()).DecodeSignature(zigTypeDecoder, null);
-            }
-            var primitive = returnType.IsPrimitive();
-            output.WriteLine(" {");
-            indent++;
-            Indent();
-            if (!primitive) {
-                output.WriteLine($"var result: {returnType} = undefined;");
-                Indent();
-            } else {
-                output.Write("return ");
-            }
-            output.Write("self.lpVtbl.");
-            for (int i = 0; i < level; i++) output.Write("parent.");
-            output.Write($"{name}(self");
-            if (!primitive) output.Write(", &result");
-            foreach (var parameter in method.GetParameters().Select(reader.GetParameter).Select(parameter => parameter.Name).Select(name => ZigName(name, badNames)).Where(name => name.Length > 0)) {
-                output.Write($", {parameter}");
-            }
-            output.WriteLine(");");
-            if (!primitive) {
-                Indent();
-                output.WriteLine("return result;");
-            }
-            indent--;
-            Indent();
-            output.WriteLine("}");
-        }
-
-        if (maybeParent is TypeReference parent) {
-            var name = reader.GetString(parent.Name);
-            GenerateInterface(self, type = interfaces[name].Where(info => info.Type.Namespace == parent.Namespace).Single().Type, level + 1, used);
-        }
-
-        if (level == 0) {
-            indent--;
-            output.WriteLine("};");
-        }
     }
 
     void GenerateMethod(MethodDefinition method) {
