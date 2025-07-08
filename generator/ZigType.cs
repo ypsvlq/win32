@@ -50,4 +50,16 @@ class ZigType(string name) {
             _ => false,
         };
     }
+
+    public string FormatConstant(string value) {
+        if (Pointers > 0) {
+            if (value[0] == '-') {
+                value = $"@as(usize, @bitCast(@as(isize, {value})))";
+            }
+            if (Name == "anyopaque") {
+                value = $"@ptrFromInt({value})";
+            }
+        }
+        return value;
+    }
 };

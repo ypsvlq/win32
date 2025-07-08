@@ -347,11 +347,15 @@ class Generator {
                 if (info.Dll == "forceinline") {
                     Indent();
                     output.Write($"pub fn {name}(");
-                    GenerateMethodSignature(info.Method, 0);
+                    var signature = GenerateMethodSignature(info.Method, 0);
                     output.WriteLine(" {");
                     indent++;
+                    var returnType = signature.ReturnType;
+                    if (typedefs.TryGetValue(returnType.ToString(), out var typedef)) {
+                        returnType = reader.GetFieldDefinition(typedef.GetFields().First()).DecodeSignature(zigTypeDecoder, null);
+                    }
                     Indent();
-                    output.WriteLine($"return {info.Attributes["Constant"].FixedArguments[0]};");
+                    output.WriteLine($"return {returnType.FormatConstant((string)info.Attributes["Constant"].FixedArguments[0])};");
                     indent--;
                     output.WriteLine("}");
                 } else if (!missingDlls.Contains(info.Dll)) {
@@ -421,15 +425,7 @@ class Generator {
                     value = $".{{ .Ptr = @ptrFromInt({(string)attributes["Constant"].FixedArguments[0]}) }}";
                     break;
                 default:
-                    value = type.ReadBlob(reader.GetBlobReader(reader.GetConstant(field.GetDefaultValue()).Value));
-                    if (type.Pointers > 0) {
-                        if (value[0] == '-') {
-                            value = $"@as(usize, @bitCast(@as(isize, {value})))";
-                        }
-                        if (type.Name == "anyopaque") {
-                            value = $"@ptrFromInt({value})";
-                        }
-                    }
+                    value = type.FormatConstant(type.ReadBlob(reader.GetBlobReader(reader.GetConstant(field.GetDefaultValue()).Value)));
                     break;
             }
             var suffix = types.ContainsKey(name) ? "_" : "";
