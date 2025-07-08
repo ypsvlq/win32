@@ -10,11 +10,11 @@ class Generator {
     readonly MetadataReader reader;
     readonly StreamWriter output;
     readonly ZigTypeDecoder zigTypeDecoder = new();
-    readonly SortedDictionary<string, List<TypeWithAttributes>> types = [];
     readonly SortedDictionary<string, TypeDefinition> typedefs = [];
+    readonly SortedDictionary<string, List<TypeWithAttributes>> types = [];
     readonly SortedDictionary<string, List<TypeWithAttributes>> interfaces = [];
     readonly SortedDictionary<string, List<TypeDefinition>> enums = [];
-    readonly SortedDictionary<string, List<MethodDefinition>> methods = [];
+    readonly SortedDictionary<string, List<MethodWithAttributes>> methods = [];
     readonly SortedDictionary<string, FieldDefinition> fields = [];
     readonly Dictionary<string, int> names = [];
 
@@ -31,7 +31,7 @@ class Generator {
                 foreach (var method in type.GetMethods().Select(reader.GetMethodDefinition)) {
                     name = reader.GetString(method.Name);
                     methods.TryAdd(name, []);
-                    methods[name].Add(method);
+                    methods[name].Add(new(reader, method));
                 }
                 foreach (var field in type.GetFields().Select(reader.GetFieldDefinition)) {
                     name = reader.GetString(field.Name);
@@ -306,8 +306,6 @@ class Generator {
             }
         }
 
-        var architectureMethods = new SortedDictionary<Architecture, List<MethodDefinition>>();
-
         foreach (var (name, list) in methods) {
             switch (name) {
                 case "CreateDispatcherQueueController":
@@ -316,55 +314,54 @@ class Generator {
                     continue;
             }
 
-            foreach (var method in list) {
-                var attributes = new Attributes(reader, method);
-
-                if (attributes.TryGetValue("SupportedArchitecture", out var attribute)) {
-                    var architecture = (Architecture)attribute.FixedArguments[0];
+            if (list[0].Attributes.ContainsKey("SupportedArchitecture")) {
+                output.WriteLine($"pub const {name} = switch (arch) {{");
+                indent++;
+                foreach (var info in list) {
+                    var architecture = (Architecture)info.Attributes["SupportedArchitecture"].FixedArguments[0];
+                    Indent();
+                    var prefix = "";
                     foreach (var flag in Enum.GetValues<Architecture>()) {
                         if (architecture.HasFlag(flag)) {
-                            architectureMethods.TryAdd(flag, []);
-                            architectureMethods[flag].Add(method);
+                            output.Write($"{prefix}.{flag}");
+                            prefix = ", ";
                         }
                     }
-                    continue;
-                } else if (list.Count > 1) {
-                    break;
+                    output.Write(" => @extern(*const fn (");
+                    GenerateMethodSignature(info.Method, info.CallingConvention);
+                    output.WriteLine($", .{{ .name = \"{name}\", .library_name = \"{info.Dll}\" }}),");
                 }
-
-                GenerateMethod(method);
-            }
-        }
-
-        output.WriteLine("pub usingnamespace switch (arch) {");
-        indent++;
-        foreach (var (architecture, list) in architectureMethods) {
-            Indent();
-            output.WriteLine($".{architecture} => struct {{");
-            indent++;
-            if (architecture == Architecture.x86) {
-                output.WriteLine("""
-                            pub const GetClassLongPtrA = GetClassLongA;
-                            pub const GetClassLongPtrW = GetClassLongW;
-                            pub const GetWindowLongPtrA = GetWindowLongA;
-                            pub const GetWindowLongPtrW = GetWindowLongW;
-                            pub const SetClassLongPtrA = SetClassLongA;
-                            pub const SetClassLongPtrW = SetClassLongW;
-                            pub const SetWindowLongPtrA = SetWindowLongA;
-                            pub const SetWindowLongPtrW = SetWindowLongW;
+                if (methodAliasesX86.TryGetValue(name, out var alias)) {
+                    Indent();
+                    output.WriteLine($".x86 => {alias},");
+                }
+                indent--;
+                output.WriteLine($$"""
+                        else => @compileError("{{name}} unsupported for target architecture"),
+                    };
                     """);
+            } else if (list.Count > 1) {
+                output.WriteLine($"pub const {name} = @compileError(\"{name} is defined in multiple DLLs\");");
+            } else {
+                var info = list[0];
+                if (info.Dll == "forceinline") {
+                    Indent();
+                    output.Write($"pub fn {name}(");
+                    GenerateMethodSignature(info.Method, 0);
+                    output.WriteLine(" {");
+                    indent++;
+                    Indent();
+                    output.WriteLine($"return {info.Attributes["Constant"].FixedArguments[0]};");
+                    indent--;
+                    output.WriteLine("}");
+                } else if (!missingDlls.Contains(info.Dll)) {
+                    Indent();
+                    output.Write($"pub extern \"{info.Dll}\" fn {name}(");
+                    GenerateMethodSignature(info.Method, info.CallingConvention);
+                    output.WriteLine(';');
+                }
             }
-            foreach (var method in list) {
-                GenerateMethod(method);
-            }
-            indent--;
-            Indent();
-            output.WriteLine("},");
         }
-        output.WriteLine("""
-                else => struct {},
-            };
-            """);
 
         var constants = new SortedDictionary<string, (string, string)>();
 
@@ -514,35 +511,6 @@ class Generator {
         output.Write('}');
     }
 
-    void GenerateMethod(MethodDefinition method) {
-        var name = reader.GetString(method.Name);
-        var attributes = new Attributes(reader, method);
-
-        var import = method.GetImport();
-        var dll = Path.GetFileNameWithoutExtension(reader.GetString(reader.GetModuleReference(import.Module).Name)).ToLowerInvariant();
-
-        if (missingDlls.Contains(dll)) {
-            return;
-        } else if (dll == "forceinline") {
-            Indent();
-            output.Write($"pub fn {name}(");
-            GenerateMethodSignature(method, 0);
-            output.WriteLine(" {");
-            indent++;
-            Indent();
-            output.WriteLine($"return {attributes["Constant"].FixedArguments[0]};");
-            indent--;
-            output.WriteLine("}");
-            return;
-        }
-
-        var callingConvention = import.Attributes.HasFlag(MethodImportAttributes.CallingConventionCDecl) ? CallingConvention.Cdecl : CallingConvention.Winapi;
-        Indent();
-        output.Write($"pub extern \"{dll}\" fn {name}(");
-        GenerateMethodSignature(method, callingConvention);
-        output.WriteLine(';');
-    }
-
     MethodSignature<ZigType> GenerateMethodSignature(MethodDefinition method, CallingConvention callingConvention, string prefix = "", HashSet<string>? badNames = null) {
         var signature = method.DecodeSignature(zigTypeDecoder, null);
         var parameters = method.GetParameters().Select(reader.GetParameter).Where(parameter => reader.GetString(parameter.Name).Length > 0);
@@ -611,11 +579,38 @@ class Generator {
         public Attributes Attributes = new(reader, type);
     }
 
+    class MethodWithAttributes {
+        public MethodDefinition Method;
+        public Attributes Attributes;
+        public string Dll;
+        public CallingConvention CallingConvention;
+
+        public MethodWithAttributes(MetadataReader reader, MethodDefinition method) {
+            Method = method;
+            Attributes = new(reader, method);
+
+            var import = method.GetImport();
+            Dll = Path.GetFileNameWithoutExtension(reader.GetString(reader.GetModuleReference(import.Module).Name)).ToLowerInvariant();
+            CallingConvention = import.Attributes.HasFlag(MethodImportAttributes.CallingConventionCDecl) ? CallingConvention.Cdecl : CallingConvention.Winapi;
+        }
+    }
+
     enum Architecture {
         x86 = 1,
         x86_64 = 2,
         aarch64 = 4,
     }
+
+    readonly Dictionary<string, string> methodAliasesX86 = new() {
+        { "GetClassLongPtrA", "GetClassLongA" },
+        { "GetClassLongPtrW", "GetClassLongW" },
+        { "GetWindowLongPtrA", "GetWindowLongA" },
+        { "GetWindowLongPtrW", "GetWindowLongW" },
+        { "SetClassLongPtrA", "SetClassLongA" },
+        { "SetClassLongPtrW", "SetClassLongW" },
+        { "SetWindowLongPtrA", "SetWindowLongA" },
+        { "SetWindowLongPtrW", "SetWindowLongW" },
+    };
 
     readonly HashSet<string> missingDlls = [
         "amsi",
