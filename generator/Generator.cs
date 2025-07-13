@@ -314,7 +314,9 @@ class Generator {
                     continue;
             }
 
-            if (list[0].Attributes.ContainsKey("SupportedArchitecture")) {
+            if (missingDlls.Contains(list[0].Dll)) {
+                continue;
+            } else if (list[0].Attributes.ContainsKey("SupportedArchitecture")) {
                 output.WriteLine($"pub const {name} = switch (arch) {{");
                 indent++;
                 foreach (var info in list) {
@@ -358,7 +360,7 @@ class Generator {
                     output.WriteLine($"return {returnType.FormatConstant((string)info.Attributes["Constant"].FixedArguments[0])};");
                     indent--;
                     output.WriteLine("}");
-                } else if (!missingDlls.Contains(info.Dll)) {
+                } else {
                     Indent();
                     output.Write($"pub extern \"{info.Dll}\" fn {name}(");
                     GenerateMethodSignature(info.Method, info.CallingConvention);
