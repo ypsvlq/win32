@@ -333,9 +333,9 @@ class Generator {
                     GenerateMethodSignature(info.Method, info.CallingConvention);
                     output.WriteLine($", .{{ .name = \"{name}\", .library_name = \"{info.Dll}\" }}),");
                 }
-                if (methodAliasesX86.TryGetValue(name, out var alias)) {
+                if (methodAliases32.TryGetValue(name, out var alias)) {
                     Indent();
-                    output.WriteLine($".x86 => {alias},");
+                    output.WriteLine($".x86, .thumb => {alias},");
                 }
                 indent--;
                 output.WriteLine($$"""
@@ -599,7 +599,7 @@ class Generator {
         aarch64 = 4,
     }
 
-    readonly Dictionary<string, string> methodAliasesX86 = new() {
+    readonly Dictionary<string, string> methodAliases32 = new() {
         { "GetClassLongPtrA", "GetClassLongA" },
         { "GetClassLongPtrW", "GetClassLongW" },
         { "GetWindowLongPtrA", "GetWindowLongA" },
