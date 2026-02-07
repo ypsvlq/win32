@@ -567,7 +567,7 @@ class Generator {
             }
         }
         return name switch {
-            "opaque" or "defer" or "align" or "error" or "callconv" or "var" or "resume" or "suspend" or "fn" or "async" => $"@\"{name}\"",
+            "opaque" or "defer" or "align" or "error" or "callconv" or "var" or "resume" or "suspend" or "fn" => $"@\"{name}\"",
             _ => name,
         };
     }
