@@ -121,7 +121,7 @@ class Generator {
             // SOFTWARE.
             const std = @import("std");
             const arch = @import("builtin").cpu.arch;
-            const FlexibleArrayType = std.zig.c_translation.FlexibleArrayType;
+            const FlexibleArrayType = std.zig.c_translation.helpers.FlexibleArrayType;
             pub const GUID = std.os.windows.GUID;
             pub const L = std.unicode.utf8ToUtf16LeStringLiteral;
             test {
