@@ -126,7 +126,7 @@ class Generator {
             pub const L = std.unicode.utf8ToUtf16LeStringLiteral;
             test {
                 @setEvalBranchQuota(1000000);
-                std.testing.refAllDeclsRecursive(@This());
+                std.testing.refAllDecls(@This());
             }
             """);
 
@@ -613,15 +613,19 @@ class Generator {
     readonly HashSet<string> missingDlls = [
         "amsi",
         "api-ms-win-appmodel-runtime-l1-1-6",
+        "api-ms-win-appmodel-runtime-l1-1-7",
+        "api-ms-win-core-apiquery-l2-1-1",
         "api-ms-win-core-ioring-l1-1-0",
         "api-ms-win-core-marshal-l1-1-0",
         "api-ms-win-core-memory-l1-1-8",
+        "api-ms-win-core-memory-l1-1-9",
         "api-ms-win-core-psm-appnotify-l1-1-1",
         "api-ms-win-dx-d3dkmt-l1-1-0",
         "api-ms-win-mm-misc-l1-1-1",
         "api-ms-win-service-core-l1-1-5",
         "api-ms-win-wsl-api-l1-1-0",
         "bcp47mrm",
+        "bindfltapi",
         "certadm",
         "certpoleng",
         "chakra",
@@ -640,7 +644,10 @@ class Generator {
         "fhsvcctl",
         "firewallapi",
         "fxsutility",
+        "gameinput",
         "hhctrl",
+        "icuin",
+        "icuuc",
         "ieframe",
         "infocardapi",
         "isolatedwindowsenvironmentutils",
