@@ -6,9 +6,11 @@ jobs:
   test:
     runs-on: windows-latest
     steps:
+    - name: Disable autocrlf
+      run: git config --global core.autocrlf false
     - name: Checkout
       uses: actions/checkout@v7
-    - name: Set up dotnet
+    - name: Set up .NET
       uses: actions/setup-dotnet@v6
       with:
         dotnet-version: '10.0'
