@@ -369,19 +369,25 @@ class Generator {
             }
         }
 
-        var constants = new SortedDictionary<string, (string, string)>();
+        var constants = new SortedDictionary<string, Dictionary<Architecture, (string, string)>>();
 
         foreach (var (prefix, list) in enums) {
             foreach (var type in list) {
+                var architecture = (Architecture)0;
+                var attributes = new Attributes(reader, type);
+                if (attributes.TryGetValue("SupportedArchitecture", out var attribute)) {
+                    architecture = (Architecture)attribute.FixedArguments[0];
+                }
                 var values = type.GetFields().Select(reader.GetFieldDefinition);
                 var valueType = values.First().DecodeSignature(zigTypeDecoder, null);
                 foreach (var field in values.Skip(1)) {
                     var name = reader.GetString(field.Name);
-                    if (names[name] > 1 || types.ContainsKey(name) || interfaces.ContainsKey(name) || methods.ContainsKey(name)) {
+                    if (architecture == 0 && (names[name] > 1 || types.ContainsKey(name) || interfaces.ContainsKey(name) || methods.ContainsKey(name))) {
                         name = $"{prefix}_{name}";
                     }
                     var value = valueType.ReadBlob(reader.GetBlobReader(reader.GetConstant(field.GetDefaultValue()).Value));
-                    constants.Add(name, (valueType.ToString(), value));
+                    constants.TryAdd(name, []);
+                    constants[name].Add(architecture, (valueType.ToString(), value));
                 }
             }
         }
@@ -431,13 +437,34 @@ class Generator {
                     break;
             }
             var suffix = types.ContainsKey(name) ? "_" : "";
-            constants.Add($"{name}{suffix}", (typeName, value));
+            (constants[$"{name}{suffix}"] = [])[0] = (typeName, value);
         }
 
-        foreach (var (name, (type, value)) in constants) {
+        foreach (var (name, list) in constants) {
             output.Write($"pub const {name}");
-            if (type != "String") output.Write($": {type}");
-            output.WriteLine($" = {value};");
+            if (list.Count == 1) {
+                var (architecture, (type, value)) = list.Single();
+                if (architecture == 0) {
+                    if (type != "String") output.Write($": {type}");
+                    output.WriteLine($" = {value};");
+                    continue;
+                }
+            }
+            output.WriteLine(" = switch (arch) {");
+            foreach (var (architecture, (type, value)) in list) {
+                var prefix = "    ";
+                foreach (var flag in Enum.GetValues<Architecture>()) {
+                    if (architecture.HasFlag(flag)) {
+                        output.Write($"{prefix}.{flag}");
+                        prefix = ", ";
+                    }
+                }
+                output.WriteLine($" => @as({type}, {value}),");
+            }
+            output.WriteLine($$"""
+                    else => @compileError("{{name}} unsupported for target architecture"),
+                };
+                """);
         }
     }
 

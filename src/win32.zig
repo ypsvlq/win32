@@ -3237,6 +3237,12 @@ pub const ARM64_NT_NEON128 = extern union {
     H: [8]u16,
     B: [16]u8,
 };
+pub const ARM64_TPIDR2_BLOCK = extern struct {
+    ZaSaveBuffer: ?*anyopaque,
+    NumZaSaveSlices: u16,
+    Reserved1: u16,
+    Reserved2: u32,
+};
 pub const ARP_HEADER = extern struct {
     HardwareAddressSpace: u16,
     ProtocolAddressSpace: u16,
@@ -4721,11 +4727,6 @@ pub const BCRYPT_KEY_LENGTHS_STRUCT = extern struct {
     dwMaxLength: u32,
     dwIncrement: u32,
 };
-pub const BCRYPT_MLKEM_KEY_BLOB = extern struct {
-    dwMagic: u32,
-    cbParameterSet: u32,
-    cbKey: u32,
-};
 pub const BCRYPT_MULTI_HASH_OPERATION = extern struct {
     iHash: u32,
     hashOperation: i32,
@@ -4749,6 +4750,15 @@ pub const BCRYPT_OID_LIST = extern struct {
     dwOIDCount: u32,
     pOIDs: [*c]BCRYPT_OID,
 };
+pub const BCRYPT_PARAMETER_SET_KEY_BLOB = extern struct {
+    dwMagic: u32,
+    cbParameterSet: u32,
+    cbKey: u32,
+};
+pub const BCRYPT_PARAMETER_SET_NAMES = extern struct {
+    dwParameterSetNames: u32,
+    ppszParameterSetNames: [*c][*c]u16,
+};
 pub const BCRYPT_PKCS1_PADDING_INFO = extern struct {
     pszAlgId: [*c]const u16,
 };
@@ -4757,11 +4767,6 @@ pub const BCRYPT_PKCS11_RSA_AES_WRAP_BLOB = extern struct {
     cbKey: u32,
     cbPaddingAlgId: u32,
     cbPaddingLabel: u32,
-};
-pub const BCRYPT_PQDSA_KEY_BLOB = extern struct {
-    dwMagic: u32,
-    cbParameterSet: u32,
-    cbKey: u32,
 };
 pub const BCRYPT_PQDSA_PADDING_INFO = extern struct {
     pbCtx: [*c]u8,
@@ -5674,6 +5679,14 @@ pub const BOOT_AREA_INFO = extern struct {
     BootSectors: extern struct {
         Offset: i64,
     },
+};
+pub const BOOT_PARTITION_REQUEST_BLOCK = extern struct {
+    Version: u32,
+    Size: u32,
+    Function: u32,
+    Flags: u32,
+    DataBufferOffset: u32,
+    DataBufferLength: u32,
 };
 pub const CLSID_BootOptions: GUID = .{ .Data1 = 747904974, .Data2 = 38747, .Data3 = 22974, .Data4 = .{ 169, 96, 154, 42, 38, 40, 83, 165 } };
 pub const CLSID_BootTraceSession: GUID = .{ .Data1 = 58946872, .Data2 = 2443, .Data3 = 4568, .Data4 = .{ 148, 20, 80, 80, 84, 80, 48, 48 } };
@@ -9986,6 +9999,23 @@ pub const COAUTHINFO = extern struct {
 pub const CLSID_CObjectId: GUID = .{ .Data1 = 2286821376, .Data2 = 8573, .Data3 = 4570, .Data4 = .{ 178, 164, 0, 14, 123, 187, 43, 9 } };
 pub const CLSID_CObjectIds: GUID = .{ .Data1 = 2286821377, .Data2 = 8573, .Data3 = 4570, .Data4 = .{ 178, 164, 0, 14, 123, 187, 43, 9 } };
 pub const CLSID_CoClassIdentityStore: GUID = .{ .Data1 = 819237446, .Data2 = 53783, .Data3 = 18015, .Data4 = .{ 176, 11, 172, 157, 221, 101, 46, 183 } };
+pub const CODE_INTEGRITY_REPORT_GENERATION_HEADER = extern struct {
+    Version: u16,
+    Reserved: u16,
+    RecordSize: u32,
+    CommitTime: u64,
+};
+pub const CODE_INTEGRITY_REPORT_RECORD_HEADER = extern struct {
+    Version: u16,
+    Reserved: u16,
+    RecordSize: u32,
+    SipaEventCode: u32,
+};
+pub const CODE_INTEGRITY_RUNTIME_REPORT = extern struct {
+    Header: RUNTIME_REPORT_HEADER,
+    CurrentGeneration: u64,
+    NumberOfGenerations: u32,
+};
 pub const CODEBASEHOLD = extern struct {
     cbSize: u32,
     szDistUnit: [*c]u16,
@@ -10059,6 +10089,7 @@ pub const CODECAPI_AVEncAudioMapDestChannel7: GUID = .{ .Data1 = 3160214375, .Da
 pub const CODECAPI_AVEncAudioMapDestChannel8: GUID = .{ .Data1 = 3160214376, .Data2 = 57194, .Data3 = 19990, .Data4 = .{ 152, 3, 184, 32, 7, 163, 12, 141 } };
 pub const CODECAPI_AVEncAudioMapDestChannel9: GUID = .{ .Data1 = 3160214377, .Data2 = 57194, .Data3 = 19990, .Data4 = .{ 152, 3, 184, 32, 7, 163, 12, 141 } };
 pub const CODECAPI_AVEncAudioMeanBitRate: GUID = .{ .Data1 = 2450691515, .Data2 = 20426, .Data3 = 18041, .Data4 = .{ 170, 184, 158, 42, 29, 117, 51, 132 } };
+pub const CODECAPI_AVEncAV1EncoderOperatingMode: GUID = .{ .Data1 = 2402164625, .Data2 = 23372, .Data3 = 19994, .Data4 = .{ 156, 61, 47, 106, 139, 29, 78, 124 } };
 pub const CODECAPI_AVEncChromaEncodeMode: GUID = .{ .Data1 = 2319952730, .Data2 = 18328, .Data3 = 19603, .Data4 = .{ 181, 165, 85, 79, 154, 59, 159, 80 } };
 pub const CODECAPI_AVEncChromaUpdateTime: GUID = .{ .Data1 = 1263524248, .Data2 = 17012, .Data3 = 16571, .Data4 = .{ 142, 228, 7, 85, 62, 126, 45, 58 } };
 pub const CODECAPI_AVEncCodecType: GUID = .{ .Data1 = 145705665, .Data2 = 62450, .Data3 = 19572, .Data4 = .{ 157, 207, 55, 242, 236, 121, 248, 38 } };
@@ -10194,6 +10225,7 @@ pub const CODECAPI_AVEncVideoCodedVideoAccessUnitSize: GUID = .{ .Data1 = 303150
 pub const CODECAPI_AVEncVideoConsecutiveFramesForLayer: GUID = .{ .Data1 = 183719202, .Data2 = 55684, .Data3 = 17838, .Data4 = .{ 187, 184, 83, 147, 62, 10, 177, 181 } };
 pub const CODECAPI_AVEncVideoContentType: GUID = .{ .Data1 = 1712421578, .Data2 = 60279, .Data3 = 17821, .Data4 = .{ 147, 12, 164, 141, 157, 6, 131, 252 } };
 pub const CODECAPI_AVEncVideoCTBSize: GUID = .{ .Data1 = 3565009074, .Data2 = 59195, .Data3 = 19641, .Data4 = .{ 140, 62, 189, 135, 125, 6, 215, 123 } };
+pub const CODECAPI_AVEncVideoD3D12ReconstructedPictureOutputMode: GUID = .{ .Data1 = 1249586831, .Data2 = 7571, .Data3 = 19562, .Data4 = .{ 181, 72, 145, 226, 248, 197, 167, 211 } };
 pub const CODECAPI_AVEncVideoDefaultUpperFieldDominant: GUID = .{ .Data1 = 2164352964, .Data2 = 3009, .Data3 = 18378, .Data4 = .{ 143, 194, 87, 5, 90, 20, 116, 165 } };
 pub const CODECAPI_AVEncVideoDirtyRectEnabled: GUID = .{ .Data1 = 2328596445, .Data2 = 24076, .Data3 = 19558, .Data4 = .{ 135, 41, 184, 246, 41, 171, 4, 251 } };
 pub const CODECAPI_AVEncVideoDisplayDimension: GUID = .{ .Data1 = 3724883560, .Data2 = 62700, .Data3 = 18345, .Data4 = .{ 134, 208, 131, 103, 112, 240, 193, 213 } };
@@ -11593,6 +11625,11 @@ pub const COPYFILE2_MESSAGE = extern struct {
             uliStreamBytesTransferred: u64,
             uliTotalFileSize: u64,
             uliTotalBytesTransferred: u64,
+        },
+        SparseChunkStatus: extern struct {
+            uliChunkNumber: u64,
+            uliChunkSize: u64,
+            uliChunkOffset: u64,
         },
     },
 };
@@ -13712,6 +13749,571 @@ pub const CLSID_CX509PublicKey: GUID = .{ .Data1 = 2286821387, .Data2 = 8573, .D
 pub const CLSID_CX509SCEPEnrollment: GUID = .{ .Data1 = 2286821473, .Data2 = 8573, .Data3 = 4570, .Data4 = .{ 178, 164, 0, 14, 123, 187, 43, 9 } };
 pub const CLSID_CX509SCEPEnrollmentHelper: GUID = .{ .Data1 = 2286821474, .Data2 = 8573, .Data3 = 4570, .Data4 = .{ 178, 164, 0, 14, 123, 187, 43, 9 } };
 pub const CLSID_CXDSData: GUID = .{ .Data1 = 3301229812, .Data2 = 73, .Data3 = 20011, .Data4 = .{ 152, 251, 149, 55, 246, 206, 81, 109 } };
+pub const CXL_BACKGROUND_COMMAND_STATUS_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u64,
+    },
+    AsUlonglong: u64,
+};
+pub const CXL_CACHEMEM_CAPABILITY_HEADER_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_CACHEMEM_REGISTERS = extern struct {
+    CapabilityHeaderRegister: CXL_CAPABILITY_HEADER_REGISTER,
+    pub fn CacheMemCapabilityHeaderRegister(self: anytype) FlexibleArrayType(@TypeOf(self), CXL_CACHEMEM_CAPABILITY_HEADER_REGISTER) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(CXL_CACHEMEM_CAPABILITY_HEADER_REGISTER)));
+    }
+};
+pub const CXL_CAPABILITY_HEADER_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_COMMAND_PAYLOAD_REGISTERS = extern struct {
+    pub fn Payload(self: anytype) FlexibleArrayType(@TypeOf(self), u32) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(u32)));
+    }
+};
+pub const CXL_COMMAND_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u64,
+    },
+    AsUlonglong: u64,
+};
+pub const CXL_COMMON_EVENT_RECORD = extern struct {
+    Header: CXL_COMMON_EVENT_RECORD_HEADER,
+    EventRecordData: [80]u8,
+};
+pub const CXL_COMMON_EVENT_RECORD_HEADER = extern struct {
+    EventRecordIdentifier: GUID align(1),
+    EventRecordLength: u8 align(1),
+    EventRecordFlags: extern union {
+        bits: extern struct {
+            _bitfield: u16 align(1),
+        } align(1),
+        AsUshort: u16 align(1),
+    } align(1),
+    Reserved: u8 align(1),
+    EventRecordHandle: u16 align(1),
+    RelatedEventRecordHandle: u16 align(1),
+    EventRecordTimestamp: u64 align(1),
+    MaintenanceOperationClass: u8 align(1),
+    MaintenanceOperationSubclass: u8 align(1),
+    LdId: u16 align(1),
+    HeadId: u8 align(1),
+    Reserved1: [11]u8 align(1),
+};
+pub const CXL_DEVICE_CAPABILITIES_ARRAY_REGISTER = extern struct {
+    Header: CXL_DEVICE_CAPABILITIES_ARRAY_REGISTER_HEADER,
+    CapabilitiesCount: u16,
+    Reserved: u16,
+    Reserved1: [2]u32,
+};
+pub const CXL_DEVICE_CAPABILITIES_ARRAY_REGISTER_HEADER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_DEVICE_CAPABILITY_HEADER_REGISTER = extern struct {
+    Header: CXL_DEVICE_CAPABILITY_HEADER_REGISTER_HEADER,
+    Offset: u32,
+    Length: u32,
+    Reserved: u32,
+};
+pub const CXL_DEVICE_CAPABILITY_HEADER_REGISTER_HEADER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_DEVICE_HEALTH_INFO = extern struct {
+    HealthStatus: extern union {
+        bits: extern struct {
+            _bitfield: u8,
+        },
+        AsUchar: u8,
+    } align(1),
+    MediaStatus: u8 align(1),
+    AdditionalStatus: extern union {
+        bits: extern struct {
+            _bitfield: u8,
+        },
+        AsUchar: u8,
+    } align(1),
+    LifeUsed: u8 align(1),
+    DeviceTemperature: u16 align(1),
+    DirtyShutdownCount: u32 align(1),
+    CorrectedVolatileErrorCount: u32 align(1),
+    CorrectedPersistentErrorCount: u32 align(1),
+};
+pub const CXL_DEVICE_REGISTERS = extern struct {
+    CapabilityArrayRegister: CXL_DEVICE_CAPABILITIES_ARRAY_REGISTER,
+    pub fn CapabilityHeaderRegister(self: anytype) FlexibleArrayType(@TypeOf(self), CXL_DEVICE_CAPABILITY_HEADER_REGISTER) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(CXL_DEVICE_CAPABILITY_HEADER_REGISTER)));
+    }
+};
+pub const CXL_DEVICE_STATUS_REGISTERS = extern struct {
+    EventStatusRegister: CXL_EVENT_STATUS_REGISTER,
+};
+pub const CXL_DRAM_EVENT_RECORD = extern struct {
+    Header: CXL_COMMON_EVENT_RECORD_HEADER,
+    PhysicalAddress: extern struct {
+        _bitfield: u64 align(1),
+    },
+    MemoryEventDescriptor: extern struct {
+        _bitfield: u8,
+    },
+    MemoryEventType: u8,
+    TransactionType: u8,
+    ValidityFlags: extern struct {
+        _bitfield: u16 align(1),
+    },
+    Channel: u8,
+    Rank: u8,
+    NibbleMask: [3]u8,
+    BankGroup: u8,
+    Bank: u8,
+    Row: [3]u8,
+    Column: [2]u8,
+    CorrectionMask: [32]u8,
+    ComponentIdentifier: [16]u8,
+    SubChannel: u8,
+    AdvProgCorrMemErrThresholdEventFlags: extern struct {
+        _bitfield: u8,
+    },
+    CVMECountAtEvent: [3]u8,
+    MemoryEventSubType: u8,
+    Reserved: u8,
+};
+pub const CXL_EVENT_STATUS_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u64,
+    },
+    AsUlong: u32,
+};
+pub const CXL_GENERAL_MEDIA_EVENT_RECORD = extern struct {
+    Header: CXL_COMMON_EVENT_RECORD_HEADER,
+    PhysicalAddress: extern struct {
+        _bitfield: u64 align(1),
+    },
+    MemoryEventDescriptor: extern struct {
+        _bitfield: u8,
+    },
+    MemoryEventType: u8,
+    TransactionType: u8,
+    ValidityFlags: extern struct {
+        _bitfield: u16 align(1),
+    },
+    Channel: u8,
+    Rank: u8,
+    Device: [3]u8,
+    ComponentIdentifier: [16]u8,
+    AdvProgCorrMemErrThresholdEventFlags: extern struct {
+        _bitfield: u8,
+    },
+    CorrectedMemoryCountAtEvent: [3]u8,
+    MemoryEventSubType: u8,
+    Reserved: [41]u8,
+};
+pub const CXL_HDM_DECODER_CAPABILITY_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_HDM_DECODER_CAPABILITY_STRUCTURE = extern struct {
+    CapabilityRegister: CXL_HDM_DECODER_CAPABILITY_REGISTER,
+    GlobalControlRegister: CXL_HDM_DECODER_GLOBAL_CONTROL_REGISTER,
+    Reserved: [2]u32,
+    pub fn Decoders(self: anytype) FlexibleArrayType(@TypeOf(self), CXL_HDM_DECODER_REGISTERS) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(CXL_HDM_DECODER_REGISTERS)));
+    }
+};
+pub const CXL_HDM_DECODER_CONTROL_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_HDM_DECODER_DPA_SKIP_LOW_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_HDM_DECODER_GLOBAL_CONTROL_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_HDM_DECODER_REGISTERS = extern struct {
+    MemoryBaseLow: CXL_HDM_MEMORY_BASE_LOW,
+    MemoryBaseHigh: u32,
+    MemorySizeLow: CXL_HDM_MEMORY_SIZE_LOW,
+    MemorySizeHigh: u32,
+    Control: CXL_HDM_DECODER_CONTROL_REGISTER,
+    u1: extern union {
+        TargetListLow: CXL_HDM_DECODER_TARGET_LIST_LOW_REGISTER,
+        DpaSkipLow: CXL_HDM_DECODER_DPA_SKIP_LOW_REGISTER,
+    },
+    u2: extern union {
+        TargetListHigh: CXL_HDM_DECODER_TARGET_LIST_HIGH_REGISTER,
+        DpaSkipHigh: u32,
+    },
+    Reserved: u32,
+};
+pub const CXL_HDM_DECODER_TARGET_LIST_HIGH_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_HDM_DECODER_TARGET_LIST_LOW_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_HDM_MEMORY_BASE_LOW = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_HDM_MEMORY_SIZE_LOW = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_INTERRUPT_POLICY = extern struct {
+    _bitfield: u8,
+};
+pub const CXL_MAILBOX_ACTIVATE_FIRMWARE = extern struct {
+    Action: u8,
+    Slot: u8,
+};
+pub const CXL_MAILBOX_CAPABILITY_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_MAILBOX_CEL_ENTRY = extern struct {
+    Opcode: u16,
+    CommandEffect: extern struct {
+        _bitfield: u16,
+    },
+};
+pub const CXL_MAILBOX_CEL_LOG = extern struct {
+    pub fn LogEntry(self: anytype) FlexibleArrayType(@TypeOf(self), CXL_MAILBOX_CEL_ENTRY) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(CXL_MAILBOX_CEL_ENTRY)));
+    }
+};
+pub const CXL_MAILBOX_CLEAR_EVENT_RECORDS_INPUT = extern struct {
+    EventLog: u8 align(1),
+    ClearEventFlags: extern struct {
+        _bitfield: u8,
+    } align(1),
+    NumberOfEventRecordHandles: u8 align(1),
+    Reserved: [3]u8 align(1),
+    pub fn EventRecordHandles(self: anytype) FlexibleArrayType(@TypeOf(self), u16) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(u16)));
+    }
+};
+pub const CXL_MAILBOX_CLEAR_POISON_INPUT = extern struct {
+    ClearPoisonPhysicalAddress: u64,
+    ClearPoisonWriteData: [64]u8,
+};
+pub const CXL_MAILBOX_CONTROL_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_MAILBOX_FIRMWARE_INFO = extern struct {
+    FWSlotsSupported: u8,
+    FWSlotInfo: extern struct {
+        _bitfield: u8,
+    },
+    FWActivationCapabilities: extern struct {
+        _bitfield: u8,
+    },
+    Reserved3: [13]u8,
+    SlotFWRevisions: [64]CHAR,
+};
+pub const CXL_MAILBOX_GET_ALERT_CONFIG_OUTPUT = extern struct {
+    ValidAlerts: extern union {
+        bits: extern struct {
+            _bitfield: u8,
+        },
+        AsUchar: u8,
+    } align(1),
+    ProgrammableAlerts: extern union {
+        bits: extern struct {
+            _bitfield: u8,
+        },
+        AsUchar: u8,
+    } align(1),
+    LifeUsedCriticalThreshold: u8 align(1),
+    LifeUsedProgrammableWarningThreshold: u8 align(1),
+    DeviceOverTemperatureCriticalThreshold: u16 align(1),
+    DeviceUnderTemperatureCriticalThreshold: u16 align(1),
+    DeviceOverTemperatureProgrammableWarningThreshold: u16 align(1),
+    DeviceUnderTemperatureProgrammableWarningThreshold: u16 align(1),
+    CorrectedVolatileMemoryProgrammableWarningThreshold: u16 align(1),
+    CorrectedPersistentMemoryProgrammableWarningThreshold: u16 align(1),
+};
+pub const CXL_MAILBOX_GET_EVENT_RECORDS_INPUT = extern struct {
+    EventLog: u8,
+};
+pub const CXL_MAILBOX_GET_EVENT_RECORDS_OUTPUT = extern struct {
+    Flags: extern struct {
+        _bitfield: u8,
+    } align(1),
+    Reserved: u8 align(1),
+    OverflowErrorCount: u16 align(1),
+    FirstOverflowEventTimestamp: u64 align(1),
+    LastOverflowEventTimestamp: u64 align(1),
+    EventRecordCount: u16 align(1),
+    Reserved1: [10]u8 align(1),
+    pub fn EventRecords(self: anytype) FlexibleArrayType(@TypeOf(self), CXL_COMMON_EVENT_RECORD) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(CXL_COMMON_EVENT_RECORD)));
+    }
+};
+pub const CXL_MAILBOX_GET_LOG_CAPABILITIES_INPUT = extern struct {
+    LogIdentifier: GUID,
+};
+pub const CXL_MAILBOX_GET_LOG_CAPABILITIES_OUTPUT = extern struct {
+    _bitfield: u32,
+};
+pub const CXL_MAILBOX_GET_LOG_INPUT = extern struct {
+    LogIdentifier: GUID,
+    Offset: u32,
+    Length: u32,
+};
+pub const CXL_MAILBOX_GET_POISON_LIST_INPUT = extern struct {
+    _bitfield: u64 align(1),
+    PhysicalAddressLength: u64 align(1),
+};
+pub const CXL_MAILBOX_GET_POISON_LIST_OUTPUT = extern struct {
+    PoisonListFlags: extern struct {
+        _bitfield: u8,
+    } align(1),
+    Reserved: u8 align(1),
+    OverflowTimestamp: u64 align(1),
+    MediaErrorRecordCount: u16 align(1),
+    Reserved1: [20]u8 align(1),
+    pub fn MediaErrorRecords(self: anytype) FlexibleArrayType(@TypeOf(self), CXL_MAILBOX_MEDIA_ERROR_RECORD) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(CXL_MAILBOX_MEDIA_ERROR_RECORD)));
+    }
+};
+pub const CXL_MAILBOX_GET_SUPPORTED_LOGS = extern struct {
+    NumberOfSupportedLogsEntries: u16,
+    Reserved: [6]u8,
+    pub fn SupportedLogEntries(self: anytype) FlexibleArrayType(@TypeOf(self), CXL_MAILBOX_SUPPORTED_LOG_ENTRY) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(CXL_MAILBOX_SUPPORTED_LOG_ENTRY)));
+    }
+};
+pub const CXL_MAILBOX_INJECT_POISON_INPUT = extern struct {
+    InjectPoisonPhysicalAddress: u64,
+};
+pub const CXL_MAILBOX_INTERRUPT_POLICY = extern struct {
+    InformationalEventLogInterruptSettings: CXL_INTERRUPT_POLICY,
+    WarningEventLogInterruptSettings: CXL_INTERRUPT_POLICY,
+    FailureEventLogInterruptSettings: CXL_INTERRUPT_POLICY,
+    FatalEventLogInterruptSettings: CXL_INTERRUPT_POLICY,
+    DynamicCapacityEventLogInterruptSettings: CXL_INTERRUPT_POLICY,
+};
+pub const CXL_MAILBOX_INTERRUPT_POLICY_2_0 = extern struct {
+    InformationalEventLogInterruptSettings: CXL_INTERRUPT_POLICY,
+    WarningEventLogInterruptSettings: CXL_INTERRUPT_POLICY,
+    FailureEventLogInterruptSettings: CXL_INTERRUPT_POLICY,
+    FatalEventLogInterruptSettings: CXL_INTERRUPT_POLICY,
+};
+pub const CXL_MAILBOX_MEDIA_ERROR_RECORD = extern struct {
+    _bitfield: u64 align(1),
+    MediaErrorLength: u32 align(1),
+    Reserved1: [4]u8 align(1),
+};
+pub const CXL_MAILBOX_MEMORY_DEVICE_IDENTIFY_INFO = extern struct {
+    FWRevision: [16]CHAR,
+    TotalCapacity: [8]u8,
+    VolatileOnlyCapacity: [8]u8,
+    PersistentOnlyCapacity: [8]u8,
+    PartitionAlignment: [8]u8,
+    InformationEventLogSize: [2]u8,
+    WarningEventLogSize: [2]u8,
+    FailureEventLogSize: [2]u8,
+    FatalEventLogSize: [2]u8,
+    LSASize: [4]u8,
+    PoisonListMaximumMediaErrorRecords: [3]u8,
+    InjectPoisonLimit: [2]u8,
+    PoisonHandlingCapabilities: extern struct {
+        _bitfield: u8,
+    },
+    QoSTelemetryCapabilities: extern struct {
+        _bitfield: u8,
+    },
+    DynamicCapacityEventLogSize: [2]u8,
+    Reserved: [3]u8,
+};
+pub const CXL_MAILBOX_REGISTERS = extern struct {
+    CapabilityRegister: CXL_MAILBOX_CAPABILITY_REGISTER,
+    ControlRegister: CXL_MAILBOX_CONTROL_REGISTER,
+    CommandRegister: CXL_COMMAND_REGISTER,
+    StatusRegister: CXL_MAILBOX_STATUS_REGISTER,
+    BackgroundCommandStatusRegister: CXL_BACKGROUND_COMMAND_STATUS_REGISTER,
+    PayloadRegisters: CXL_COMMAND_PAYLOAD_REGISTERS,
+};
+pub const CXL_MAILBOX_SET_ALERT_CONFIG_INPUT = extern struct {
+    ValidAlertActions: extern union {
+        bits: extern struct {
+            _bitfield: u8,
+        },
+        AsUchar: u8,
+    } align(1),
+    EnableAlertActions: extern union {
+        bits: extern struct {
+            _bitfield: u8,
+        },
+        AsUchar: u8,
+    } align(1),
+    LifeUsedProgrammableWarningThreshold: u8 align(1),
+    Reserved: u8 align(1),
+    DeviceOverTemperatureProgrammableWarningThreshold: u16 align(1),
+    DeviceUnderTemperatureProgrammableWarningThreshold: u16 align(1),
+    CorrectedVolatileMemoryProgrammableWarningThreshold: u16 align(1),
+    CorrectedPersistentMemoryProgrammableWarningThreshold: u16 align(1),
+};
+pub const CXL_MAILBOX_STATUS_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u64,
+    },
+    AsUlonglong: u64,
+};
+pub const CXL_MAILBOX_SUPPORTED_LOG_ENTRY = extern struct {
+    LogIdentifier: GUID,
+    LogSize: u32,
+};
+pub const CXL_MAILBOX_TRANSFER_FIRMWARE = extern struct {
+    Action: u8,
+    Slot: u8,
+    Reserved: u16,
+    Offset: u32,
+    Reserved2: [120]u8,
+    pub fn Data(self: anytype) FlexibleArrayType(@TypeOf(self), u8) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(u8)));
+    }
+};
+pub const CXL_MEMORY_DEVICE_STATUS_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u64,
+    },
+    AsUlonglong: u64,
+};
+pub const CXL_MEMORY_DEVICE_STATUS_REGISTERS = extern struct {
+    MemoryDeviceStatusRegister: CXL_MEMORY_DEVICE_STATUS_REGISTER,
+};
+pub const CXL_MEMORY_MODULE_EVENT_RECORD = extern struct {
+    Header: CXL_COMMON_EVENT_RECORD_HEADER,
+    DeviceEventType: u8,
+    DeviceHealthInfo: CXL_DEVICE_HEALTH_INFO,
+    ValidityFlags: extern struct {
+        _bitfield: u16 align(1),
+    },
+    ComponentIdentifier: [16]u8,
+    DeviceEventSubtype: u8,
+    Reserved: [42]u8,
+};
+pub const CXL_MEMORY_SPARING_EVENT_RECORD = extern struct {
+    Header: CXL_COMMON_EVENT_RECORD_HEADER align(1),
+    MaintenanceOperationClass: u8 align(1),
+    MaintenanceOperationSubclass: u8 align(1),
+    Flags: extern struct {
+        _bitfield: u8,
+    } align(1),
+    Result: u8 align(1),
+    ValidityFlags: extern struct {
+        _bitfield: u16 align(1),
+    } align(1),
+    Reserved: [6]u8 align(1),
+    SpareResourceAvailable: u16 align(1),
+    Channel: u8 align(1),
+    Rank: u8 align(1),
+    NibbleMask: [3]u8 align(1),
+    BankGroup: u8 align(1),
+    Bank: u8 align(1),
+    Row: [3]u8 align(1),
+    Column: [2]u8 align(1),
+    ComponentIdentifier: [16]u8 align(1),
+    SubChannel: u8 align(1),
+    Reserved3: [37]u8 align(1),
+};
+pub const CXL_RAS_CAPABILITY_STRUCTURE = extern struct {
+    UncorrectableErrorStatusRegister: CXL_RAS_UNCORRECTABLE_ERROR_STATUS_REGISTER,
+    UncorrectableErrorMaskRegister: CXL_RAS_UNCORRECTABLE_ERROR_MASK_REGISTER,
+    UncorrectableErrorSeverityRegister: CXL_RAS_UNCORRECTABLE_ERROR_SEVERITY_REGISTER,
+    CorrectableErrorStatusRegister: CXL_RAS_CORRECTABLE_ERROR_STATUS_REGISTER,
+    CorrectableErrorMaskRegister: CXL_RAS_CORRECTABLE_ERROR_MASK_REGISTER,
+    ErrorCapabilityAndControlRegister: CXL_RAS_ERROR_CAPABILITY_AND_CONTROL_REGISTER,
+    HeaderLogRegisters: CXL_RAS_HEADER_LOG_REGISTERS,
+};
+pub const CXL_RAS_CORRECTABLE_ERROR_MASK_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_RAS_CORRECTABLE_ERROR_STATUS_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_RAS_ERROR_CAPABILITY_AND_CONTROL_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_RAS_HEADER_LOG_REGISTERS = extern struct {
+    HeaderLogArray: [16]u32,
+};
+pub const CXL_RAS_UNCORRECTABLE_ERROR_MASK_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_RAS_UNCORRECTABLE_ERROR_SEVERITY_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const CXL_RAS_UNCORRECTABLE_ERROR_STATUS_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
 pub const CY = extern union {
     Anonymous: extern struct {
         Lo: u32,
@@ -24648,7 +25250,7 @@ pub const DEBUG_STACK_FRAME_EX = extern struct {
     Virtual: BOOL,
     FrameNumber: u32,
     InlineFrameContext: u32,
-    Reserved1: u32,
+    FrameMachine: u32,
 };
 pub const DEBUG_SYMBOL_ENTRY = extern struct {
     ModuleBase: u64,
@@ -33099,7 +33701,7 @@ pub const DRIVER_INFO_ENTRY = extern struct {
     PublisherThumbprintHashAlgorithm: u16,
     ImageHashOffset: u32,
     PublisherThumbprintOffset: u32,
-    LoadCount: u16,
+    NumberOfLoadingTimes: u16,
     OemNameSize: u16,
     OemNameOffset: u32,
     Flags: extern union {
@@ -35773,6 +36375,20 @@ pub const DXGI_ADAPTER_DESC3 = extern struct {
     GraphicsPreemptionGranularity: i32,
     ComputePreemptionGranularity: i32,
 };
+pub const DXGI_ADAPTER_DESC4 = extern struct {
+    Description: [128]u16,
+    VendorId: u32,
+    DeviceId: u32,
+    SubSysId: u32,
+    Revision: u32,
+    DedicatedVideoMemory: usize,
+    DedicatedSystemMemory: usize,
+    SharedSystemMemory: usize,
+    AdapterLuid: LUID,
+    Flags: i32,
+    GraphicsPreemptionGranularity: i32,
+    ComputePreemptionGranularity: i32,
+};
 pub const DXGI_DECODE_SWAP_CHAIN_DESC = extern struct {
     Flags: u32,
 };
@@ -35996,6 +36612,20 @@ pub const DXGI_SWAP_CHAIN_DESC1 = extern struct {
     SwapEffect: i32,
     AlphaMode: i32,
     Flags: u32,
+};
+pub const DXGI_SWAP_CHAIN_DESC2 = extern struct {
+    Width: u32,
+    Height: u32,
+    Format: i32,
+    Stereo: BOOL,
+    SampleDesc: DXGI_SAMPLE_DESC,
+    BufferUsage: u32,
+    BufferCount: u32,
+    Scaling: i32,
+    SwapEffect: i32,
+    AlphaMode: i32,
+    Flags: u32,
+    ColorSpace: i32,
 };
 pub const DXGI_SWAP_CHAIN_FULLSCREEN_DESC = extern struct {
     RefreshRate: DXGI_RATIONAL,
@@ -37815,6 +38445,10 @@ pub const ENCLAVE_INFORMATION = extern struct {
     Size: usize,
     Identity: ENCLAVE_IDENTITY,
 };
+pub const ENCLAVE_PACKAGE_IDENTITY = extern struct {
+    PackageId: [32]u8 align(1),
+    PackageSvn: u64 align(1),
+};
 pub const ENCLAVE_VBS_BASIC_KEY_REQUEST = extern struct {
     RequestSize: u32,
     Flags: u32,
@@ -39205,18 +39839,6 @@ pub const EXPERIMENTAL_WEBAUTHN_PLUGIN_ADD_AUTHENTICATOR_OPTIONS = extern struct
     cbAuthenticatorInfo: u32,
     pbAuthenticatorInfo: [*c]u8,
 };
-pub const EXPERIMENTAL_WEBAUTHN_PLUGIN_ADD_AUTHENTICATOR_OPTIONS_2 = extern struct {
-    pwszAuthenticatorName: [*c]const u16,
-    pClsid: [*c]const GUID,
-    pwszPluginRpId: [*c]const u16,
-    pwszLightThemeLogoSvg: [*c]const u16,
-    pwszDarkThemeLogoSvg: [*c]const u16,
-    cbAuthenticatorInfo: u32,
-    pbAuthenticatorInfo: [*c]const u8,
-    cSupportedRpIds: u32,
-    ppwszSupportedRpIds: [*c][*c]const u16,
-    pwszUserVerificationKeyName: [*c]const u16,
-};
 pub const EXPERIMENTAL_WEBAUTHN_PLUGIN_ADD_AUTHENTICATOR_RESPONSE = extern struct {
     cbOpSignPubKey: u32,
     pbOpSignPubKey: [*c]u8,
@@ -39273,26 +39895,6 @@ pub const EXPERIMENTAL_WEBAUTHN_PLUGIN_UPDATE_AUTHENTICATOR_DETAILS = extern str
     pwszDarkThemeLogo: [*c]const u16,
     cbAuthenticatorInfo: u32,
     pbAuthenticatorInfo: [*c]u8,
-};
-pub const EXPERIMENTAL_WEBAUTHN_PLUGIN_UPDATE_AUTHENTICATOR_DETAILS_2 = extern struct {
-    pwszAuthenticatorName: [*c]const u16,
-    pClsid: [*c]const GUID,
-    pClsidNew: [*c]const GUID,
-    pwszLightThemeLogoSvg: [*c]const u16,
-    pwszDarkThemeLogoSvg: [*c]const u16,
-    cbAuthenticatorInfo: u32,
-    pbAuthenticatorInfo: [*c]const u8,
-    cSupportedRpIds: u32,
-    ppwszSupportedRpIds: [*c][*c]const u16,
-    pwszUserVerificationKeyName: [*c]const u16,
-};
-pub const EXPERIMENTAL_WEBAUTHN_PLUGIN_USER_VERIFICATION_REQUEST_2 = extern struct {
-    hwnd: HWND,
-    pGuidTransactionId: [*c]const GUID,
-    pwszUsername: [*c]const u16,
-    pwszDisplayHint: [*c]const u16,
-    cbBufferToSign: u32,
-    pbBufferToSign: [*c]u8,
 };
 pub const EXPLICIT_ACCESS_A = extern struct {
     grfAccessPermissions: u32,
@@ -42090,13 +42692,6 @@ pub const FWPM_FILTER0 = extern struct {
 pub const FWPM_LAYER_ENUM_TEMPLATE0 = extern struct {
     reserved: u64,
 };
-pub const FWPM_LAYER_STATISTICS0 = extern struct {
-    layerId: GUID,
-    classifyPermitCount: u32,
-    classifyBlockCount: u32,
-    classifyVetoCount: u32,
-    numCacheEntries: u32,
-};
 pub const FWPM_LAYER_STATISTICS1 = extern struct {
     layerId: GUID,
     classifyPermitCount: u32,
@@ -42666,44 +43261,6 @@ pub const FWPM_SESSION0 = extern struct {
     sid: [*c]SID,
     username: [*c]u16,
     kernelMode: BOOL,
-};
-pub const FWPM_STATISTICS0 = extern struct {
-    numLayerStatistics: u32,
-    layerStatistics: [*c]FWPM_LAYER_STATISTICS0,
-    inboundAllowedConnectionsV4: u32,
-    inboundBlockedConnectionsV4: u32,
-    outboundAllowedConnectionsV4: u32,
-    outboundBlockedConnectionsV4: u32,
-    inboundAllowedConnectionsV6: u32,
-    inboundBlockedConnectionsV6: u32,
-    outboundAllowedConnectionsV6: u32,
-    outboundBlockedConnectionsV6: u32,
-    inboundActiveConnectionsV4: u32,
-    outboundActiveConnectionsV4: u32,
-    inboundActiveConnectionsV6: u32,
-    outboundActiveConnectionsV6: u32,
-    reauthDirInbound: u64,
-    reauthDirOutbound: u64,
-    reauthFamilyV4: u64,
-    reauthFamilyV6: u64,
-    reauthProtoOther: u64,
-    reauthProtoIPv4: u64,
-    reauthProtoIPv6: u64,
-    reauthProtoICMP: u64,
-    reauthProtoICMP6: u64,
-    reauthProtoUDP: u64,
-    reauthProtoTCP: u64,
-    reauthReasonPolicyChange: u64,
-    reauthReasonNewArrivalInterface: u64,
-    reauthReasonNewNextHopInterface: u64,
-    reauthReasonProfileCrossing: u64,
-    reauthReasonClassifyCompletion: u64,
-    reauthReasonIPSecPropertiesChanged: u64,
-    reauthReasonMidStreamInspection: u64,
-    reauthReasonSocketPropertyChanged: u64,
-    reauthReasonNewInboundMCastBCastPacket: u64,
-    reauthReasonEDPPolicyChanged: u64,
-    reauthReasonProxyHandleChanged: u64,
 };
 pub const FWPM_STATISTICS1 = extern struct {
     numLayerStatistics: u32,
@@ -44889,6 +45446,19 @@ pub const HEAACWAVEINFO = extern struct {
     wStructType: u16 align(1),
     wReserved1: u16 align(1),
     dwReserved2: u32 align(1),
+};
+pub const HEAP_MEMORY_USAGE_ENTRY = extern struct {
+    HeapHandle: ?*anyopaque,
+    TotalCommittedBytes: usize,
+    TotalReservedBytes: usize,
+};
+pub const HEAP_MEMORY_USAGE_INFORMATION = extern struct {
+    Version: u16,
+    EntryCount: usize,
+    pub fn Entries(self: anytype) FlexibleArrayType(@TypeOf(self), HEAP_MEMORY_USAGE_ENTRY) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(HEAP_MEMORY_USAGE_ENTRY)));
+    }
 };
 pub const HEAP_OPTIMIZE_RESOURCES_INFORMATION = extern struct {
     Version: u32,
@@ -48021,6 +48591,14 @@ pub const IMAGE_FILE_HEADER = extern struct {
     SizeOfOptionalHeader: u16,
     Characteristics: u16,
 };
+pub const IMAGE_FILE_MACHINES = extern struct {
+    Anonymous: extern union {
+        Value: u32,
+        Anonymous: extern struct {
+            _bitfield: u32,
+        },
+    },
+};
 pub const IMAGE_FUNCTION_ENTRY = extern struct {
     StartingAddress: u32,
     EndingAddress: u32,
@@ -48072,6 +48650,41 @@ pub const IMAGE_HOT_PATCH_MACHINE = extern struct {
     Anonymous: extern struct {
         _bitfield: u32,
     },
+};
+pub const IMAGE_HOTSWAP_ARM64_ENDPOINT_INFO_ENTRY_V2 = extern struct {
+    Common: IMAGE_HOTSWAP_ENDPOINT_INFO_ENTRY_COMMON,
+    IntArgs: u32,
+    FloatArgs: u32,
+    ArgStackSize: u32,
+    ReturnType: i32,
+    pub fn Name(self: anytype) FlexibleArrayType(@TypeOf(self), u8) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(u8)));
+    }
+};
+pub const IMAGE_HOTSWAP_ENDPOINT_INFO_ENTRY_COMMON = extern struct {
+    Size: u32,
+    Rva: u32,
+    NameSize: u32,
+    NameOffset: u32,
+};
+pub const IMAGE_HOTSWAP_ENDPOINT_INFO_HEADER_COMMON = extern struct {
+    Version: u32,
+    Size: u32,
+};
+pub const IMAGE_HOTSWAP_ENDPOINT_INFO_HEADER_V2 = extern struct {
+    Common: IMAGE_HOTSWAP_ENDPOINT_INFO_HEADER_COMMON,
+    Count: u32,
+};
+pub const IMAGE_HOTSWAP_X64_ENDPOINT_INFO_ENTRY_V2 = extern struct {
+    Common: IMAGE_HOTSWAP_ENDPOINT_INFO_ENTRY_COMMON,
+    ArgRegs: [4]i32,
+    ArgStackSize: u32,
+    RetReg: i32,
+    pub fn Name(self: anytype) FlexibleArrayType(@TypeOf(self), u8) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(u8)));
+    }
 };
 pub const IMAGE_IMPORT_BY_NAME = extern struct {
     Hint: u16,
@@ -53401,6 +54014,7 @@ pub const KDDEBUGGER_DATA64 = extern struct {
     ShadowStackEnabled: u64,
     PointerAuthMask: u64,
     OffsetPrcbExceptionStack: u16,
+    PointerIgnoreBits: u64,
 };
 pub const KDEXT_DUMP_HANDLE_CALLBACK = ?*const fn (HandleInfo: [*c]KDEXT_HANDLE_INFORMATION, Flags: u32, Context: ?*anyopaque) callconv(.winapi) BOOLEAN;
 pub const KDEXT_FILELOCK_OWNER = extern struct {
@@ -60409,9 +61023,16 @@ pub const MEMORY_BASIC_INFORMATION64 = extern struct {
     __alignment2: u32,
 };
 pub const MEMORY_DEFECT = extern struct {
-    Version: u32 align(1),
+    Version: u16 align(1),
+    Flags: MEMORY_DEFECT_FLAGS align(1),
     DimmInfo: DIMM_INFO align(1),
     ErrType: i32 align(1),
+};
+pub const MEMORY_DEFECT_FLAGS = extern union {
+    Anonymous: extern struct {
+        _bitfield: u16 align(1),
+    } align(1),
+    AsUINT16: u16 align(1),
 };
 pub const MEMORY_PARTITION_DEDICATED_MEMORY_ATTRIBUTE = extern struct {
     Type: i32,
@@ -63447,7 +64068,7 @@ pub const MIDL_STUB_MESSAGE = extern struct {
     FullPtrXlatTables: [*c]FULL_PTR_XLAT_TABLES,
     FullPtrRefId: u32,
     PointerLength: u32,
-    _bitfield: i32,
+    _bitfield: u32,
     dwDestContext: u32,
     pvDestContext: ?*anyopaque,
     SavedContextHandles: [*c][*c]NDR_SCONTEXT,
@@ -63615,6 +64236,7 @@ pub const MINIDUMP_CALLBACK_INPUT = extern struct {
         VmQuery: MINIDUMP_VM_QUERY_CALLBACK,
         VmPreRead: MINIDUMP_VM_PRE_READ_CALLBACK,
         VmPostRead: MINIDUMP_VM_POST_READ_CALLBACK,
+        CompressedMemoryStreamFinish: MINIDUMP_COMPRESSED_MEMORY_STREAM_FINISH_CALLBACK,
     } align(4),
 };
 pub const MINIDUMP_CALLBACK_OUTPUT = extern struct {
@@ -63643,10 +64265,22 @@ pub const MINIDUMP_CALLBACK_OUTPUT = extern struct {
             VmReadStatus: HRESULT,
             VmReadBytesCompleted: u32,
         },
+        CompressedMemoryStreamStart: MINIDUMP_COMPRESSED_MEMORY_STREAM_START_CALLBACK,
         Status: HRESULT,
     } align(4),
 };
 pub const MINIDUMP_CALLBACK_ROUTINE = ?*const fn (CallbackParam: ?*anyopaque, CallbackInput: [*c]MINIDUMP_CALLBACK_INPUT, CallbackOutput: [*c]MINIDUMP_CALLBACK_OUTPUT) callconv(.winapi) BOOL;
+pub const MINIDUMP_COMPRESSED_MEMORY_STREAM_FINISH_CALLBACK = extern struct {
+    CompressedStreamSize: u64 align(4),
+    StreamCompressionRate: u32 align(4),
+};
+pub const MINIDUMP_COMPRESSED_MEMORY_STREAM_START_CALLBACK = extern struct {
+    MaxParallelism: u32 align(4),
+    MaxTransferSize: u32 align(4),
+    NumaNodeInfoArray: [*c]NUMA_NODE_RELATIONSHIP align(4),
+    NumaNodeInfoArraySize: u32 align(4),
+    Reserved: u32 align(4),
+};
 pub const MINIDUMP_DIRECTORY = extern struct {
     StreamType: u32 align(4),
     Location: MINIDUMP_LOCATION_DESCRIPTOR align(4),
@@ -70777,6 +71411,20 @@ pub const NTSCSI_UNICODE_STRING = extern struct {
     MaximumLength: u16,
     Buffer: [*c]u16,
 };
+pub const NUMA_NODE_MEMORY_PERFORMANCE_BANDWIDTH = extern struct {
+    Condition: NUMA_NODE_MEMORY_PERFORMANCE_MEASUREMENT_CONDITION,
+    Bandwidth: u64,
+};
+pub const NUMA_NODE_MEMORY_PERFORMANCE_LATENCY = extern struct {
+    Condition: NUMA_NODE_MEMORY_PERFORMANCE_MEASUREMENT_CONDITION,
+    Latency: u64,
+};
+pub const NUMA_NODE_MEMORY_PERFORMANCE_MEASUREMENT_CONDITION = extern struct {
+    Flags: extern struct {
+        _bitfield: u8,
+    },
+    MinTransferSizeInBytes: u64,
+};
 pub const NUMA_NODE_RELATIONSHIP = extern struct {
     NodeNumber: u32,
     Reserved: [18]u8,
@@ -70915,6 +71563,22 @@ pub const NVME_ADMIN_SUBMISSION_QUEUE_BASE_ADDRESS = extern union {
 pub const NVME_AUTO_POWER_STATE_TRANSITION_ENTRY = extern struct {
     _bitfield: u32,
     Reserved1: u32,
+};
+pub const NVME_BOOT_PARTITION_INFORMATION = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+    },
+    AsUlong: u32,
+};
+pub const NVME_BOOT_PARTITION_LOG = extern struct {
+    LogIdentifier: u8,
+    Reserved0: [3]u8,
+    BpInfo: NVME_BOOT_PARTITION_INFORMATION,
+    Reserved1: [8]u8,
+    pub fn BootPartitionData(self: anytype) FlexibleArrayType(@TypeOf(self), u8) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(u8)));
+    }
 };
 pub const NVME_CDW0_FEATURE_DSSD_POWER_STATE = extern union {
     Anonymous: extern struct {
@@ -71840,7 +72504,8 @@ pub const NVME_CONTROLLER_REGISTERS = extern struct {
     ACQ: NVME_ADMIN_COMPLETION_QUEUE_BASE_ADDRESS,
     CMBLOC: NVME_CONTROLLER_MEMORY_BUFFER_LOCATION,
     CMBSZ: NVME_CONTROLLER_MEMORY_BUFFER_SIZE,
-    Reserved1: [9]u32,
+    BPINFO: NVME_BOOT_PARTITION_INFORMATION,
+    Reserved1: [8]u32,
     NSSD: NVME_NVM_SUBSYSTEM_SHUTDOWN,
     CRTO: NVME_CONTROLLER_READY_TIMEOUTS,
     Reserved2: [933]u32,
@@ -75287,6 +75952,7 @@ pub const PARTITION_INFORMATION = extern struct {
 };
 pub const PARTITION_INFORMATION_EX = extern struct {
     PartitionStyle: i32,
+    PartitionOrdinal: u16,
     StartingOffset: i64,
     PartitionLength: i64,
     PartitionNumber: u32,
@@ -75831,6 +76497,7 @@ pub const PDD_WAITFORVERTICALBLANK = ?*const fn ([*c]DD_WAITFORVERTICALBLANKDATA
 pub const PDEBUG_EXTENSION_CALL = ?*const fn (Client: [*c]IDebugClient, Args: [*c]const u8) callconv(.winapi) HRESULT;
 pub const PDEBUG_EXTENSION_CANUNLOAD = ?*const fn () callconv(.winapi) HRESULT;
 pub const PDEBUG_EXTENSION_INITIALIZE = ?*const fn (Version: [*c]u32, Flags: [*c]u32) callconv(.winapi) HRESULT;
+pub const PDEBUG_EXTENSION_ISEXTENSIONAPI = ?*const fn (Name: [*c]const u8) callconv(.winapi) BOOL;
 pub const PDEBUG_EXTENSION_KNOWN_STRUCT = ?*const fn (Flags: u32, Offset: u64, TypeName: [*c]u8, Buffer: [*c]u8, BufferChars: [*c]u32) callconv(.winapi) HRESULT;
 pub const PDEBUG_EXTENSION_KNOWN_STRUCT_EX = ?*const fn (Client: [*c]IDebugClient, Flags: u32, Offset: u64, TypeName: [*c]const u8, Buffer: [*c]u8, BufferChars: [*c]u32) callconv(.winapi) HRESULT;
 pub const PDEBUG_EXTENSION_NOTIFY = ?*const fn (Notify: u32, Argument: u64) callconv(.winapi) void;
@@ -80206,6 +80873,15 @@ pub const PROCESS_COMMIT_USAGE = extern struct {
     SharedCommitCharge: u64,
     ReleasedCommitDebt: u64,
     Reserved: u64,
+};
+pub const PROCESS_CREATION_SME_VECTOR_LENGTH = extern struct {
+    Anonymous: extern union {
+        Data: u32,
+        Anonymous: extern struct {
+            _bitfield: u32,
+        },
+    },
+    Reserved: u32,
 };
 pub const PROCESS_CREATION_SVE_VECTOR_LENGTH = extern union {
     Data: u32,
@@ -88308,6 +88984,18 @@ pub const SECURITY_CAPABILITIES = extern struct {
     CapabilityCount: u32,
     Reserved: u32,
 };
+pub const SECURITY_CONTAINMENT_CONFIGURATION = extern struct {
+    Size: u32,
+    Anonymous: extern union {
+        Flags: u32,
+        Anonymous: extern struct {
+            _bitfield: u32,
+        },
+    },
+    ExistingTokenHandle: HANDLE,
+    SecurityCapabilities: SECURITY_CAPABILITIES,
+    AppContainerIntegrityLevel: u32,
+};
 pub const SECURITY_DESCRIPTOR = extern struct {
     Revision: u8,
     Sbz1: u8,
@@ -89829,6 +90517,16 @@ pub const SHARE_INFO_503 = extern struct {
     shi503_reserved: u32,
     shi503_security_descriptor: PSECURITY_DESCRIPTOR,
 };
+pub const SHARED_COMPUTE_UNIT_RELATIONSHIP = extern struct {
+    Type: u32,
+    ComputeUnitCount: u32,
+    Reserved: [14]u8,
+    GroupCount: u16,
+    pub fn GroupMasks(self: anytype) FlexibleArrayType(@TypeOf(self), GROUP_AFFINITY) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(GROUP_AFFINITY)));
+    }
+};
 pub const SHARED_VIRTUAL_DISK_SUPPORT = extern struct {
     SharedVirtualDiskSupport: i32,
     HandleState: i32,
@@ -90558,6 +91256,38 @@ pub const SIPAEVENT_KSR_SIGNATURE_PAYLOAD = extern struct {
         return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(u8)));
     }
 };
+pub const SIPAEVENT_REFS_ATTESTATION_CERTIFICATE_HEADER = extern struct {
+    Size: u32,
+    Version: u32,
+    LeafCertificateFingerprintSize: u32,
+    LeafCertificateFingerprint: [64]u8,
+    RootCertificateFingerprintSize: u32,
+    RootCertificateFingerprint: [64]u8,
+    AttestedHashSize: u32,
+    AttestedHash: [64]u8,
+    UserPayloadOffset: u32,
+    UserPayloadSize: u32,
+    LeafCertificateIssuerBlobOffset: u32,
+    LeafCertificateIssuerBlobSize: u32,
+    LeafCertificateSubjectBlobOffset: u32,
+    LeafCertificateSubjectBlobSize: u32,
+    Reserved: [2]u64,
+    pub fn Data(self: anytype) FlexibleArrayType(@TypeOf(self), u8) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(u8)));
+    }
+};
+pub const SIPAEVENT_REFS_ATTESTATION_SUMMARY_HEADER = extern struct {
+    Size: u32,
+    Version: u32,
+    AttestedType: i32,
+    AttestedHashSize: u32,
+    AttestedHash: [64]u8,
+    ProofOfOriginHashSize: u32,
+    ProofOfOriginHash: [64]u8,
+    Reserved: [4]u64,
+    CertificateHeader: SIPAEVENT_REFS_ATTESTATION_CERTIFICATE_HEADER,
+};
 pub const SIPAEVENT_REFS_ROLLBACK_PROTECTION_USER_PAYLOAD_HASH_DATA = extern struct {
     ChecksumType: u16,
     pub fn ChecksumBuffer(self: anytype) FlexibleArrayType(@TypeOf(self), u8) {
@@ -90617,6 +91347,12 @@ pub const SIPAEVENT_SI_POLICY_SIGNER_PAYLOAD = extern struct {
         const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
         return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(u8)));
     }
+};
+pub const SIPAEVENT_SI_POLICY_SUPPLEMENTAL_POLICY_INFO_V1 = extern struct {
+    PayloadVersion: u32 align(1),
+    VarDataOffset: u32 align(1),
+    PolicyNameLength: u16 align(1),
+    BasePolicyIDLength: u16 align(1),
 };
 pub const SIPAEVENT_VSM_IDK_INFO_PAYLOAD = extern struct {
     KeyAlgID: u32 align(1),
@@ -93563,6 +94299,27 @@ pub const STnefProblemArray = extern struct {
         return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(STnefProblem)));
     }
 };
+pub const STOR_PAGING_DEVICE_DUMP_DATA = extern struct {
+    Descriptor: DEVICEDUMP_STRUCTURE_VERSION align(1),
+    EntryCount: u32 align(1),
+    EntrySize: u32 align(1),
+    pub fn Entries(self: anytype) FlexibleArrayType(@TypeOf(self), STOR_PAGING_DEVICE_DUMP_ENTRY) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(STOR_PAGING_DEVICE_DUMP_ENTRY)));
+    }
+};
+pub const STOR_PAGING_DEVICE_DUMP_ENTRY = extern struct {
+    MiniportName: [33]CHAR align(1),
+    ModelName: [65]CHAR align(1),
+    FirmwareRevision: [17]CHAR align(1),
+    PagingPathCount: u16 align(1),
+    Flags: extern union {
+        Anonymous: extern struct {
+            _bitfield: u8,
+        },
+        AsUchar: u8,
+    } align(1),
+};
 pub const STORAGE_ACCESS_ALIGNMENT_DESCRIPTOR = extern struct {
     Version: u32,
     Size: u32,
@@ -93612,6 +94369,32 @@ pub const STORAGE_ATTRIBUTE_MGMT = extern struct {
     Size: u32,
     Action: i32,
     Attribute: u32,
+};
+pub const STORAGE_BOOT_PARTITION_ACTIVATE = extern struct {
+    Version: u32,
+    Size: u32,
+    BPID: u8,
+    Reserved0: [3]u8,
+};
+pub const STORAGE_BOOT_PARTITION_DOWNLOAD = extern struct {
+    Version: u32,
+    Size: u32,
+    BPID: u8,
+    Offset: u64,
+    BufferSize: u64,
+    pub fn ImageBuffer(self: anytype) FlexibleArrayType(@TypeOf(self), u8) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(u8)));
+    }
+};
+pub const STORAGE_BOOT_PARTITION_INFO = extern struct {
+    Version: u32,
+    Size: u32,
+    BPSZ: u64,
+    ImagePayloadAlignment: u32,
+    ImagePayloadMaxSize: u32,
+    SlotCount: u8,
+    ABPID: u8,
 };
 pub const STORAGE_BREAK_RESERVATION_REQUEST = extern struct {
     Length: u32,
@@ -94023,6 +94806,36 @@ pub const STORAGE_HOTPLUG_INFO = extern struct {
     MediaHotplug: BOOLEAN,
     DeviceHotplug: BOOLEAN,
     WriteCacheEnableOverride: BOOLEAN,
+};
+pub const STORAGE_HW_BOOT_PARTITION_ACTIVATE = extern struct {
+    Version: u32,
+    Size: u32,
+    Flags: u32,
+    BPID: u8,
+    Reserved: [3]u8,
+};
+pub const STORAGE_HW_BOOT_PARTITION_DOWNLOAD = extern struct {
+    Version: u32,
+    Size: u32,
+    Flags: u32,
+    BPID: u8,
+    Reserved: [3]u8,
+    Offset: u64,
+    BufferSize: u64,
+    pub fn ImageBuffer(self: anytype) FlexibleArrayType(@TypeOf(self), u8) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(u8)));
+    }
+};
+pub const STORAGE_HW_BOOT_PARTITION_INFO = extern struct {
+    Version: u32,
+    Size: u32,
+    BPSZ: u64,
+    Flags: u32,
+    ImagePayloadAlignment: u32,
+    ImagePayloadMaxSize: u32,
+    SlotCount: u8,
+    ABPID: u8,
 };
 pub const STORAGE_HW_CRYPTO_CAPABILITY = extern struct {
     Version: u32,
@@ -95248,6 +96061,15 @@ pub const SyncProviderConfiguration = extern struct {
 pub const CLSID_SyncProviderRegistration: GUID = .{ .Data1 = 4163587825, .Data2 = 37801, .Data3 = 19934, .Data4 = .{ 128, 21, 247, 149, 10, 26, 110, 49 } };
 pub const CLSID_SyncResultsFolder: GUID = .{ .Data1 = 1910084708, .Data2 = 15211, .Data3 = 18268, .Data4 = .{ 178, 65, 225, 88, 131, 32, 117, 41 } };
 pub const CLSID_SyncSetupFolder: GUID = .{ .Data1 = 782129600, .Data2 = 46135, .Data3 = 18817, .Data4 = .{ 166, 71, 156, 52, 185, 185, 8, 145 } };
+pub const SYNTHETIC_DEVICE_CREATION_PARAMS = extern struct {
+    pointerType: i32,
+    maxCount: u32,
+    feedbackMode: i32,
+    hMonitor: HMONITOR,
+    deviceWidth: u32,
+    deviceHeight: u32,
+    options: i32,
+};
 pub const SYSTEM_ACCESS_FILTER_ACE = extern struct {
     Header: ACE_HEADER,
     Mask: u32,
@@ -95420,6 +96242,7 @@ pub const SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX = extern struct {
         NumaNode: NUMA_NODE_RELATIONSHIP,
         Cache: CACHE_RELATIONSHIP,
         Group: GROUP_RELATIONSHIP,
+        SharedComputeUnit: SHARED_COMPUTE_UNIT_RELATIONSHIP,
     },
 };
 pub const SYSTEM_LOOKASIDE_INFORMATION = extern struct {
@@ -95545,7 +96368,7 @@ pub const SYSTEM_PROCESS_INFORMATION = extern struct {
     ImageName: UNICODE_STRING,
     BasePriority: i32,
     UniqueProcessId: HANDLE,
-    Reserved2: ?*anyopaque,
+    InheritedFromUniqueProcessId: HANDLE,
     HandleCount: u32,
     SessionId: u32,
     Reserved3: ?*anyopaque,
@@ -96904,6 +97727,17 @@ pub const TLIBATTR = extern struct {
 pub const TLS_EXTENSION_SUBSCRIPTION = extern struct {
     ExtensionType: u16,
     HandshakeType: u16,
+};
+pub const TLS_HYBRID_KEYEXCHANGE_BLOB = extern struct {
+    dwMagic: u32,
+    dwKeyType: u32,
+    NumBlobs: u8,
+    rgwszBlobTypes: [4][*c]const u16,
+    rgbBlobs: [4][*c]u8,
+};
+pub const TLS_KEM_CIPHERTEXT_BLOB = extern struct {
+    dwMagic: u32,
+    cbLength: u32,
 };
 pub const TLS_PARAMETERS = extern struct {
     cAlpnIds: u32,
@@ -100967,6 +101801,10 @@ pub const VBS_ENCLAVE_REPORT_MODULE = extern struct {
         return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(u16)));
     }
 };
+pub const VBS_ENCLAVE_REPORT_PACKAGE_ID = extern struct {
+    Header: VBS_ENCLAVE_REPORT_VARDATA_HEADER,
+    PackageIdentity: ENCLAVE_PACKAGE_IDENTITY,
+};
 pub const VBS_ENCLAVE_REPORT_PKG_HEADER = extern struct {
     PackageSize: u32 align(1),
     Version: u32 align(1),
@@ -103734,6 +104572,18 @@ pub const WEBAUTHN_PLUGIN_ADD_AUTHENTICATOR_OPTIONS = extern struct {
     cSupportedRpIds: u32,
     ppwszSupportedRpIds: [*c][*c]const u16,
 };
+pub const WEBAUTHN_PLUGIN_ADD_AUTHENTICATOR_OPTIONS_2 = extern struct {
+    pwszAuthenticatorName: [*c]const u16,
+    pClsid: [*c]const GUID,
+    pwszPluginRpId: [*c]const u16,
+    pwszLightThemeLogoSvg: [*c]const u16,
+    pwszDarkThemeLogoSvg: [*c]const u16,
+    cbAuthenticatorInfo: u32,
+    pbAuthenticatorInfo: [*c]const u8,
+    cSupportedRpIds: u32,
+    ppwszSupportedRpIds: [*c][*c]const u16,
+    pwszUserVerificationKeyName: [*c]const u16,
+};
 pub const WEBAUTHN_PLUGIN_ADD_AUTHENTICATOR_RESPONSE = extern struct {
     cbOpSignPubKey: u32,
     pbOpSignPubKey: [*c]u8,
@@ -103778,11 +104628,31 @@ pub const WEBAUTHN_PLUGIN_UPDATE_AUTHENTICATOR_DETAILS = extern struct {
     cSupportedRpIds: u32,
     ppwszSupportedRpIds: [*c][*c]const u16,
 };
+pub const WEBAUTHN_PLUGIN_UPDATE_AUTHENTICATOR_DETAILS_2 = extern struct {
+    pwszAuthenticatorName: [*c]const u16,
+    pClsid: [*c]const GUID,
+    pClsidNew: [*c]const GUID,
+    pwszLightThemeLogoSvg: [*c]const u16,
+    pwszDarkThemeLogoSvg: [*c]const u16,
+    cbAuthenticatorInfo: u32,
+    pbAuthenticatorInfo: [*c]const u8,
+    cSupportedRpIds: u32,
+    ppwszSupportedRpIds: [*c][*c]const u16,
+    pwszUserVerificationKeyName: [*c]const u16,
+};
 pub const WEBAUTHN_PLUGIN_USER_VERIFICATION_REQUEST = extern struct {
     hwnd: HWND,
     rguidTransactionId: [*c]const GUID,
     pwszUsername: [*c]const u16,
     pwszDisplayHint: [*c]const u16,
+};
+pub const WEBAUTHN_PLUGIN_USER_VERIFICATION_REQUEST_2 = extern struct {
+    hwnd: HWND,
+    pGuidTransactionId: [*c]const GUID,
+    pwszUsername: [*c]const u16,
+    pwszDisplayHint: [*c]const u16,
+    cbBufferToSign: u32,
+    pbBufferToSign: [*c]u8,
 };
 pub const WEBAUTHN_RP_ENTITY_INFORMATION = extern struct {
     dwVersion: u32,
@@ -104110,6 +104980,32 @@ pub const WHEA_ERROR_SOURCE_DESCRIPTOR = extern struct {
         DeviceDriverDescriptor: WHEA_DEVICE_DRIVER_DESCRIPTOR,
     } align(1),
 };
+pub const WHEA_ERROR_SOURCE_DESCRIPTOR_V2 = extern struct {
+    Length: u32 align(1),
+    Version: u32 align(1),
+    Type: i32 align(1),
+    State: i32 align(1),
+    MaxRawDataLength: u32 align(1),
+    NumRecordsToPreallocate: u32 align(1),
+    MaxSectionsPerRecord: u32 align(1),
+    ErrorSourceId: u32 align(1),
+    PlatformErrorSourceId: u32 align(1),
+    Flags: u32 align(1),
+    Info: extern union {
+        XpfMceDescriptorV2: WHEA_XPF_MCE_DESCRIPTOR_V2,
+        XpfCmcDescriptorV2: WHEA_XPF_CMC_DESCRIPTOR_V2,
+        XpfNmiDescriptor: WHEA_XPF_NMI_DESCRIPTOR,
+        IpfMcaDescriptor: WHEA_IPF_MCA_DESCRIPTOR,
+        IpfCmcDescriptor: WHEA_IPF_CMC_DESCRIPTOR,
+        IpfCpeDescriptor: WHEA_IPF_CPE_DESCRIPTOR,
+        AerRootportDescriptor: WHEA_AER_ROOTPORT_DESCRIPTOR,
+        AerEndpointDescriptor: WHEA_AER_ENDPOINT_DESCRIPTOR,
+        AerBridgeDescriptor: WHEA_AER_BRIDGE_DESCRIPTOR,
+        GenErrDescriptor: WHEA_GENERIC_ERROR_DESCRIPTOR,
+        GenErrDescriptorV2: WHEA_GENERIC_ERROR_DESCRIPTOR_V2,
+        DeviceDriverDescriptor: WHEA_DEVICE_DRIVER_DESCRIPTOR,
+    } align(1),
+};
 pub const WHEA_ERROR_SOURCE_INITIALIZE_DEVICE_DRIVER = ?*const fn (Context: ?*anyopaque, ErrorSourceId: u32) callconv(.winapi) NTSTATUS;
 pub const WHEA_ERROR_SOURCE_UNINITIALIZE_DEVICE_DRIVER = ?*const fn (Context: ?*anyopaque) callconv(.winapi) void;
 pub const WHEA_GENERIC_ERROR_DESCRIPTOR = extern struct {
@@ -104248,6 +105144,14 @@ pub const WHEA_XPF_CMC_DESCRIPTOR = extern struct {
     Notify: WHEA_NOTIFICATION_DESCRIPTOR align(1),
     Banks: [32]WHEA_XPF_MC_BANK_DESCRIPTOR align(1),
 };
+pub const WHEA_XPF_CMC_DESCRIPTOR_V2 = extern struct {
+    Type: u16 align(1),
+    Enabled: BOOLEAN align(1),
+    NumberOfBanks: u8 align(1),
+    Reserved: u32 align(1),
+    Notify: WHEA_NOTIFICATION_DESCRIPTOR align(1),
+    Banks: [64]WHEA_XPF_MC_BANK_DESCRIPTOR align(1),
+};
 pub const WHEA_XPF_MC_BANK_DESCRIPTOR = extern struct {
     BankNumber: u8 align(1),
     ClearOnInitialization: BOOLEAN align(1),
@@ -104268,6 +105172,15 @@ pub const WHEA_XPF_MCE_DESCRIPTOR = extern struct {
     MCG_GlobalControl: u64 align(1),
     Banks: [32]WHEA_XPF_MC_BANK_DESCRIPTOR align(1),
 };
+pub const WHEA_XPF_MCE_DESCRIPTOR_V2 = extern struct {
+    Type: u16 align(1),
+    Enabled: u8 align(1),
+    NumberOfBanks: u8 align(1),
+    Flags: XPF_MCE_FLAGS align(1),
+    MCG_Capability: u64 align(1),
+    MCG_GlobalControl: u64 align(1),
+    Banks: [64]WHEA_XPF_MC_BANK_DESCRIPTOR align(1),
+};
 pub const WHEA_XPF_NMI_DESCRIPTOR = extern struct {
     Type: u16 align(1),
     Enabled: BOOLEAN align(1),
@@ -104276,7 +105189,9 @@ pub const WHV_ACCESS_GPA_CONTROLS = extern union {
     AsUINT64: u64,
     Anonymous: extern struct {
         CacheType: i32,
-        Reserved: u32,
+        InputVtl: WHV_INPUT_VTL,
+        Reserved: u8,
+        Reserved1: u16,
     },
 };
 pub const WHV_ADVISE_GPA_RANGE = extern union {
@@ -104292,24 +105207,174 @@ pub const WHV_ADVISE_GPA_RANGE_POPULATE_FLAGS = extern union {
         _bitfield: u32,
     },
 };
-pub const WHV_CAPABILITY = extern union {
-    HypervisorPresent: BOOL,
-    Features: WHV_CAPABILITY_FEATURES,
-    ExtendedVmExits: WHV_EXTENDED_VM_EXITS,
-    ProcessorVendor: i32,
-    ProcessorFeatures: WHV_PROCESSOR_FEATURES,
-    SyntheticProcessorFeaturesBanks: WHV_SYNTHETIC_PROCESSOR_FEATURES_BANKS,
-    ProcessorXsaveFeatures: WHV_PROCESSOR_XSAVE_FEATURES,
-    ProcessorClFlushSize: u8,
-    ExceptionExitBitmap: u64,
-    X64MsrExitBitmap: WHV_X64_MSR_EXIT_BITMAP,
-    ProcessorClockFrequency: u64,
-    InterruptClockFrequency: u64,
-    ProcessorFeaturesBanks: WHV_PROCESSOR_FEATURES_BANKS,
-    GpaRangePopulateFlags: WHV_ADVISE_GPA_RANGE_POPULATE_FLAGS,
-    ProcessorFrequencyCap: WHV_CAPABILITY_PROCESSOR_FREQUENCY_CAP,
-    ProcessorPerfmonFeatures: WHV_PROCESSOR_PERFMON_FEATURES,
-    SchedulerFeatures: WHV_SCHEDULER_FEATURES,
+pub const WHV_ARM64_GLOBAL_INTERRUPT_CONTROLLER_STATE = extern struct {
+    Version: u8,
+    GicVersion: u8,
+    Reserved0: [2]u8,
+    NumInterrupts: u32,
+    GicdCtlrEnableGrp1A: u64,
+    pub fn Interrupts(self: anytype) FlexibleArrayType(@TypeOf(self), WHV_ARM64_GLOBAL_INTERRUPT_STATE) {
+        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
+        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(WHV_ARM64_GLOBAL_INTERRUPT_STATE)));
+    }
+};
+pub const WHV_ARM64_GLOBAL_INTERRUPT_STATE = extern struct {
+    InterruptId: u32,
+    ActiveVpIndex: u32,
+    Anonymous: extern union {
+        TargetMpidr: u32,
+        TargetVpIndex: u32,
+    },
+    InterruptState: WHV_ARM64_INTERRUPT_STATE,
+};
+pub const WHV_ARM64_HYPERCALL_CONTEXT = extern struct {
+    Header: WHV_INTERCEPT_MESSAGE_HEADER,
+    Immediate: u16,
+    Reserved1: u16,
+    Reserved2: u32,
+    X: [18]u64,
+};
+pub const WHV_ARM64_IC_GIC_V3_PARAMETERS = extern struct {
+    GicdBaseAddress: u64,
+    GitsTranslaterBaseAddress: u64,
+    Reserved: u32,
+    GicLpiIntIdBits: u32,
+    GicPpiOverflowInterruptFromCntv: u32,
+    GicPpiPerformanceMonitorsInterrupt: u32,
+    Reserved1: [6]u32,
+};
+pub const WHV_ARM64_IC_PARAMETERS = extern struct {
+    EmulationMode: i32,
+    Reserved: u32,
+    Anonymous: extern union {
+        GicV3Parameters: WHV_ARM64_IC_GIC_V3_PARAMETERS,
+    },
+};
+pub const WHV_ARM64_INTERRUPT_STATE = extern struct {
+    Anonymous: extern struct {
+        _bitfield: u8,
+    },
+    GicrIpriorityrConfigured: u8,
+    GicrIpriorityrActive: u8,
+    Reserved1: u8,
+};
+pub const WHV_ARM64_LOCAL_INTERRUPT_CONTROLLER_STATE = extern struct {
+    Version: u8,
+    GicVersion: u8,
+    Reserved0: [6]u8,
+    IccIgrpen1El1: u64,
+    GicrCtlrEnableLpis: u64,
+    IccBpr1El1: u64,
+    IccPmrEl1: u64,
+    GicrPropbaser: u64,
+    GicrPendbaser: u64,
+    IchAp1REl2: [4]u32,
+    BankedInterruptState: [32]WHV_ARM64_INTERRUPT_STATE,
+};
+pub const WHV_ARM64_PENDING_EVENT = extern union {
+    Anonymous1: extern struct {
+        Reg0: WHV_UINT128,
+        Reg1: WHV_UINT128,
+    },
+    Anonymous2: extern struct {
+        _bitfield: u8,
+        EventData: [15]u8,
+    },
+    Exception: WHV_ARM64_PENDING_EXCEPTION_EVENT,
+    SyntheticException: WHV_ARM64_PENDING_SYNTHETIC_EXCEPTION_EVENT,
+};
+pub const WHV_ARM64_PENDING_EXCEPTION_EVENT = extern union {
+    AsUINT64: [3]u64,
+    Anonymous: extern struct {
+        _bitfield: u8,
+        Reserved1: u8,
+        Reserved2: u16,
+        Reserved3: u32,
+        EsrElx: u64,
+        FarElx: u64,
+    },
+};
+pub const WHV_ARM64_PENDING_SYNTHETIC_EXCEPTION_EVENT = extern union {
+    AsUINT64: [2]u64,
+    Anonymous: extern struct {
+        _bitfield: u8,
+        Reserved1: u8,
+        Reserved2: u16,
+        ExceptionType: u32,
+        Context: u64,
+    },
+};
+pub const WHV_ARM64_PROCESSOR_FEATURES = extern union {
+    Anonymous: extern struct {
+        _bitfield: u64,
+    },
+    AsUINT64: u64,
+};
+pub const WHV_ARM64_PROCESSOR_FEATURES1 = extern union {
+    Anonymous: extern struct {
+        _bitfield: u64,
+    },
+    AsUINT64: u64,
+};
+pub const WHV_ARM64_RESET_CONTEXT = extern struct {
+    Header: WHV_INTERCEPT_MESSAGE_HEADER,
+    ResetType: i32,
+    Reserved: u32,
+};
+pub const WHV_ARM64_VP_STATE_SME = extern struct {
+    Version: u16,
+    RegisterDataOffset: u16,
+    StreamingVectorLength: u32,
+    Reserved0: u64,
+};
+pub const WHV_ARM64_VP_STATE_SVE = extern struct {
+    Version: u16,
+    RegisterDataOffset: u16,
+    VectorLength: u32,
+    Reserved0: u64,
+};
+pub const WHV_CAPABILITY = switch (arch) {
+    .aarch64 => extern union {
+        HypervisorPresent: BOOL,
+        Features: WHV_CAPABILITY_FEATURES,
+        ExtendedVmExits: WHV_EXTENDED_VM_EXITS,
+        ProcessorVendor: i32,
+        ProcessorFeatures: WHV_ARM64_PROCESSOR_FEATURES,
+        SyntheticProcessorFeaturesBanks: WHV_SYNTHETIC_PROCESSOR_FEATURES_BANKS,
+        ProcessorClFlushSize: u8,
+        ProcessorClockFrequency: u64,
+        ProcessorFeaturesBanks: WHV_PROCESSOR_FEATURES_BANKS,
+        GpaRangePopulateFlags: WHV_ADVISE_GPA_RANGE_POPULATE_FLAGS,
+        ProcessorFrequencyCap: WHV_CAPABILITY_PROCESSOR_FREQUENCY_CAP,
+        SchedulerFeatures: WHV_SCHEDULER_FEATURES,
+        PhysicalAddressWidth: u32,
+        NestedFeatureRegister: u64,
+        GicLpiIntIdBits: u32,
+        MaxSveVectorLength: u32,
+        MaxSmeStreamingVectorLength: u32,
+    },
+    .x86_64 => extern union {
+        HypervisorPresent: BOOL,
+        Features: WHV_CAPABILITY_FEATURES,
+        ExtendedVmExits: WHV_EXTENDED_VM_EXITS,
+        ProcessorVendor: i32,
+        ProcessorFeatures: WHV_X64_PROCESSOR_FEATURES,
+        SyntheticProcessorFeaturesBanks: WHV_SYNTHETIC_PROCESSOR_FEATURES_BANKS,
+        ProcessorClFlushSize: u8,
+        ProcessorClockFrequency: u64,
+        ProcessorFeaturesBanks: WHV_PROCESSOR_FEATURES_BANKS,
+        GpaRangePopulateFlags: WHV_ADVISE_GPA_RANGE_POPULATE_FLAGS,
+        ProcessorFrequencyCap: WHV_CAPABILITY_PROCESSOR_FREQUENCY_CAP,
+        SchedulerFeatures: WHV_SCHEDULER_FEATURES,
+        PhysicalAddressWidth: u32,
+        NestedFeatureRegister: u64,
+        ProcessorXsaveFeatures: WHV_PROCESSOR_XSAVE_FEATURES,
+        InterruptClockFrequency: u64,
+        ProcessorPerfmonFeatures: WHV_PROCESSOR_PERFMON_FEATURES,
+        X64MsrExitBitmap: WHV_X64_MSR_EXIT_BITMAP,
+        ExceptionExitBitmap: u64,
+    },
+    else => @compileError("WHV_CAPABILITY unsupported for target architecture"),
 };
 pub const WHV_CAPABILITY_FEATURES = extern union {
     Anonymous: extern struct {
@@ -104329,6 +105394,24 @@ pub const WHV_CPUID_OUTPUT = extern struct {
     Ebx: u32,
     Ecx: u32,
     Edx: u32,
+};
+pub const WHV_DELIVERABILITY_NOTIFICATIONS_REGISTER = extern union {
+    Anonymous: extern struct {
+        _bitfield: u64,
+    },
+    AsUINT64: u64,
+};
+pub const WHV_DISABLE_PARTITION_VTL_FLAGS = extern union {
+    AsUINT8: u8,
+    Anonymous: extern struct {
+        _bitfield: u8,
+    },
+};
+pub const WHV_DISABLE_VP_VTL_FLAGS = extern union {
+    AsUINT8: u8,
+    Anonymous: extern struct {
+        _bitfield: u8,
+    },
 };
 pub const WHV_DOORBELL_MATCH_DATA = extern struct {
     GuestAddress: u64,
@@ -104368,23 +105451,65 @@ pub const WHV_EMULATOR_STATUS = extern union {
     AsUINT32: u32,
 };
 pub const WHV_EMULATOR_TRANSLATE_GVA_PAGE_CALLBACK = ?*const fn (Context: ?*anyopaque, Gva: u64, TranslateFlags: i32, TranslationResult: [*c]i32, Gpa: [*c]u64) callconv(.winapi) HRESULT;
+pub const WHV_ENABLE_PARTITION_VTL_FLAGS = extern union {
+    AsUINT8: u8,
+    Anonymous: extern struct {
+        _bitfield: u8,
+    },
+};
 pub const WHV_EXTENDED_VM_EXITS = extern union {
     Anonymous: extern struct {
         _bitfield: u64,
     },
     AsUINT64: u64,
 };
-pub const WHV_HYPERCALL_CONTEXT = extern struct {
-    Rax: u64,
-    Rbx: u64,
-    Rcx: u64,
-    Rdx: u64,
-    R8: u64,
-    Rsi: u64,
-    Rdi: u64,
-    Reserved0: u64,
-    XmmRegisters: [6]WHV_UINT128,
-    Reserved1: [2]u64,
+pub const WHV_INITIAL_VP_CONTEXT = switch (arch) {
+    .aarch64 => extern struct {
+        Pc: u64,
+        Sp_ELh: u64,
+        SCTLR_EL1: u64,
+        MAIR_EL1: u64,
+        TCR_EL1: u64,
+        VBAR_EL1: u64,
+        TTBR0_EL1: u64,
+        TTBR1_EL1: u64,
+        X18: u64,
+    },
+    .x86_64 => extern struct {
+        Rip: u64,
+        Rsp: u64,
+        Rflags: u64,
+        Cs: WHV_X64_SEGMENT_REGISTER,
+        Ds: WHV_X64_SEGMENT_REGISTER,
+        Es: WHV_X64_SEGMENT_REGISTER,
+        Fs: WHV_X64_SEGMENT_REGISTER,
+        Gs: WHV_X64_SEGMENT_REGISTER,
+        Ss: WHV_X64_SEGMENT_REGISTER,
+        Tr: WHV_X64_SEGMENT_REGISTER,
+        Ldtr: WHV_X64_SEGMENT_REGISTER,
+        Idtr: WHV_X64_TABLE_REGISTER,
+        Gdtr: WHV_X64_TABLE_REGISTER,
+        Efer: u64,
+        Cr0: u64,
+        Cr3: u64,
+        Cr4: u64,
+        MsrCrPat: u64,
+    },
+    else => @compileError("WHV_INITIAL_VP_CONTEXT unsupported for target architecture"),
+};
+pub const WHV_INPUT_VTL = extern union {
+    AsUINT8: u8,
+    Anonymous: extern struct {
+        _bitfield: u8,
+    },
+};
+pub const WHV_INTERCEPT_MESSAGE_HEADER = extern struct {
+    VpIndex: u32,
+    InstructionLength: u8,
+    InterceptAccessType: u8,
+    ExecutionState: WHV_VP_EXECUTION_STATE,
+    Pc: u64,
+    Cpsr: u64,
 };
 pub const WHV_INTERNAL_ACTIVITY_REGISTER = extern union {
     Anonymous: extern struct {
@@ -104392,24 +105517,71 @@ pub const WHV_INTERNAL_ACTIVITY_REGISTER = extern union {
     },
     AsUINT64: u64,
 };
-pub const WHV_INTERRUPT_CONTROL = extern struct {
-    _bitfield: u64,
-    Destination: u32,
-    Vector: u32,
+pub const WHV_INTERRUPT_CONTROL = switch (arch) {
+    .aarch64 => extern struct {
+        TargetPartition: u64,
+        InterruptControl: WHV_INTERRUPT_CONTROL2,
+        DestinationAddress: u64,
+        RequestedVector: u32,
+        TargetVtl: u8,
+        ReservedZ0: u8,
+        ReservedZ1: u16,
+    },
+    .x86_64 => extern struct {
+        _bitfield: u64,
+        Destination: u32,
+        Vector: u32,
+    },
+    else => @compileError("WHV_INTERRUPT_CONTROL unsupported for target architecture"),
 };
-pub const WHV_MEMORY_ACCESS_CONTEXT = extern struct {
-    InstructionByteCount: u8,
-    Reserved: [3]u8,
-    InstructionBytes: [16]u8,
-    AccessInfo: WHV_MEMORY_ACCESS_INFO,
-    Gpa: u64,
-    Gva: u64,
-};
-pub const WHV_MEMORY_ACCESS_INFO = extern union {
+pub const WHV_INTERRUPT_CONTROL2 = extern union {
+    AsUINT64: u64,
     Anonymous: extern struct {
+        InterruptType: i32,
         _bitfield: u32,
     },
-    AsUINT32: u32,
+};
+pub const WHV_INVALID_VP_REGISTER_CONTEXT = extern struct {
+    VpIndex: u32,
+    Reserved: u32,
+};
+pub const WHV_MEMORY_ACCESS_CONTEXT = switch (arch) {
+    .aarch64 => extern struct {
+        Header: WHV_INTERCEPT_MESSAGE_HEADER,
+        Reserved0: u32,
+        InstructionByteCount: u8,
+        AccessInfo: WHV_MEMORY_ACCESS_INFO,
+        Reserved1: u16,
+        InstructionBytes: [4]u8,
+        Reserved2: u32,
+        Gva: u64,
+        Gpa: u64,
+        Syndrome: u64,
+    },
+    .x86_64 => extern struct {
+        InstructionByteCount: u8,
+        Reserved: [3]u8,
+        InstructionBytes: [16]u8,
+        AccessInfo: WHV_MEMORY_ACCESS_INFO,
+        Gpa: u64,
+        Gva: u64,
+    },
+    else => @compileError("WHV_MEMORY_ACCESS_CONTEXT unsupported for target architecture"),
+};
+pub const WHV_MEMORY_ACCESS_INFO = switch (arch) {
+    .aarch64 => extern union {
+        AsUINT8: u8,
+        Anonymous: extern struct {
+            _bitfield: u8,
+        },
+    },
+    .x86_64 => extern union {
+        Anonymous: extern struct {
+            _bitfield: u32,
+        },
+        AsUINT32: u32,
+    },
+    else => @compileError("WHV_MEMORY_ACCESS_INFO unsupported for target architecture"),
 };
 pub const WHV_MEMORY_RANGE_ENTRY = extern struct {
     GuestAddress: u64,
@@ -104421,9 +105593,25 @@ pub const WHV_MSR_ACTION_ENTRY = extern struct {
     WriteAction: u8,
     Reserved: u16,
 };
+pub const WHV_NESTED_ENLIGHTENMENTS_CONTROL = extern struct {
+    Features: extern union {
+        AsUINT32: u32,
+        Anonymous: extern struct {
+            _bitfield: u32,
+        },
+    },
+    HypercallControls: extern union {
+        AsUINT32: u32,
+        Anonymous: extern struct {
+            _bitfield: u32,
+        },
+    },
+};
 pub const WHV_NOTIFICATION_PORT_PARAMETERS = extern struct {
     NotificationPortType: i32,
-    Reserved: u32,
+    Reserved: u16,
+    Reserved1: u8,
+    ConnectionVtl: u8,
     Anonymous: extern union {
         Doorbell: WHV_DOORBELL_MATCH_DATA,
         Event: extern struct {
@@ -104436,37 +105624,63 @@ pub const WHV_PARTITION_MEMORY_COUNTERS = extern struct {
     Mapped2MPageCount: u64,
     Mapped1GPageCount: u64,
 };
-pub const WHV_PARTITION_PROPERTY = extern union {
-    ExtendedVmExits: WHV_EXTENDED_VM_EXITS,
-    ProcessorFeatures: WHV_PROCESSOR_FEATURES,
-    SyntheticProcessorFeaturesBanks: WHV_SYNTHETIC_PROCESSOR_FEATURES_BANKS,
-    ProcessorXsaveFeatures: WHV_PROCESSOR_XSAVE_FEATURES,
-    ProcessorClFlushSize: u8,
-    ProcessorCount: u32,
-    CpuidExitList: [1]u32,
-    CpuidResultList: [1]WHV_X64_CPUID_RESULT,
-    CpuidResultList2: [1]WHV_X64_CPUID_RESULT2,
-    MsrActionList: [1]WHV_MSR_ACTION_ENTRY,
-    UnimplementedMsrAction: i32,
-    ExceptionExitBitmap: u64,
-    LocalApicEmulationMode: i32,
-    SeparateSecurityDomain: BOOL,
-    NestedVirtualization: BOOL,
-    X64MsrExitBitmap: WHV_X64_MSR_EXIT_BITMAP,
-    ProcessorClockFrequency: u64,
-    InterruptClockFrequency: u64,
-    ApicRemoteRead: BOOL,
-    ProcessorFeaturesBanks: WHV_PROCESSOR_FEATURES_BANKS,
-    ReferenceTime: u64,
-    PrimaryNumaNode: u16,
-    CpuReserve: u32,
-    CpuCap: u32,
-    CpuWeight: u32,
-    CpuGroupId: u64,
-    ProcessorFrequencyCap: u32,
-    AllowDeviceAssignment: BOOL,
-    ProcessorPerfmonFeatures: WHV_PROCESSOR_PERFMON_FEATURES,
-    DisableSmt: BOOL,
+pub const WHV_PARTITION_PROPERTY = switch (arch) {
+    .aarch64 => extern union {
+        ExtendedVmExits: WHV_EXTENDED_VM_EXITS,
+        ProcessorFeatures: WHV_ARM64_PROCESSOR_FEATURES,
+        SyntheticProcessorFeaturesBanks: WHV_SYNTHETIC_PROCESSOR_FEATURES_BANKS,
+        ProcessorClFlushSize: u8,
+        ProcessorCount: u32,
+        SeparateSecurityDomain: BOOL,
+        NestedVirtualization: BOOL,
+        ProcessorClockFrequency: u64,
+        ProcessorFeaturesBanks: WHV_PROCESSOR_FEATURES_BANKS,
+        ReferenceTime: u64,
+        PrimaryNumaNode: u16,
+        CpuReserve: u32,
+        CpuCap: u32,
+        CpuWeight: u32,
+        CpuGroupId: u64,
+        ProcessorFrequencyCap: u32,
+        AllowDeviceAssignment: BOOL,
+        DisableSmt: BOOL,
+        PhysicalAddressWidth: u32,
+        Arm64IcParameters: WHV_ARM64_IC_PARAMETERS,
+    },
+    .x86_64 => extern union {
+        ExtendedVmExits: WHV_EXTENDED_VM_EXITS,
+        ProcessorFeatures: WHV_X64_PROCESSOR_FEATURES,
+        SyntheticProcessorFeaturesBanks: WHV_SYNTHETIC_PROCESSOR_FEATURES_BANKS,
+        ProcessorClFlushSize: u8,
+        ProcessorCount: u32,
+        SeparateSecurityDomain: BOOL,
+        NestedVirtualization: BOOL,
+        ProcessorClockFrequency: u64,
+        ProcessorFeaturesBanks: WHV_PROCESSOR_FEATURES_BANKS,
+        ReferenceTime: u64,
+        PrimaryNumaNode: u16,
+        CpuReserve: u32,
+        CpuCap: u32,
+        CpuWeight: u32,
+        CpuGroupId: u64,
+        ProcessorFrequencyCap: u32,
+        AllowDeviceAssignment: BOOL,
+        DisableSmt: BOOL,
+        PhysicalAddressWidth: u32,
+        ProcessorXsaveFeatures: WHV_PROCESSOR_XSAVE_FEATURES,
+        CpuidExitList: [1]u32,
+        ExceptionExitBitmap: u64,
+        ApicRemoteRead: BOOL,
+        X64MsrExitBitmap: WHV_X64_MSR_EXIT_BITMAP,
+        ProcessorPerfmonFeatures: WHV_PROCESSOR_PERFMON_FEATURES,
+        InterruptClockFrequency: u64,
+        CpuidResultList: [1]WHV_X64_CPUID_RESULT,
+        CpuidResultList2: [1]WHV_X64_CPUID_RESULT2,
+        MsrActionList: [1]WHV_MSR_ACTION_ENTRY,
+        UnimplementedMsrAction: i32,
+        LocalApicEmulationMode: i32,
+    },
+    else => @compileError("WHV_PARTITION_PROPERTY unsupported for target architecture"),
 };
 pub const WHV_PROCESSOR_APIC_COUNTERS = extern struct {
     MmioAccessCount: u64,
@@ -104480,48 +105694,46 @@ pub const WHV_PROCESSOR_EVENT_COUNTERS = extern struct {
     ExceptionCount: u64,
     InterruptCount: u64,
 };
-pub const WHV_PROCESSOR_FEATURES = extern union {
-    Anonymous: extern struct {
-        _bitfield: u64,
-    },
-    AsUINT64: u64,
-};
 pub const WHV_PROCESSOR_FEATURES_BANKS = extern struct {
     BanksCount: u32,
     Reserved0: u32,
     Anonymous: extern union {
         Anonymous: extern struct {
-            Bank0: WHV_PROCESSOR_FEATURES,
-            Bank1: WHV_PROCESSOR_FEATURES1,
+            Bank0: WHV_X64_PROCESSOR_FEATURES,
+            Bank1: WHV_X64_PROCESSOR_FEATURES1,
         },
         AsUINT64: [2]u64,
     },
-};
-pub const WHV_PROCESSOR_FEATURES1 = extern union {
-    Anonymous: extern struct {
-        _bitfield: u64,
-    },
-    AsUINT64: u64,
 };
 pub const WHV_PROCESSOR_INTERCEPT_COUNTER = extern struct {
     Count: u64,
     Time100ns: u64,
 };
-pub const WHV_PROCESSOR_INTERCEPT_COUNTERS = extern struct {
-    PageInvalidations: WHV_PROCESSOR_INTERCEPT_COUNTER,
-    ControlRegisterAccesses: WHV_PROCESSOR_INTERCEPT_COUNTER,
-    IoInstructions: WHV_PROCESSOR_INTERCEPT_COUNTER,
-    HaltInstructions: WHV_PROCESSOR_INTERCEPT_COUNTER,
-    CpuidInstructions: WHV_PROCESSOR_INTERCEPT_COUNTER,
-    MsrAccesses: WHV_PROCESSOR_INTERCEPT_COUNTER,
-    OtherIntercepts: WHV_PROCESSOR_INTERCEPT_COUNTER,
-    PendingInterrupts: WHV_PROCESSOR_INTERCEPT_COUNTER,
-    EmulatedInstructions: WHV_PROCESSOR_INTERCEPT_COUNTER,
-    DebugRegisterAccesses: WHV_PROCESSOR_INTERCEPT_COUNTER,
-    PageFaultIntercepts: WHV_PROCESSOR_INTERCEPT_COUNTER,
-    NestedPageFaultIntercepts: WHV_PROCESSOR_INTERCEPT_COUNTER,
-    Hypercalls: WHV_PROCESSOR_INTERCEPT_COUNTER,
-    RdpmcInstructions: WHV_PROCESSOR_INTERCEPT_COUNTER,
+pub const WHV_PROCESSOR_INTERCEPT_COUNTERS = switch (arch) {
+    .aarch64 => extern struct {
+        OtherIntercepts: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        PendingInterrupts: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        NestedPageFaultIntercepts: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        Hypercalls: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        Reserved: [10]WHV_PROCESSOR_INTERCEPT_COUNTER,
+    },
+    .x86_64 => extern struct {
+        PageInvalidations: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        ControlRegisterAccesses: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        IoInstructions: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        HaltInstructions: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        CpuidInstructions: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        MsrAccesses: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        OtherIntercepts: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        PendingInterrupts: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        EmulatedInstructions: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        DebugRegisterAccesses: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        PageFaultIntercepts: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        NestedPageFaultIntercepts: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        Hypercalls: WHV_PROCESSOR_INTERCEPT_COUNTER,
+        RdpmcInstructions: WHV_PROCESSOR_INTERCEPT_COUNTER,
+    },
+    else => @compileError("WHV_PROCESSOR_INTERCEPT_COUNTERS unsupported for target architecture"),
 };
 pub const WHV_PROCESSOR_PERFMON_FEATURES = extern union {
     Anonymous: extern struct {
@@ -104547,49 +105759,106 @@ pub const WHV_PROCESSOR_XSAVE_FEATURES = extern union {
     },
     AsUINT64: u64,
 };
-pub const WHV_REGISTER_VALUE = extern union {
-    Reg128: WHV_UINT128,
-    Reg64: u64,
-    Reg32: u32,
-    Reg16: u16,
-    Reg8: u8,
-    Fp: WHV_X64_FP_REGISTER,
-    FpControlStatus: WHV_X64_FP_CONTROL_STATUS_REGISTER,
-    XmmControlStatus: WHV_X64_XMM_CONTROL_STATUS_REGISTER,
-    Segment: WHV_X64_SEGMENT_REGISTER,
-    Table: WHV_X64_TABLE_REGISTER,
-    InterruptState: WHV_X64_INTERRUPT_STATE_REGISTER,
-    PendingInterruption: WHV_X64_PENDING_INTERRUPTION_REGISTER,
-    DeliverabilityNotifications: WHV_X64_DELIVERABILITY_NOTIFICATIONS_REGISTER,
-    ExceptionEvent: WHV_X64_PENDING_EXCEPTION_EVENT,
-    ExtIntEvent: WHV_X64_PENDING_EXT_INT_EVENT,
-    InternalActivity: WHV_INTERNAL_ACTIVITY_REGISTER,
-    PendingDebugException: WHV_X64_PENDING_DEBUG_EXCEPTION,
+pub const WHV_REGISTER_ACCESS_INFO = extern union {
+    SourceValue: WHV_REGISTER_VALUE,
+    DestinationRegister: i32,
+};
+pub const WHV_REGISTER_CONTEXT = extern struct {
+    Header: WHV_INTERCEPT_MESSAGE_HEADER,
+    Anonymous: extern struct {
+        _bitfield: u8,
+    },
+    Reserved8: u8,
+    Reserved16: u16,
+    RegisterName: i32,
+    AccessInfo: WHV_REGISTER_ACCESS_INFO,
+};
+pub const WHV_REGISTER_VALUE = switch (arch) {
+    .aarch64 => extern union {
+        Reg128: WHV_UINT128,
+        Reg64: u64,
+        Reg32: u32,
+        Reg16: u16,
+        Reg8: u8,
+        InternalActivity: WHV_INTERNAL_ACTIVITY_REGISTER,
+        DeliverabilityNotifications: WHV_DELIVERABILITY_NOTIFICATIONS_REGISTER,
+    },
+    .x86_64 => extern union {
+        Reg128: WHV_UINT128,
+        Reg64: u64,
+        Reg32: u32,
+        Reg16: u16,
+        Reg8: u8,
+        InternalActivity: WHV_INTERNAL_ACTIVITY_REGISTER,
+        DeliverabilityNotifications: WHV_DELIVERABILITY_NOTIFICATIONS_REGISTER,
+        Fp: WHV_X64_FP_REGISTER,
+        FpControlStatus: WHV_X64_FP_CONTROL_STATUS_REGISTER,
+        XmmControlStatus: WHV_X64_XMM_CONTROL_STATUS_REGISTER,
+        Segment: WHV_X64_SEGMENT_REGISTER,
+        Table: WHV_X64_TABLE_REGISTER,
+        InterruptState: WHV_X64_INTERRUPT_STATE_REGISTER,
+        PendingInterruption: WHV_X64_PENDING_INTERRUPTION_REGISTER,
+        ExceptionEvent: WHV_X64_PENDING_EXCEPTION_EVENT,
+        ExtIntEvent: WHV_X64_PENDING_EXT_INT_EVENT,
+        PendingDebugException: WHV_X64_PENDING_DEBUG_EXCEPTION,
+        NestedState: WHV_X64_NESTED_GUEST_STATE,
+        InvEpt: WHV_X64_NESTED_INVEPT_REGISTER,
+        InvVpid: WHV_X64_NESTED_INVVPID_REGISTER,
+        SvmNestedExit0: WHV_X64_PENDING_SVM_NESTED_EXIT_EVENT0,
+        SvmNestedExit1: WHV_X64_PENDING_SVM_NESTED_EXIT_EVENT1,
+        SvmNestedExit2: WHV_X64_PENDING_SVM_NESTED_EXIT_EVENT2,
+        SvmNestedExit3: WHV_X64_PENDING_SVM_NESTED_EXIT_EVENT3,
+        VmxNestedExit0: WHV_X64_PENDING_VMX_NESTED_EXIT_EVENT0,
+        VmxNestedExit1: WHV_X64_PENDING_VMX_NESTED_EXIT_EVENT1,
+        VmxNestedExit2: WHV_X64_PENDING_VMX_NESTED_EXIT_EVENT2,
+        VmxNestedExit3: WHV_X64_PENDING_VMX_NESTED_EXIT_EVENT3,
+    },
+    else => @compileError("WHV_REGISTER_VALUE unsupported for target architecture"),
 };
 pub const WHV_RUN_VP_CANCELED_CONTEXT = extern struct {
     CancelReason: i32,
 };
-pub const WHV_RUN_VP_EXIT_CONTEXT = extern struct {
-    ExitReason: i32,
-    Reserved: u32,
-    VpContext: WHV_VP_EXIT_CONTEXT,
-    Anonymous: extern union {
-        MemoryAccess: WHV_MEMORY_ACCESS_CONTEXT,
-        IoPortAccess: WHV_X64_IO_PORT_ACCESS_CONTEXT,
-        MsrAccess: WHV_X64_MSR_ACCESS_CONTEXT,
-        CpuidAccess: WHV_X64_CPUID_ACCESS_CONTEXT,
-        VpException: WHV_VP_EXCEPTION_CONTEXT,
-        InterruptWindow: WHV_X64_INTERRUPTION_DELIVERABLE_CONTEXT,
-        UnsupportedFeature: WHV_X64_UNSUPPORTED_FEATURE_CONTEXT,
-        CancelReason: WHV_RUN_VP_CANCELED_CONTEXT,
-        ApicEoi: WHV_X64_APIC_EOI_CONTEXT,
-        ReadTsc: WHV_X64_RDTSC_CONTEXT,
-        ApicSmi: WHV_X64_APIC_SMI_CONTEXT,
-        Hypercall: WHV_HYPERCALL_CONTEXT,
-        ApicInitSipi: WHV_X64_APIC_INIT_SIPI_CONTEXT,
-        ApicWrite: WHV_X64_APIC_WRITE_CONTEXT,
-        SynicSintDeliverable: WHV_SYNIC_SINT_DELIVERABLE_CONTEXT,
+pub const WHV_RUN_VP_EXIT_CONTEXT = switch (arch) {
+    .aarch64 => extern struct {
+        ExitReason: i32,
+        Reserved: u32,
+        Reserved1: u64,
+        Anonymous: extern union {
+            MemoryAccess: WHV_MEMORY_ACCESS_CONTEXT,
+            CancelReason: WHV_RUN_VP_CANCELED_CONTEXT,
+            Hypercall: WHV_ARM64_HYPERCALL_CONTEXT,
+            SynicSintDeliverable: WHV_SYNIC_SINT_DELIVERABLE_CONTEXT,
+            UnrecoverableException: WHV_UNRECOVERABLE_EXCEPTION_CONTEXT,
+            InvalidVpRegister: WHV_INVALID_VP_REGISTER_CONTEXT,
+            Register: WHV_REGISTER_CONTEXT,
+            Arm64Reset: WHV_ARM64_RESET_CONTEXT,
+            AsUINT64: [32]u64,
+        },
     },
+    .x86_64 => extern struct {
+        ExitReason: i32,
+        Reserved: u32,
+        VpContext: WHV_X64_VP_EXIT_CONTEXT,
+        Anonymous: extern union {
+            MemoryAccess: WHV_MEMORY_ACCESS_CONTEXT,
+            CancelReason: WHV_RUN_VP_CANCELED_CONTEXT,
+            Hypercall: WHV_X64_HYPERCALL_CONTEXT,
+            SynicSintDeliverable: WHV_SYNIC_SINT_DELIVERABLE_CONTEXT,
+            IoPortAccess: WHV_X64_IO_PORT_ACCESS_CONTEXT,
+            MsrAccess: WHV_X64_MSR_ACCESS_CONTEXT,
+            CpuidAccess: WHV_X64_CPUID_ACCESS_CONTEXT,
+            VpException: WHV_VP_EXCEPTION_CONTEXT,
+            InterruptWindow: WHV_X64_INTERRUPTION_DELIVERABLE_CONTEXT,
+            UnsupportedFeature: WHV_X64_UNSUPPORTED_FEATURE_CONTEXT,
+            ApicEoi: WHV_X64_APIC_EOI_CONTEXT,
+            ReadTsc: WHV_X64_RDTSC_CONTEXT,
+            ApicSmi: WHV_X64_APIC_SMI_CONTEXT,
+            ApicInitSipi: WHV_X64_APIC_INIT_SIPI_CONTEXT,
+            ApicWrite: WHV_X64_APIC_WRITE_CONTEXT,
+            AsUINT64: [22]u64,
+        },
+    },
+    else => @compileError("WHV_RUN_VP_EXIT_CONTEXT unsupported for target architecture"),
 };
 pub const WHV_SCHEDULER_FEATURES = extern union {
     Anonymous: extern struct {
@@ -104603,16 +105872,49 @@ pub const WHV_SRIOV_RESOURCE_DESCRIPTOR = extern struct {
     VirtualFunctionIndex: u16,
     Reserved: u16,
 };
+pub const WHV_SVM_NESTED_HOST_STATE = extern struct {
+    Rip: u64,
+    Rsp: u64,
+    Rflags: u64,
+    Rax: u64,
+    Es: WHV_SVM_VMCB_SELECTOR,
+    Cs: WHV_SVM_VMCB_SELECTOR,
+    Ss: WHV_SVM_VMCB_SELECTOR,
+    Ds: WHV_SVM_VMCB_SELECTOR,
+    Gdtr: WHV_SVM_VMCB_SELECTOR,
+    Idtr: WHV_SVM_VMCB_SELECTOR,
+    Efer: u64,
+    Cr0: u64,
+    Cr3: u64,
+    Cr4: u64,
+    VirtualTpr: u64,
+    Reserved: [6]u64,
+};
+pub const WHV_SVM_VMCB_SELECTOR = extern struct {
+    Selector: u16 align(1),
+    Attrib: u16 align(1),
+    Limit: u32 align(1),
+    Base: u64 align(1),
+};
 pub const WHV_SYNIC_EVENT_PARAMETERS = extern struct {
     VpIndex: u32,
     TargetSint: u8,
-    Reserved: u8,
+    TargetVtl: u8,
     FlagNumber: u16,
 };
-pub const WHV_SYNIC_SINT_DELIVERABLE_CONTEXT = extern struct {
-    DeliverableSints: u16,
-    Reserved1: u16,
-    Reserved2: u32,
+pub const WHV_SYNIC_SINT_DELIVERABLE_CONTEXT = switch (arch) {
+    .aarch64 => extern struct {
+        Header: WHV_INTERCEPT_MESSAGE_HEADER,
+        DeliverableSints: u16,
+        Reserved1: u16,
+        Reserved2: u32,
+    },
+    .x86_64 => extern struct {
+        DeliverableSints: u16,
+        Reserved1: u16,
+        Reserved2: u32,
+    },
+    else => @compileError("WHV_SYNIC_SINT_DELIVERABLE_CONTEXT unsupported for target architecture"),
 };
 pub const WHV_SYNTHETIC_PROCESSOR_FEATURES = extern union {
     Anonymous: extern struct {
@@ -104632,6 +105934,12 @@ pub const WHV_SYNTHETIC_PROCESSOR_FEATURES_BANKS = extern struct {
             return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(u64)));
         }
     },
+};
+pub const WHV_TRANSLATE_GVA_2_FLAGS = extern union {
+    Anonymous: extern struct {
+        _bitfield: u64,
+    },
+    AsUINT64: u64,
 };
 pub const WHV_TRANSLATE_GVA_RESULT = extern struct {
     ResultCode: i32,
@@ -104658,6 +105966,9 @@ pub const WHV_UINT128 = extern union {
     },
     Dword: [4]u32,
 };
+pub const WHV_UNRECOVERABLE_EXCEPTION_CONTEXT = extern struct {
+    Header: WHV_INTERCEPT_MESSAGE_HEADER,
+};
 pub const WHV_VIRTUAL_PROCESSOR_PROPERTY = extern struct {
     PropertyCode: i32,
     Reserved: u32,
@@ -104682,14 +105993,11 @@ pub const WHV_VP_EXCEPTION_INFO = extern union {
     },
     AsUINT32: u32,
 };
-pub const WHV_VP_EXIT_CONTEXT = extern struct {
-    ExecutionState: WHV_X64_VP_EXECUTION_STATE,
-    _bitfield: u8,
-    Reserved: u8,
-    Reserved2: u32,
-    Cs: WHV_X64_SEGMENT_REGISTER,
-    Rip: u64,
-    Rflags: u64,
+pub const WHV_VP_EXECUTION_STATE = extern union {
+    AsUINT16: u16,
+    Anonymous: extern struct {
+        _bitfield: u16,
+    },
 };
 pub const WHV_VPCI_DEVICE_NOTIFICATION = extern struct {
     NotificationType: i32,
@@ -104732,6 +106040,12 @@ pub const WHV_VPCI_MMIO_MAPPING = extern struct {
 pub const WHV_VPCI_PROBED_BARS = extern struct {
     Value: [6]u32,
 };
+pub const WHV_VTL_PERMISSION_SET = extern union {
+    AsUINT32: u32,
+    Anonymous: extern struct {
+        VtlPermissionFrom1: [2]u16,
+    },
+};
 pub const WHV_X64_APIC_EOI_CONTEXT = extern struct {
     InterruptVector: u32,
 };
@@ -104772,12 +106086,6 @@ pub const WHV_X64_CPUID_RESULT2 = extern struct {
     Output: WHV_CPUID_OUTPUT,
     Mask: WHV_CPUID_OUTPUT,
 };
-pub const WHV_X64_DELIVERABILITY_NOTIFICATIONS_REGISTER = extern union {
-    Anonymous: extern struct {
-        _bitfield: u64,
-    },
-    AsUINT64: u64,
-};
 pub const WHV_X64_FP_CONTROL_STATUS_REGISTER = extern union {
     Anonymous: extern struct {
         FpControl: u16,
@@ -104802,6 +106110,18 @@ pub const WHV_X64_FP_REGISTER = extern union {
         _bitfield: u64,
     },
     AsUINT128: WHV_UINT128,
+};
+pub const WHV_X64_HYPERCALL_CONTEXT = extern struct {
+    Rax: u64,
+    Rbx: u64,
+    Rcx: u64,
+    Rdx: u64,
+    R8: u64,
+    Rsi: u64,
+    Rdi: u64,
+    Reserved0: u64,
+    XmmRegisters: [6]WHV_UINT128,
+    Reserved1: [2]u64,
 };
 pub const WHV_X64_INTERRUPT_STATE_REGISTER = extern union {
     Anonymous: extern struct {
@@ -104850,6 +106170,34 @@ pub const WHV_X64_MSR_EXIT_BITMAP = extern union {
         _bitfield: u64,
     },
 };
+pub const WHV_X64_NESTED_GUEST_STATE = extern union {
+    Anonymous: extern struct {
+        _bitfield: u64,
+        Reserved1: u64,
+    },
+    AsUINT128: WHV_UINT128,
+};
+pub const WHV_X64_NESTED_INVEPT_REGISTER = extern union {
+    Anonymous: extern struct {
+        Type: u8,
+        Reserved: [7]u8,
+        Eptp: u64,
+    },
+    AsUINT128: WHV_UINT128,
+};
+pub const WHV_X64_NESTED_INVVPID_REGISTER = extern union {
+    Anonymous: extern struct {
+        Type: u8,
+        Reserved: [3]u8,
+        Vpid: u32,
+        LinearAddress: u64,
+    },
+    AsUINT128: WHV_UINT128,
+};
+pub const WHV_X64_NESTED_STATE = extern union {
+    Vmx: WHV_X64_VMX_NESTED_STATE,
+    Svm: WHV_X64_SVM_NESTED_STATE,
+};
 pub const WHV_X64_PENDING_DEBUG_EXCEPTION = extern union {
     AsUINT64: u64,
     Anonymous: extern struct {
@@ -104878,6 +106226,77 @@ pub const WHV_X64_PENDING_INTERRUPTION_REGISTER = extern union {
     },
     AsUINT64: u64,
 };
+pub const WHV_X64_PENDING_SVM_NESTED_EXIT_EVENT0 = extern union {
+    Anonymous: extern struct {
+        _bitfield: u64,
+        ExitCode: u64,
+    },
+    AsUINT128: WHV_UINT128,
+};
+pub const WHV_X64_PENDING_SVM_NESTED_EXIT_EVENT1 = extern union {
+    Anonymous: extern struct {
+        ExitInfo1: u64,
+        ExitInfo2: u64,
+    },
+    AsUINT128: WHV_UINT128,
+};
+pub const WHV_X64_PENDING_SVM_NESTED_EXIT_EVENT2 = extern union {
+    Anonymous: extern struct {
+        NextRip: u64,
+        InstructionBytesFetchedCount: u8,
+        InstructionBytes: [7]u8,
+    },
+    AsUINT128: WHV_UINT128,
+};
+pub const WHV_X64_PENDING_SVM_NESTED_EXIT_EVENT3 = extern union {
+    Anonymous: extern struct {
+        InstructionBytes: [8]u8,
+        Reserved2: u64,
+    },
+    AsUINT128: WHV_UINT128,
+};
+pub const WHV_X64_PENDING_VMX_NESTED_EXIT_EVENT0 = extern union {
+    Anonymous: extern struct {
+        _bitfield: u32,
+        ExitReason: u32,
+        ExitQualification: u64,
+    },
+    AsUINT128: WHV_UINT128,
+};
+pub const WHV_X64_PENDING_VMX_NESTED_EXIT_EVENT1 = extern union {
+    Anonymous: extern struct {
+        InstructionLength: u32,
+        InstructionInfo: u32,
+        ExitInterruptionInfo: u32,
+        ExitExceptionErrorCode: u32,
+    },
+    AsUINT128: WHV_UINT128,
+};
+pub const WHV_X64_PENDING_VMX_NESTED_EXIT_EVENT2 = extern union {
+    Anonymous: extern struct {
+        GuestLinearAddress: u64,
+        GuestPhysicalAddress: u64,
+    },
+    AsUINT128: WHV_UINT128,
+};
+pub const WHV_X64_PENDING_VMX_NESTED_EXIT_EVENT3 = extern union {
+    Anonymous: extern struct {
+        MsrData: u64,
+    },
+    AsUINT128: WHV_UINT128,
+};
+pub const WHV_X64_PROCESSOR_FEATURES = extern union {
+    Anonymous: extern struct {
+        _bitfield: u64,
+    },
+    AsUINT64: u64,
+};
+pub const WHV_X64_PROCESSOR_FEATURES1 = extern union {
+    Anonymous: extern struct {
+        _bitfield: u64,
+    },
+    AsUINT64: u64,
+};
 pub const WHV_X64_RDTSC_CONTEXT = extern struct {
     TscAux: u64,
     VirtualOffset: u64,
@@ -104902,6 +106321,20 @@ pub const WHV_X64_SEGMENT_REGISTER = extern struct {
         Attributes: u16,
     },
 };
+pub const WHV_X64_SVM_NESTED_STATE = extern struct {
+    Vendor: i32,
+    Flags: extern struct {
+        _bitfield: u32,
+    },
+    NestedEnlightenmentsControl: WHV_NESTED_ENLIGHTENMENTS_CONTROL,
+    HostSaveGpa: u64,
+    VmControlMsr: u64,
+    VirtualTscRatioMsr: u64,
+    VmcbGpa: u64,
+    HostState: WHV_SVM_NESTED_HOST_STATE,
+    Reserved: [3832]u8,
+    VmcbBytes: [4096]u8,
+};
 pub const WHV_X64_TABLE_REGISTER = extern struct {
     Pad: [3]u16,
     Limit: u16,
@@ -104912,11 +106345,41 @@ pub const WHV_X64_UNSUPPORTED_FEATURE_CONTEXT = extern struct {
     Reserved: u32,
     FeatureParameter: u64,
 };
+pub const WHV_X64_VMX_NESTED_STATE = extern struct {
+    Vendor: i32,
+    Flags: extern struct {
+        _bitfield: u32,
+    },
+    NestedEnlightenmentsControl: WHV_NESTED_ENLIGHTENMENTS_CONTROL,
+    Pdpt: [4]u64,
+    VmxonRegionGpa: u64,
+    VmcsGpa: u64,
+    CurrentEnlightenedVmcs: u64,
+    VirtualApicRegs: extern struct {
+        Tpr: u32,
+        Ppr: u32,
+        Isr: [8]u32,
+        Irr: [8]u32,
+        IcrLow: u32,
+        IcrHigh: u32,
+    },
+    Reserved: [3944]u8,
+    VmcsBytes: [4096]u8,
+};
 pub const WHV_X64_VP_EXECUTION_STATE = extern union {
     Anonymous: extern struct {
         _bitfield: u16,
     },
     AsUINT16: u16,
+};
+pub const WHV_X64_VP_EXIT_CONTEXT = extern struct {
+    ExecutionState: WHV_X64_VP_EXECUTION_STATE,
+    _bitfield: u8,
+    Reserved: u8,
+    Reserved2: u32,
+    Cs: WHV_X64_SEGMENT_REGISTER,
+    Rip: u64,
+    Rflags: u64,
 };
 pub const WHV_X64_XMM_CONTROL_STATUS_REGISTER = extern union {
     Anonymous: extern struct {
@@ -105402,23 +106865,6 @@ pub const WIN32_FIND_DATAW = extern struct {
 pub const WIN32_FIND_STREAM_DATA = extern struct {
     StreamSize: i64,
     cStreamName: [296]u16,
-};
-pub const WIN32_MEMORY_NUMA_PERFORMANCE_ENTRY = extern struct {
-    InitiatorNodeNumber: u32,
-    TargetNodeNumber: u32,
-    DataType: u8,
-    Flags: extern struct {
-        _bitfield: u8,
-    },
-    MinTransferSizeInBytes: u64,
-    EntryValue: u64,
-};
-pub const WIN32_MEMORY_NUMA_PERFORMANCE_INFORMATION_OUTPUT = extern struct {
-    EntryCount: u32,
-    pub fn PerformanceEntries(self: anytype) FlexibleArrayType(@TypeOf(self), WIN32_MEMORY_NUMA_PERFORMANCE_ENTRY) {
-        const Intermediate = FlexibleArrayType(@TypeOf(self), u8);
-        return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf(WIN32_MEMORY_NUMA_PERFORMANCE_ENTRY)));
-    }
 };
 pub const WIN32_MEMORY_PARTITION_INFORMATION = extern struct {
     Flags: u32,
@@ -111460,6 +112906,16 @@ pub const WTSUSERCONFIGW = extern struct {
     TerminalServerHomeDir: [261]u16,
     TerminalServerHomeDirDrive: [4]u16,
 };
+pub const WTSWindowInfo = extern struct {
+    Hwnd: HWND,
+    Height: i32,
+    Width: i32,
+    ViewWidth: i32,
+    ViewHeight: i32,
+    ViewOffsetX: i32,
+    ViewOffsetY: i32,
+    Scale: f32,
+};
 pub const X509Certificate = extern struct {
     Version: u32,
     SerialNumber: [4]u32,
@@ -111879,11 +113335,34 @@ pub const XSAVE_AREA_HEADER = extern struct {
     CompactionMask: u64,
     Reserved2: [6]u64,
 };
+pub const XSAVE_ARM64_SME_TPIDR2_HEADER = extern struct {
+    Reserved: [8]u32,
+};
+pub const XSAVE_ARM64_SME_ZA_HEADER = extern struct {
+    VectorLength: u32,
+    Anonymous: extern union {
+        Flags: u32,
+        Anonymous: extern struct {
+            _bitfield: u32,
+        },
+    },
+    Reserved: [6]u32,
+};
+pub const XSAVE_ARM64_SME_ZT_HEADER = extern struct {
+    RegisterCount: u32,
+    Reserved: [7]u32,
+};
 pub const XSAVE_ARM64_SVE_HEADER = extern struct {
     VectorLength: u32,
     VectorRegisterOffset: u32,
     PredicateRegisterOffset: u32,
-    Reserved: [5]u32,
+    Anonymous: extern union {
+        Flags: u32,
+        Anonymous: extern struct {
+            _bitfield: u32,
+        },
+    },
+    Reserved: [4]u32,
 };
 pub const XSAVE_CET_U_FORMAT = extern struct {
     Ia32CetUMsr: u64,
@@ -111939,7 +113418,7 @@ pub const XSTATE_CONFIGURATION = extern struct {
     EnabledFeatures: u64,
     EnabledVolatileFeatures: u64,
     Size: u32,
-    Anonymous: extern union {
+    Anonymous1: extern union {
         ControlFlags: u32,
         Anonymous: extern struct {
             _bitfield: u32,
@@ -111953,8 +113432,25 @@ pub const XSTATE_CONFIGURATION = extern struct {
     EnabledUserVisibleSupervisorFeatures: u64,
     ExtendedFeatureDisableFeatures: u64,
     AllNonLargeFeatureSize: u32,
-    MaxSveVectorLength: u16,
-    Spare1: u16,
+    Anonymous2: extern union {
+        Anonymous1: extern struct {
+            Amd64Spare1: [3]u32,
+        },
+        Anonymous2: extern struct {
+            MaxSveVectorLength: u16,
+            MaxSmeVectorLength: u16,
+            SmeZTRegisterCount: u16,
+            Anonymous: extern union {
+                Arm64Flags: u16,
+                Anonymous: extern struct {
+                    _bitfield: u16,
+                },
+            },
+            SupportedSmeVectorLengths: u8,
+            Arm64Spare: [3]u8,
+        },
+    },
+    Spare: u64,
 };
 pub const XSTATE_CONTEXT = switch (arch) {
     .x86_64, .aarch64 => extern struct {
@@ -170190,7 +171686,7 @@ pub const IClipServiceNotificationHelper = extern struct {
         QueryInterface: *const fn (self: *IClipServiceNotificationHelper, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) callconv(.winapi) HRESULT,
         AddRef: *const fn (self: *IClipServiceNotificationHelper) callconv(.winapi) u32,
         Release: *const fn (self: *IClipServiceNotificationHelper) callconv(.winapi) u32,
-        ShowToast: *const fn (self: *IClipServiceNotificationHelper, titleText: BSTR, bodyText: BSTR, packageName: BSTR, appId: BSTR, launchCommand: BSTR) callconv(.winapi) HRESULT,
+        ShowToast: *const fn (self: *IClipServiceNotificationHelper) callconv(.winapi) HRESULT,
     };
     pub fn QueryInterface(self: *IClipServiceNotificationHelper, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) HRESULT {
         return self.lpVtbl.QueryInterface(self, riid, ppvObject);
@@ -170201,8 +171697,8 @@ pub const IClipServiceNotificationHelper = extern struct {
     pub fn Release(self: *IClipServiceNotificationHelper) u32 {
         return self.lpVtbl.Release(self);
     }
-    pub fn ShowToast(self: *IClipServiceNotificationHelper, titleText: BSTR, bodyText: BSTR, packageName: BSTR, appId: BSTR, launchCommand: BSTR) HRESULT {
-        return self.lpVtbl.ShowToast(self, titleText, bodyText, packageName, appId, launchCommand);
+    pub fn ShowToast(self: *IClipServiceNotificationHelper) HRESULT {
+        return self.lpVtbl.ShowToast(self);
     }
 };
 pub const IID_IClockVector: GUID = .{ .Data1 = 347219786, .Data2 = 34456, .Data3 = 19654, .Data4 = .{ 147, 51, 248, 155, 209, 212, 123, 196 } };
@@ -245999,6 +247495,56 @@ pub const IDebugHostFunctionIntrospection3 = extern struct {
         return self.lpVtbl.IsNoReturnFunction(self, pIsNoReturnFunction);
     }
 };
+pub const IID_IDebugHostFunctionIntrospection4: GUID = .{ .Data1 = 4181681817, .Data2 = 7982, .Data3 = 20402, .Data4 = .{ 129, 100, 54, 58, 120, 247, 145, 78 } };
+pub const IDebugHostFunctionIntrospection4 = extern struct {
+    lpVtbl: *const Vtbl,
+    pub const Vtbl = extern struct {
+        QueryInterface: *const fn (self: *IDebugHostFunctionIntrospection4, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        AddRef: *const fn (self: *IDebugHostFunctionIntrospection4) callconv(.winapi) u32,
+        Release: *const fn (self: *IDebugHostFunctionIntrospection4) callconv(.winapi) u32,
+        EnumerateLocalsDetails: *const fn (self: *IDebugHostFunctionIntrospection4, localsEnum: [*c][*c]IDebugHostFunctionLocalDetailsEnumerator) callconv(.winapi) HRESULT,
+        EnumerateInlineFunctionsByRVA: *const fn (self: *IDebugHostFunctionIntrospection4, rva: u64, inlinesEnum: [*c][*c]IDebugHostSymbolEnumerator) callconv(.winapi) HRESULT,
+        FindContainingCodeRangeByRVA: *const fn (self: *IDebugHostFunctionIntrospection4, rva: u64, rangeStart: [*c]Extensions_Location, rangeEnd: [*c]Extensions_Location) callconv(.winapi) HRESULT,
+        FindSourceLocationByRVA: *const fn (self: *IDebugHostFunctionIntrospection4, rva: u64, sourceFile: [*c]BSTR, sourceLine: [*c]u64) callconv(.winapi) HRESULT,
+        EnumerateLocalsDetailsEx: *const fn (self: *IDebugHostFunctionIntrospection4, enumerateInlinedLocals: u8, localsEnum: [*c][*c]IDebugHostFunctionLocalDetailsEnumerator) callconv(.winapi) HRESULT,
+        IsNoReturnFunction: *const fn (self: *IDebugHostFunctionIntrospection4, pIsNoReturnFunction: [*c]bool) callconv(.winapi) HRESULT,
+        GetPrologueRange: *const fn (self: *IDebugHostFunctionIntrospection4, pPrologueStart: [*c]Extensions_Location, pPrologueEnd: [*c]Extensions_Location) callconv(.winapi) HRESULT,
+        GetEpilogueRange: *const fn (self: *IDebugHostFunctionIntrospection4, pEpilogueStart: [*c]Extensions_Location, pEpilogueEnd: [*c]Extensions_Location) callconv(.winapi) HRESULT,
+    };
+    pub fn QueryInterface(self: *IDebugHostFunctionIntrospection4, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.QueryInterface(self, riid, ppvObject);
+    }
+    pub fn AddRef(self: *IDebugHostFunctionIntrospection4) u32 {
+        return self.lpVtbl.AddRef(self);
+    }
+    pub fn Release(self: *IDebugHostFunctionIntrospection4) u32 {
+        return self.lpVtbl.Release(self);
+    }
+    pub fn EnumerateLocalsDetails(self: *IDebugHostFunctionIntrospection4, localsEnum: [*c][*c]IDebugHostFunctionLocalDetailsEnumerator) HRESULT {
+        return self.lpVtbl.EnumerateLocalsDetails(self, localsEnum);
+    }
+    pub fn EnumerateInlineFunctionsByRVA(self: *IDebugHostFunctionIntrospection4, rva: u64, inlinesEnum: [*c][*c]IDebugHostSymbolEnumerator) HRESULT {
+        return self.lpVtbl.EnumerateInlineFunctionsByRVA(self, rva, inlinesEnum);
+    }
+    pub fn FindContainingCodeRangeByRVA(self: *IDebugHostFunctionIntrospection4, rva: u64, rangeStart: [*c]Extensions_Location, rangeEnd: [*c]Extensions_Location) HRESULT {
+        return self.lpVtbl.FindContainingCodeRangeByRVA(self, rva, rangeStart, rangeEnd);
+    }
+    pub fn FindSourceLocationByRVA(self: *IDebugHostFunctionIntrospection4, rva: u64, sourceFile: [*c]BSTR, sourceLine: [*c]u64) HRESULT {
+        return self.lpVtbl.FindSourceLocationByRVA(self, rva, sourceFile, sourceLine);
+    }
+    pub fn EnumerateLocalsDetailsEx(self: *IDebugHostFunctionIntrospection4, enumerateInlinedLocals: u8, localsEnum: [*c][*c]IDebugHostFunctionLocalDetailsEnumerator) HRESULT {
+        return self.lpVtbl.EnumerateLocalsDetailsEx(self, enumerateInlinedLocals, localsEnum);
+    }
+    pub fn IsNoReturnFunction(self: *IDebugHostFunctionIntrospection4, pIsNoReturnFunction: [*c]bool) HRESULT {
+        return self.lpVtbl.IsNoReturnFunction(self, pIsNoReturnFunction);
+    }
+    pub fn GetPrologueRange(self: *IDebugHostFunctionIntrospection4, pPrologueStart: [*c]Extensions_Location, pPrologueEnd: [*c]Extensions_Location) HRESULT {
+        return self.lpVtbl.GetPrologueRange(self, pPrologueStart, pPrologueEnd);
+    }
+    pub fn GetEpilogueRange(self: *IDebugHostFunctionIntrospection4, pEpilogueStart: [*c]Extensions_Location, pEpilogueEnd: [*c]Extensions_Location) HRESULT {
+        return self.lpVtbl.GetEpilogueRange(self, pEpilogueStart, pEpilogueEnd);
+    }
+};
 pub const IID_IDebugHostFunctionLocalDetails: GUID = .{ .Data1 = 2301103784, .Data2 = 46009, .Data3 = 16524, .Data4 = .{ 190, 22, 50, 171, 40, 245, 192, 172 } };
 pub const IDebugHostFunctionLocalDetails = extern struct {
     lpVtbl: *const Vtbl,
@@ -246823,6 +248369,96 @@ pub const IDebugHostModule5 = extern struct {
         return self.lpVtbl.GetPrimaryCompilerInformation(self, pCompilerId, pPrimaryCompilerString);
     }
 };
+pub const IID_IDebugHostModule6: GUID = .{ .Data1 = 284148862, .Data2 = 26836, .Data3 = 20359, .Data4 = .{ 129, 15, 103, 41, 168, 5, 148, 10 } };
+pub const IDebugHostModule6 = extern struct {
+    lpVtbl: *const Vtbl,
+    pub const Vtbl = extern struct {
+        QueryInterface: *const fn (self: *IDebugHostModule6, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        AddRef: *const fn (self: *IDebugHostModule6) callconv(.winapi) u32,
+        Release: *const fn (self: *IDebugHostModule6) callconv(.winapi) u32,
+        GetContext: *const fn (self: *IDebugHostModule6, context: [*c][*c]IDebugHostContext) callconv(.winapi) HRESULT,
+        EnumerateChildren: *const fn (self: *IDebugHostModule6, kind: i32, name: [*c]const u16, ppEnum: [*c][*c]IDebugHostSymbolEnumerator) callconv(.winapi) HRESULT,
+        GetSymbolKind: *const fn (self: *IDebugHostModule6, kind: [*c]i32) callconv(.winapi) HRESULT,
+        GetName: *const fn (self: *IDebugHostModule6, symbolName: [*c]BSTR) callconv(.winapi) HRESULT,
+        GetType: *const fn (self: *IDebugHostModule6, type: [*c][*c]IDebugHostType) callconv(.winapi) HRESULT,
+        GetContainingModule: *const fn (self: *IDebugHostModule6, containingModule: [*c][*c]IDebugHostModule) callconv(.winapi) HRESULT,
+        CompareAgainst: *const fn (self: *IDebugHostModule6, pComparisonSymbol: [*c]IDebugHostSymbol, comparisonFlags: u32, pMatches: [*c]bool) callconv(.winapi) HRESULT,
+        GetImageName: *const fn (self: *IDebugHostModule6, allowPath: u8, imageName: [*c]BSTR) callconv(.winapi) HRESULT,
+        GetBaseLocation: *const fn (self: *IDebugHostModule6, moduleBaseLocation: [*c]Extensions_Location) callconv(.winapi) HRESULT,
+        GetVersion: *const fn (self: *IDebugHostModule6, fileVersion: [*c]u64, productVersion: [*c]u64) callconv(.winapi) HRESULT,
+        FindTypeByName: *const fn (self: *IDebugHostModule6, typeName: [*c]const u16, type: [*c][*c]IDebugHostType) callconv(.winapi) HRESULT,
+        FindSymbolByRVA: *const fn (self: *IDebugHostModule6, rva: u64, symbol: [*c][*c]IDebugHostSymbol) callconv(.winapi) HRESULT,
+        FindSymbolByName: *const fn (self: *IDebugHostModule6, symbolName: [*c]const u16, symbol: [*c][*c]IDebugHostSymbol) callconv(.winapi) HRESULT,
+        FindContainingSymbolByRVA: *const fn (self: *IDebugHostModule6, rva: u64, symbol: [*c][*c]IDebugHostSymbol, offset: [*c]u64) callconv(.winapi) HRESULT,
+        GetRange: *const fn (self: *IDebugHostModule6, moduleStart: [*c]Extensions_Location, moduleEnd: [*c]Extensions_Location) callconv(.winapi) HRESULT,
+        FindTypeByName2: *const fn (self: *IDebugHostModule6, pEnclosingSymbol: [*c]IDebugHostSymbol, typeName: [*c]const u16, type: [*c][*c]IDebugHostType) callconv(.winapi) HRESULT,
+        GetPrimaryCompilerInformation: *const fn (self: *IDebugHostModule6, pCompilerId: [*c]i32, pPrimaryCompilerString: [*c]BSTR) callconv(.winapi) HRESULT,
+        GetArchitectureByRVA: *const fn (self: *IDebugHostModule6, rva: u64, pMachineArchitecture: [*c]u32, pRangeRvaStart: [*c]u64, pRangeRvaEnd: [*c]u64) callconv(.winapi) HRESULT,
+    };
+    pub fn QueryInterface(self: *IDebugHostModule6, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.QueryInterface(self, riid, ppvObject);
+    }
+    pub fn AddRef(self: *IDebugHostModule6) u32 {
+        return self.lpVtbl.AddRef(self);
+    }
+    pub fn Release(self: *IDebugHostModule6) u32 {
+        return self.lpVtbl.Release(self);
+    }
+    pub fn GetContext(self: *IDebugHostModule6, context: [*c][*c]IDebugHostContext) HRESULT {
+        return self.lpVtbl.GetContext(self, context);
+    }
+    pub fn EnumerateChildren(self: *IDebugHostModule6, kind: i32, name: [*c]const u16, ppEnum: [*c][*c]IDebugHostSymbolEnumerator) HRESULT {
+        return self.lpVtbl.EnumerateChildren(self, kind, name, ppEnum);
+    }
+    pub fn GetSymbolKind(self: *IDebugHostModule6, kind: [*c]i32) HRESULT {
+        return self.lpVtbl.GetSymbolKind(self, kind);
+    }
+    pub fn GetName(self: *IDebugHostModule6, symbolName: [*c]BSTR) HRESULT {
+        return self.lpVtbl.GetName(self, symbolName);
+    }
+    pub fn GetType(self: *IDebugHostModule6, @"type": [*c][*c]IDebugHostType) HRESULT {
+        return self.lpVtbl.GetType(self, @"type");
+    }
+    pub fn GetContainingModule(self: *IDebugHostModule6, containingModule: [*c][*c]IDebugHostModule) HRESULT {
+        return self.lpVtbl.GetContainingModule(self, containingModule);
+    }
+    pub fn CompareAgainst(self: *IDebugHostModule6, pComparisonSymbol: [*c]IDebugHostSymbol, comparisonFlags: u32, pMatches: [*c]bool) HRESULT {
+        return self.lpVtbl.CompareAgainst(self, pComparisonSymbol, comparisonFlags, pMatches);
+    }
+    pub fn GetImageName(self: *IDebugHostModule6, allowPath: u8, imageName: [*c]BSTR) HRESULT {
+        return self.lpVtbl.GetImageName(self, allowPath, imageName);
+    }
+    pub fn GetBaseLocation(self: *IDebugHostModule6, moduleBaseLocation: [*c]Extensions_Location) HRESULT {
+        return self.lpVtbl.GetBaseLocation(self, moduleBaseLocation);
+    }
+    pub fn GetVersion(self: *IDebugHostModule6, fileVersion: [*c]u64, productVersion: [*c]u64) HRESULT {
+        return self.lpVtbl.GetVersion(self, fileVersion, productVersion);
+    }
+    pub fn FindTypeByName(self: *IDebugHostModule6, typeName: [*c]const u16, @"type": [*c][*c]IDebugHostType) HRESULT {
+        return self.lpVtbl.FindTypeByName(self, typeName, @"type");
+    }
+    pub fn FindSymbolByRVA(self: *IDebugHostModule6, rva: u64, symbol: [*c][*c]IDebugHostSymbol) HRESULT {
+        return self.lpVtbl.FindSymbolByRVA(self, rva, symbol);
+    }
+    pub fn FindSymbolByName(self: *IDebugHostModule6, symbolName: [*c]const u16, symbol: [*c][*c]IDebugHostSymbol) HRESULT {
+        return self.lpVtbl.FindSymbolByName(self, symbolName, symbol);
+    }
+    pub fn FindContainingSymbolByRVA(self: *IDebugHostModule6, rva: u64, symbol: [*c][*c]IDebugHostSymbol, offset: [*c]u64) HRESULT {
+        return self.lpVtbl.FindContainingSymbolByRVA(self, rva, symbol, offset);
+    }
+    pub fn GetRange(self: *IDebugHostModule6, moduleStart: [*c]Extensions_Location, moduleEnd: [*c]Extensions_Location) HRESULT {
+        return self.lpVtbl.GetRange(self, moduleStart, moduleEnd);
+    }
+    pub fn FindTypeByName2(self: *IDebugHostModule6, pEnclosingSymbol: [*c]IDebugHostSymbol, typeName: [*c]const u16, @"type": [*c][*c]IDebugHostType) HRESULT {
+        return self.lpVtbl.FindTypeByName2(self, pEnclosingSymbol, typeName, @"type");
+    }
+    pub fn GetPrimaryCompilerInformation(self: *IDebugHostModule6, pCompilerId: [*c]i32, pPrimaryCompilerString: [*c]BSTR) HRESULT {
+        return self.lpVtbl.GetPrimaryCompilerInformation(self, pCompilerId, pPrimaryCompilerString);
+    }
+    pub fn GetArchitectureByRVA(self: *IDebugHostModule6, rva: u64, pMachineArchitecture: [*c]u32, pRangeRvaStart: [*c]u64, pRangeRvaEnd: [*c]u64) HRESULT {
+        return self.lpVtbl.GetArchitectureByRVA(self, rva, pMachineArchitecture, pRangeRvaStart, pRangeRvaEnd);
+    }
+};
 pub const IID_IDebugHostModuleSignature: GUID = .{ .Data1 = 837106266, .Data2 = 494, .Data3 = 19387, .Data4 = .{ 184, 153, 75, 70, 174, 125, 89, 92 } };
 pub const IDebugHostModuleSignature = extern struct {
     lpVtbl: *const Vtbl,
@@ -247243,6 +248879,64 @@ pub const IDebugHostSymbols2 = extern struct {
     }
     pub fn DemangleSymbolName(self: *IDebugHostSymbols2, pSymbol: [*c]IDebugHostSymbol, flags: u32, pDemangledSymbolName: [*c]BSTR) HRESULT {
         return self.lpVtbl.DemangleSymbolName(self, pSymbol, flags, pDemangledSymbolName);
+    }
+};
+pub const IID_IDebugHostSymbols3: GUID = .{ .Data1 = 2234901272, .Data2 = 20299, .Data3 = 19150, .Data4 = .{ 162, 27, 175, 158, 19, 74, 78, 155 } };
+pub const IDebugHostSymbols3 = extern struct {
+    lpVtbl: *const Vtbl,
+    pub const Vtbl = extern struct {
+        QueryInterface: *const fn (self: *IDebugHostSymbols3, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        AddRef: *const fn (self: *IDebugHostSymbols3) callconv(.winapi) u32,
+        Release: *const fn (self: *IDebugHostSymbols3) callconv(.winapi) u32,
+        CreateModuleSignature: *const fn (self: *IDebugHostSymbols3, pwszModuleName: [*c]const u16, pwszMinVersion: [*c]const u16, pwszMaxVersion: [*c]const u16, ppModuleSignature: [*c][*c]IDebugHostModuleSignature) callconv(.winapi) HRESULT,
+        CreateTypeSignature: *const fn (self: *IDebugHostSymbols3, signatureSpecification: [*c]const u16, module: [*c]IDebugHostModule, typeSignature: [*c][*c]IDebugHostTypeSignature) callconv(.winapi) HRESULT,
+        CreateTypeSignatureForModuleRange: *const fn (self: *IDebugHostSymbols3, signatureSpecification: [*c]const u16, moduleName: [*c]const u16, minVersion: [*c]const u16, maxVersion: [*c]const u16, typeSignature: [*c][*c]IDebugHostTypeSignature) callconv(.winapi) HRESULT,
+        EnumerateModules: *const fn (self: *IDebugHostSymbols3, context: [*c]IDebugHostContext, moduleEnum: [*c][*c]IDebugHostSymbolEnumerator) callconv(.winapi) HRESULT,
+        FindModuleByName: *const fn (self: *IDebugHostSymbols3, context: [*c]IDebugHostContext, moduleName: [*c]const u16, module: [*c][*c]IDebugHostModule) callconv(.winapi) HRESULT,
+        FindModuleByLocation: *const fn (self: *IDebugHostSymbols3, context: [*c]IDebugHostContext, moduleLocation: Extensions_Location, module: [*c][*c]IDebugHostModule) callconv(.winapi) HRESULT,
+        GetMostDerivedObject: *const fn (self: *IDebugHostSymbols3, pContext: [*c]IDebugHostContext, location: Extensions_Location, objectType: [*c]IDebugHostType, derivedLocation: [*c]Extensions_Location, derivedType: [*c][*c]IDebugHostType) callconv(.winapi) HRESULT,
+        DemangleSymbolName: *const fn (self: *IDebugHostSymbols3, pSymbol: [*c]IDebugHostSymbol, flags: u32, pDemangledSymbolName: [*c]BSTR) callconv(.winapi) HRESULT,
+        CreateModuleSignature2: *const fn (self: *IDebugHostSymbols3, pwszModuleName: [*c]const u16, allowLooseNameMatch: u8, pwszMinVersion: [*c]const u16, pwszMaxVersion: [*c]const u16, ppModuleSignature: [*c][*c]IDebugHostModuleSignature) callconv(.winapi) HRESULT,
+        CreateTypeSignatureForModuleRange2: *const fn (self: *IDebugHostSymbols3, signatureSpecification: [*c]const u16, moduleName: [*c]const u16, allowLooseNameMatch: u8, minVersion: [*c]const u16, maxVersion: [*c]const u16, typeSignature: [*c][*c]IDebugHostTypeSignature) callconv(.winapi) HRESULT,
+    };
+    pub fn QueryInterface(self: *IDebugHostSymbols3, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.QueryInterface(self, riid, ppvObject);
+    }
+    pub fn AddRef(self: *IDebugHostSymbols3) u32 {
+        return self.lpVtbl.AddRef(self);
+    }
+    pub fn Release(self: *IDebugHostSymbols3) u32 {
+        return self.lpVtbl.Release(self);
+    }
+    pub fn CreateModuleSignature(self: *IDebugHostSymbols3, pwszModuleName: [*c]const u16, pwszMinVersion: [*c]const u16, pwszMaxVersion: [*c]const u16, ppModuleSignature: [*c][*c]IDebugHostModuleSignature) HRESULT {
+        return self.lpVtbl.CreateModuleSignature(self, pwszModuleName, pwszMinVersion, pwszMaxVersion, ppModuleSignature);
+    }
+    pub fn CreateTypeSignature(self: *IDebugHostSymbols3, signatureSpecification: [*c]const u16, module: [*c]IDebugHostModule, typeSignature: [*c][*c]IDebugHostTypeSignature) HRESULT {
+        return self.lpVtbl.CreateTypeSignature(self, signatureSpecification, module, typeSignature);
+    }
+    pub fn CreateTypeSignatureForModuleRange(self: *IDebugHostSymbols3, signatureSpecification: [*c]const u16, moduleName: [*c]const u16, minVersion: [*c]const u16, maxVersion: [*c]const u16, typeSignature: [*c][*c]IDebugHostTypeSignature) HRESULT {
+        return self.lpVtbl.CreateTypeSignatureForModuleRange(self, signatureSpecification, moduleName, minVersion, maxVersion, typeSignature);
+    }
+    pub fn EnumerateModules(self: *IDebugHostSymbols3, context: [*c]IDebugHostContext, moduleEnum: [*c][*c]IDebugHostSymbolEnumerator) HRESULT {
+        return self.lpVtbl.EnumerateModules(self, context, moduleEnum);
+    }
+    pub fn FindModuleByName(self: *IDebugHostSymbols3, context: [*c]IDebugHostContext, moduleName: [*c]const u16, module: [*c][*c]IDebugHostModule) HRESULT {
+        return self.lpVtbl.FindModuleByName(self, context, moduleName, module);
+    }
+    pub fn FindModuleByLocation(self: *IDebugHostSymbols3, context: [*c]IDebugHostContext, moduleLocation: Extensions_Location, module: [*c][*c]IDebugHostModule) HRESULT {
+        return self.lpVtbl.FindModuleByLocation(self, context, moduleLocation, module);
+    }
+    pub fn GetMostDerivedObject(self: *IDebugHostSymbols3, pContext: [*c]IDebugHostContext, location: Extensions_Location, objectType: [*c]IDebugHostType, derivedLocation: [*c]Extensions_Location, derivedType: [*c][*c]IDebugHostType) HRESULT {
+        return self.lpVtbl.GetMostDerivedObject(self, pContext, location, objectType, derivedLocation, derivedType);
+    }
+    pub fn DemangleSymbolName(self: *IDebugHostSymbols3, pSymbol: [*c]IDebugHostSymbol, flags: u32, pDemangledSymbolName: [*c]BSTR) HRESULT {
+        return self.lpVtbl.DemangleSymbolName(self, pSymbol, flags, pDemangledSymbolName);
+    }
+    pub fn CreateModuleSignature2(self: *IDebugHostSymbols3, pwszModuleName: [*c]const u16, allowLooseNameMatch: u8, pwszMinVersion: [*c]const u16, pwszMaxVersion: [*c]const u16, ppModuleSignature: [*c][*c]IDebugHostModuleSignature) HRESULT {
+        return self.lpVtbl.CreateModuleSignature2(self, pwszModuleName, allowLooseNameMatch, pwszMinVersion, pwszMaxVersion, ppModuleSignature);
+    }
+    pub fn CreateTypeSignatureForModuleRange2(self: *IDebugHostSymbols3, signatureSpecification: [*c]const u16, moduleName: [*c]const u16, allowLooseNameMatch: u8, minVersion: [*c]const u16, maxVersion: [*c]const u16, typeSignature: [*c][*c]IDebugHostTypeSignature) HRESULT {
+        return self.lpVtbl.CreateTypeSignatureForModuleRange2(self, signatureSpecification, moduleName, allowLooseNameMatch, minVersion, maxVersion, typeSignature);
     }
 };
 pub const IID_IDebugHostSymbolsTargetComposition: GUID = .{ .Data1 = 1011575517, .Data2 = 32993, .Data3 = 19499, .Data4 = .{ 175, 225, 154, 17, 50, 88, 109, 208 } };
@@ -284634,6 +286328,100 @@ pub const IDXGIAdapter4 = extern struct {
         return self.lpVtbl.GetDesc3(self, pDesc);
     }
 };
+pub const IID_IDXGIAdapter5: GUID = .{ .Data1 = 2489607228, .Data2 = 51547, .Data3 = 18036, .Data4 = .{ 138, 125, 238, 5, 72, 232, 192, 34 } };
+pub const IDXGIAdapter5 = extern struct {
+    lpVtbl: *const Vtbl,
+    pub const Vtbl = extern struct {
+        QueryInterface: *const fn (self: *IDXGIAdapter5, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        AddRef: *const fn (self: *IDXGIAdapter5) callconv(.winapi) u32,
+        Release: *const fn (self: *IDXGIAdapter5) callconv(.winapi) u32,
+        SetPrivateData: *const fn (self: *IDXGIAdapter5, Name: [*c]const GUID, DataSize: u32, pData: ?*const anyopaque) callconv(.winapi) HRESULT,
+        SetPrivateDataInterface: *const fn (self: *IDXGIAdapter5, Name: [*c]const GUID, pUnknown: [*c]const IUnknown) callconv(.winapi) HRESULT,
+        GetPrivateData: *const fn (self: *IDXGIAdapter5, Name: [*c]const GUID, pDataSize: [*c]u32, pData: ?*anyopaque) callconv(.winapi) HRESULT,
+        GetParent: *const fn (self: *IDXGIAdapter5, riid: [*c]const GUID, ppParent: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        EnumOutputs: *const fn (self: *IDXGIAdapter5, Output: u32, ppOutput: [*c][*c]IDXGIOutput) callconv(.winapi) HRESULT,
+        GetDesc: *const fn (self: *IDXGIAdapter5, pDesc: [*c]DXGI_ADAPTER_DESC) callconv(.winapi) HRESULT,
+        CheckInterfaceSupport: *const fn (self: *IDXGIAdapter5, InterfaceName: [*c]const GUID, pUMDVersion: [*c]i64) callconv(.winapi) HRESULT,
+        GetDesc1: *const fn (self: *IDXGIAdapter5, pDesc: [*c]DXGI_ADAPTER_DESC1) callconv(.winapi) HRESULT,
+        GetDesc2: *const fn (self: *IDXGIAdapter5, pDesc: [*c]DXGI_ADAPTER_DESC2) callconv(.winapi) HRESULT,
+        RegisterHardwareContentProtectionTeardownStatusEvent: *const fn (self: *IDXGIAdapter5, hEvent: HANDLE, pdwCookie: [*c]u32) callconv(.winapi) HRESULT,
+        UnregisterHardwareContentProtectionTeardownStatus: *const fn (self: *IDXGIAdapter5, dwCookie: u32) callconv(.winapi) void,
+        QueryVideoMemoryInfo: *const fn (self: *IDXGIAdapter5, NodeIndex: u32, MemorySegmentGroup: i32, pVideoMemoryInfo: [*c]DXGI_QUERY_VIDEO_MEMORY_INFO) callconv(.winapi) HRESULT,
+        SetVideoMemoryReservation: *const fn (self: *IDXGIAdapter5, NodeIndex: u32, MemorySegmentGroup: i32, Reservation: u64) callconv(.winapi) HRESULT,
+        RegisterVideoMemoryBudgetChangeNotificationEvent: *const fn (self: *IDXGIAdapter5, hEvent: HANDLE, pdwCookie: [*c]u32) callconv(.winapi) HRESULT,
+        UnregisterVideoMemoryBudgetChangeNotification: *const fn (self: *IDXGIAdapter5, dwCookie: u32) callconv(.winapi) void,
+        GetDesc3: *const fn (self: *IDXGIAdapter5, pDesc: [*c]DXGI_ADAPTER_DESC3) callconv(.winapi) HRESULT,
+        GetDesc4: *const fn (self: *IDXGIAdapter5, pDesc: [*c]DXGI_ADAPTER_DESC4) callconv(.winapi) HRESULT,
+        GetSingleAdapterHybridMode: *const fn (self: *IDXGIAdapter5, pSingleAdapterHybridMode: [*c]i32) callconv(.winapi) HRESULT,
+        SetSingleAdapterHybridMode: *const fn (self: *IDXGIAdapter5, SingleAdapterHybridMode: i32) callconv(.winapi) HRESULT,
+    };
+    pub fn QueryInterface(self: *IDXGIAdapter5, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.QueryInterface(self, riid, ppvObject);
+    }
+    pub fn AddRef(self: *IDXGIAdapter5) u32 {
+        return self.lpVtbl.AddRef(self);
+    }
+    pub fn Release(self: *IDXGIAdapter5) u32 {
+        return self.lpVtbl.Release(self);
+    }
+    pub fn SetPrivateData(self: *IDXGIAdapter5, Name: [*c]const GUID, DataSize: u32, pData: ?*const anyopaque) HRESULT {
+        return self.lpVtbl.SetPrivateData(self, Name, DataSize, pData);
+    }
+    pub fn SetPrivateDataInterface(self: *IDXGIAdapter5, Name: [*c]const GUID, pUnknown: [*c]const IUnknown) HRESULT {
+        return self.lpVtbl.SetPrivateDataInterface(self, Name, pUnknown);
+    }
+    pub fn GetPrivateData(self: *IDXGIAdapter5, Name: [*c]const GUID, pDataSize: [*c]u32, pData: ?*anyopaque) HRESULT {
+        return self.lpVtbl.GetPrivateData(self, Name, pDataSize, pData);
+    }
+    pub fn GetParent(self: *IDXGIAdapter5, riid: [*c]const GUID, ppParent: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.GetParent(self, riid, ppParent);
+    }
+    pub fn EnumOutputs(self: *IDXGIAdapter5, Output: u32, ppOutput: [*c][*c]IDXGIOutput) HRESULT {
+        return self.lpVtbl.EnumOutputs(self, Output, ppOutput);
+    }
+    pub fn GetDesc(self: *IDXGIAdapter5, pDesc: [*c]DXGI_ADAPTER_DESC) HRESULT {
+        return self.lpVtbl.GetDesc(self, pDesc);
+    }
+    pub fn CheckInterfaceSupport(self: *IDXGIAdapter5, InterfaceName: [*c]const GUID, pUMDVersion: [*c]i64) HRESULT {
+        return self.lpVtbl.CheckInterfaceSupport(self, InterfaceName, pUMDVersion);
+    }
+    pub fn GetDesc1(self: *IDXGIAdapter5, pDesc: [*c]DXGI_ADAPTER_DESC1) HRESULT {
+        return self.lpVtbl.GetDesc1(self, pDesc);
+    }
+    pub fn GetDesc2(self: *IDXGIAdapter5, pDesc: [*c]DXGI_ADAPTER_DESC2) HRESULT {
+        return self.lpVtbl.GetDesc2(self, pDesc);
+    }
+    pub fn RegisterHardwareContentProtectionTeardownStatusEvent(self: *IDXGIAdapter5, hEvent: HANDLE, pdwCookie: [*c]u32) HRESULT {
+        return self.lpVtbl.RegisterHardwareContentProtectionTeardownStatusEvent(self, hEvent, pdwCookie);
+    }
+    pub fn UnregisterHardwareContentProtectionTeardownStatus(self: *IDXGIAdapter5, dwCookie: u32) void {
+        return self.lpVtbl.UnregisterHardwareContentProtectionTeardownStatus(self, dwCookie);
+    }
+    pub fn QueryVideoMemoryInfo(self: *IDXGIAdapter5, NodeIndex: u32, MemorySegmentGroup: i32, pVideoMemoryInfo: [*c]DXGI_QUERY_VIDEO_MEMORY_INFO) HRESULT {
+        return self.lpVtbl.QueryVideoMemoryInfo(self, NodeIndex, MemorySegmentGroup, pVideoMemoryInfo);
+    }
+    pub fn SetVideoMemoryReservation(self: *IDXGIAdapter5, NodeIndex: u32, MemorySegmentGroup: i32, Reservation: u64) HRESULT {
+        return self.lpVtbl.SetVideoMemoryReservation(self, NodeIndex, MemorySegmentGroup, Reservation);
+    }
+    pub fn RegisterVideoMemoryBudgetChangeNotificationEvent(self: *IDXGIAdapter5, hEvent: HANDLE, pdwCookie: [*c]u32) HRESULT {
+        return self.lpVtbl.RegisterVideoMemoryBudgetChangeNotificationEvent(self, hEvent, pdwCookie);
+    }
+    pub fn UnregisterVideoMemoryBudgetChangeNotification(self: *IDXGIAdapter5, dwCookie: u32) void {
+        return self.lpVtbl.UnregisterVideoMemoryBudgetChangeNotification(self, dwCookie);
+    }
+    pub fn GetDesc3(self: *IDXGIAdapter5, pDesc: [*c]DXGI_ADAPTER_DESC3) HRESULT {
+        return self.lpVtbl.GetDesc3(self, pDesc);
+    }
+    pub fn GetDesc4(self: *IDXGIAdapter5, pDesc: [*c]DXGI_ADAPTER_DESC4) HRESULT {
+        return self.lpVtbl.GetDesc4(self, pDesc);
+    }
+    pub fn GetSingleAdapterHybridMode(self: *IDXGIAdapter5, pSingleAdapterHybridMode: [*c]i32) HRESULT {
+        return self.lpVtbl.GetSingleAdapterHybridMode(self, pSingleAdapterHybridMode);
+    }
+    pub fn SetSingleAdapterHybridMode(self: *IDXGIAdapter5, SingleAdapterHybridMode_: i32) HRESULT {
+        return self.lpVtbl.SetSingleAdapterHybridMode(self, SingleAdapterHybridMode_);
+    }
+};
 pub const IID_IDXGIDebug: GUID = .{ .Data1 = 295597138, .Data2 = 56990, .Data3 = 16638, .Data4 = .{ 136, 6, 136, 249, 12, 18, 180, 65 } };
 pub const IDXGIDebug = extern struct {
     lpVtbl: *const Vtbl,
@@ -285994,6 +287782,152 @@ pub const IDXGIFactory7 = extern struct {
         return self.lpVtbl.UnregisterAdaptersChangedEvent(self, dwCookie);
     }
 };
+pub const IID_IDXGIFactory8: GUID = .{ .Data1 = 1765557697, .Data2 = 14759, .Data3 = 19487, .Data4 = .{ 189, 211, 217, 163, 34, 155, 131, 33 } };
+pub const IDXGIFactory8 = extern struct {
+    lpVtbl: *const Vtbl,
+    pub const Vtbl = extern struct {
+        QueryInterface: *const fn (self: *IDXGIFactory8, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        AddRef: *const fn (self: *IDXGIFactory8) callconv(.winapi) u32,
+        Release: *const fn (self: *IDXGIFactory8) callconv(.winapi) u32,
+        SetPrivateData: *const fn (self: *IDXGIFactory8, Name: [*c]const GUID, DataSize: u32, pData: ?*const anyopaque) callconv(.winapi) HRESULT,
+        SetPrivateDataInterface: *const fn (self: *IDXGIFactory8, Name: [*c]const GUID, pUnknown: [*c]const IUnknown) callconv(.winapi) HRESULT,
+        GetPrivateData: *const fn (self: *IDXGIFactory8, Name: [*c]const GUID, pDataSize: [*c]u32, pData: ?*anyopaque) callconv(.winapi) HRESULT,
+        GetParent: *const fn (self: *IDXGIFactory8, riid: [*c]const GUID, ppParent: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        EnumAdapters: *const fn (self: *IDXGIFactory8, Adapter: u32, ppAdapter: [*c][*c]IDXGIAdapter) callconv(.winapi) HRESULT,
+        MakeWindowAssociation: *const fn (self: *IDXGIFactory8, WindowHandle: HWND, Flags: u32) callconv(.winapi) HRESULT,
+        GetWindowAssociation: *const fn (self: *IDXGIFactory8, pWindowHandle: [*c]HWND) callconv(.winapi) HRESULT,
+        CreateSwapChain: *const fn (self: *IDXGIFactory8, pDevice: [*c]IUnknown, pDesc: [*c]DXGI_SWAP_CHAIN_DESC, ppSwapChain: [*c][*c]IDXGISwapChain) callconv(.winapi) HRESULT,
+        CreateSoftwareAdapter: *const fn (self: *IDXGIFactory8, Module: HMODULE, ppAdapter: [*c][*c]IDXGIAdapter) callconv(.winapi) HRESULT,
+        EnumAdapters1: *const fn (self: *IDXGIFactory8, Adapter: u32, ppAdapter: [*c][*c]IDXGIAdapter1) callconv(.winapi) HRESULT,
+        IsCurrent: *const fn (self: *IDXGIFactory8) callconv(.winapi) BOOL,
+        IsWindowedStereoEnabled: *const fn (self: *IDXGIFactory8) callconv(.winapi) BOOL,
+        CreateSwapChainForHwnd: *const fn (self: *IDXGIFactory8, pDevice: [*c]IUnknown, hWnd: HWND, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC1, pFullscreenDesc: [*c]const DXGI_SWAP_CHAIN_FULLSCREEN_DESC, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain1) callconv(.winapi) HRESULT,
+        CreateSwapChainForCoreWindow: *const fn (self: *IDXGIFactory8, pDevice: [*c]IUnknown, pWindow: [*c]IUnknown, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC1, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain1) callconv(.winapi) HRESULT,
+        GetSharedResourceAdapterLuid: *const fn (self: *IDXGIFactory8, hResource: HANDLE, pLuid: [*c]LUID) callconv(.winapi) HRESULT,
+        RegisterStereoStatusWindow: *const fn (self: *IDXGIFactory8, WindowHandle: HWND, wMsg: u32, pdwCookie: [*c]u32) callconv(.winapi) HRESULT,
+        RegisterStereoStatusEvent: *const fn (self: *IDXGIFactory8, hEvent: HANDLE, pdwCookie: [*c]u32) callconv(.winapi) HRESULT,
+        UnregisterStereoStatus: *const fn (self: *IDXGIFactory8, dwCookie: u32) callconv(.winapi) void,
+        RegisterOcclusionStatusWindow: *const fn (self: *IDXGIFactory8, WindowHandle: HWND, wMsg: u32, pdwCookie: [*c]u32) callconv(.winapi) HRESULT,
+        RegisterOcclusionStatusEvent: *const fn (self: *IDXGIFactory8, hEvent: HANDLE, pdwCookie: [*c]u32) callconv(.winapi) HRESULT,
+        UnregisterOcclusionStatus: *const fn (self: *IDXGIFactory8, dwCookie: u32) callconv(.winapi) void,
+        CreateSwapChainForComposition: *const fn (self: *IDXGIFactory8, pDevice: [*c]IUnknown, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC1, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain1) callconv(.winapi) HRESULT,
+        GetCreationFlags: *const fn (self: *IDXGIFactory8) callconv(.winapi) u32,
+        EnumAdapterByLuid: *const fn (self: *IDXGIFactory8, AdapterLuid: LUID, riid: [*c]const GUID, ppvAdapter: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        EnumWarpAdapter: *const fn (self: *IDXGIFactory8, riid: [*c]const GUID, ppvAdapter: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        CheckFeatureSupport: *const fn (self: *IDXGIFactory8, Feature: i32, pFeatureSupportData: ?*anyopaque, FeatureSupportDataSize: u32) callconv(.winapi) HRESULT,
+        EnumAdapterByGpuPreference: *const fn (self: *IDXGIFactory8, Adapter: u32, GpuPreference: i32, riid: [*c]const GUID, ppvAdapter: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        RegisterAdaptersChangedEvent: *const fn (self: *IDXGIFactory8, hEvent: HANDLE, pdwCookie: [*c]u32) callconv(.winapi) HRESULT,
+        UnregisterAdaptersChangedEvent: *const fn (self: *IDXGIFactory8, dwCookie: u32) callconv(.winapi) HRESULT,
+        CreateSwapChainForHwnd1: *const fn (self: *IDXGIFactory8, pDevice: [*c]IUnknown, hWnd: HWND, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC2, pFullscreenDesc: [*c]const DXGI_SWAP_CHAIN_FULLSCREEN_DESC, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain5) callconv(.winapi) HRESULT,
+        CreateSwapChainForCoreWindow1: *const fn (self: *IDXGIFactory8, pDevice: [*c]IUnknown, pWindow: [*c]IUnknown, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC2, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain5) callconv(.winapi) HRESULT,
+        CreateSwapChainForComposition1: *const fn (self: *IDXGIFactory8, pDevice: [*c]IUnknown, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC2, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain5) callconv(.winapi) HRESULT,
+    };
+    pub fn QueryInterface(self: *IDXGIFactory8, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.QueryInterface(self, riid, ppvObject);
+    }
+    pub fn AddRef(self: *IDXGIFactory8) u32 {
+        return self.lpVtbl.AddRef(self);
+    }
+    pub fn Release(self: *IDXGIFactory8) u32 {
+        return self.lpVtbl.Release(self);
+    }
+    pub fn SetPrivateData(self: *IDXGIFactory8, Name: [*c]const GUID, DataSize: u32, pData: ?*const anyopaque) HRESULT {
+        return self.lpVtbl.SetPrivateData(self, Name, DataSize, pData);
+    }
+    pub fn SetPrivateDataInterface(self: *IDXGIFactory8, Name: [*c]const GUID, pUnknown: [*c]const IUnknown) HRESULT {
+        return self.lpVtbl.SetPrivateDataInterface(self, Name, pUnknown);
+    }
+    pub fn GetPrivateData(self: *IDXGIFactory8, Name: [*c]const GUID, pDataSize: [*c]u32, pData: ?*anyopaque) HRESULT {
+        return self.lpVtbl.GetPrivateData(self, Name, pDataSize, pData);
+    }
+    pub fn GetParent(self: *IDXGIFactory8, riid: [*c]const GUID, ppParent: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.GetParent(self, riid, ppParent);
+    }
+    pub fn EnumAdapters(self: *IDXGIFactory8, Adapter_: u32, ppAdapter: [*c][*c]IDXGIAdapter) HRESULT {
+        return self.lpVtbl.EnumAdapters(self, Adapter_, ppAdapter);
+    }
+    pub fn MakeWindowAssociation(self: *IDXGIFactory8, WindowHandle: HWND, Flags: u32) HRESULT {
+        return self.lpVtbl.MakeWindowAssociation(self, WindowHandle, Flags);
+    }
+    pub fn GetWindowAssociation(self: *IDXGIFactory8, pWindowHandle: [*c]HWND) HRESULT {
+        return self.lpVtbl.GetWindowAssociation(self, pWindowHandle);
+    }
+    pub fn CreateSwapChain(self: *IDXGIFactory8, pDevice: [*c]IUnknown, pDesc: [*c]DXGI_SWAP_CHAIN_DESC, ppSwapChain: [*c][*c]IDXGISwapChain) HRESULT {
+        return self.lpVtbl.CreateSwapChain(self, pDevice, pDesc, ppSwapChain);
+    }
+    pub fn CreateSoftwareAdapter(self: *IDXGIFactory8, Module: HMODULE, ppAdapter: [*c][*c]IDXGIAdapter) HRESULT {
+        return self.lpVtbl.CreateSoftwareAdapter(self, Module, ppAdapter);
+    }
+    pub fn EnumAdapters1(self: *IDXGIFactory8, Adapter_: u32, ppAdapter: [*c][*c]IDXGIAdapter1) HRESULT {
+        return self.lpVtbl.EnumAdapters1(self, Adapter_, ppAdapter);
+    }
+    pub fn IsCurrent(self: *IDXGIFactory8) BOOL {
+        return self.lpVtbl.IsCurrent(self);
+    }
+    pub fn IsWindowedStereoEnabled(self: *IDXGIFactory8) BOOL {
+        return self.lpVtbl.IsWindowedStereoEnabled(self);
+    }
+    pub fn CreateSwapChainForHwnd(self: *IDXGIFactory8, pDevice: [*c]IUnknown, hWnd: HWND, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC1, pFullscreenDesc: [*c]const DXGI_SWAP_CHAIN_FULLSCREEN_DESC, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain1) HRESULT {
+        return self.lpVtbl.CreateSwapChainForHwnd(self, pDevice, hWnd, pDesc, pFullscreenDesc, pRestrictToOutput, ppSwapChain);
+    }
+    pub fn CreateSwapChainForCoreWindow(self: *IDXGIFactory8, pDevice: [*c]IUnknown, pWindow: [*c]IUnknown, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC1, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain1) HRESULT {
+        return self.lpVtbl.CreateSwapChainForCoreWindow(self, pDevice, pWindow, pDesc, pRestrictToOutput, ppSwapChain);
+    }
+    pub fn GetSharedResourceAdapterLuid(self: *IDXGIFactory8, hResource: HANDLE, pLuid: [*c]LUID) HRESULT {
+        return self.lpVtbl.GetSharedResourceAdapterLuid(self, hResource, pLuid);
+    }
+    pub fn RegisterStereoStatusWindow(self: *IDXGIFactory8, WindowHandle: HWND, wMsg: u32, pdwCookie: [*c]u32) HRESULT {
+        return self.lpVtbl.RegisterStereoStatusWindow(self, WindowHandle, wMsg, pdwCookie);
+    }
+    pub fn RegisterStereoStatusEvent(self: *IDXGIFactory8, hEvent: HANDLE, pdwCookie: [*c]u32) HRESULT {
+        return self.lpVtbl.RegisterStereoStatusEvent(self, hEvent, pdwCookie);
+    }
+    pub fn UnregisterStereoStatus(self: *IDXGIFactory8, dwCookie: u32) void {
+        return self.lpVtbl.UnregisterStereoStatus(self, dwCookie);
+    }
+    pub fn RegisterOcclusionStatusWindow(self: *IDXGIFactory8, WindowHandle: HWND, wMsg: u32, pdwCookie: [*c]u32) HRESULT {
+        return self.lpVtbl.RegisterOcclusionStatusWindow(self, WindowHandle, wMsg, pdwCookie);
+    }
+    pub fn RegisterOcclusionStatusEvent(self: *IDXGIFactory8, hEvent: HANDLE, pdwCookie: [*c]u32) HRESULT {
+        return self.lpVtbl.RegisterOcclusionStatusEvent(self, hEvent, pdwCookie);
+    }
+    pub fn UnregisterOcclusionStatus(self: *IDXGIFactory8, dwCookie: u32) void {
+        return self.lpVtbl.UnregisterOcclusionStatus(self, dwCookie);
+    }
+    pub fn CreateSwapChainForComposition(self: *IDXGIFactory8, pDevice: [*c]IUnknown, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC1, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain1) HRESULT {
+        return self.lpVtbl.CreateSwapChainForComposition(self, pDevice, pDesc, pRestrictToOutput, ppSwapChain);
+    }
+    pub fn GetCreationFlags(self: *IDXGIFactory8) u32 {
+        return self.lpVtbl.GetCreationFlags(self);
+    }
+    pub fn EnumAdapterByLuid(self: *IDXGIFactory8, AdapterLuid: LUID, riid: [*c]const GUID, ppvAdapter: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.EnumAdapterByLuid(self, AdapterLuid, riid, ppvAdapter);
+    }
+    pub fn EnumWarpAdapter(self: *IDXGIFactory8, riid: [*c]const GUID, ppvAdapter: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.EnumWarpAdapter(self, riid, ppvAdapter);
+    }
+    pub fn CheckFeatureSupport(self: *IDXGIFactory8, Feature: i32, pFeatureSupportData: ?*anyopaque, FeatureSupportDataSize: u32) HRESULT {
+        return self.lpVtbl.CheckFeatureSupport(self, Feature, pFeatureSupportData, FeatureSupportDataSize);
+    }
+    pub fn EnumAdapterByGpuPreference(self: *IDXGIFactory8, Adapter_: u32, GpuPreference: i32, riid: [*c]const GUID, ppvAdapter: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.EnumAdapterByGpuPreference(self, Adapter_, GpuPreference, riid, ppvAdapter);
+    }
+    pub fn RegisterAdaptersChangedEvent(self: *IDXGIFactory8, hEvent: HANDLE, pdwCookie: [*c]u32) HRESULT {
+        return self.lpVtbl.RegisterAdaptersChangedEvent(self, hEvent, pdwCookie);
+    }
+    pub fn UnregisterAdaptersChangedEvent(self: *IDXGIFactory8, dwCookie: u32) HRESULT {
+        return self.lpVtbl.UnregisterAdaptersChangedEvent(self, dwCookie);
+    }
+    pub fn CreateSwapChainForHwnd1(self: *IDXGIFactory8, pDevice: [*c]IUnknown, hWnd: HWND, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC2, pFullscreenDesc: [*c]const DXGI_SWAP_CHAIN_FULLSCREEN_DESC, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain5) HRESULT {
+        return self.lpVtbl.CreateSwapChainForHwnd1(self, pDevice, hWnd, pDesc, pFullscreenDesc, pRestrictToOutput, ppSwapChain);
+    }
+    pub fn CreateSwapChainForCoreWindow1(self: *IDXGIFactory8, pDevice: [*c]IUnknown, pWindow: [*c]IUnknown, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC2, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain5) HRESULT {
+        return self.lpVtbl.CreateSwapChainForCoreWindow1(self, pDevice, pWindow, pDesc, pRestrictToOutput, ppSwapChain);
+    }
+    pub fn CreateSwapChainForComposition1(self: *IDXGIFactory8, pDevice: [*c]IUnknown, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC2, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain5) HRESULT {
+        return self.lpVtbl.CreateSwapChainForComposition1(self, pDevice, pDesc, pRestrictToOutput, ppSwapChain);
+    }
+};
 pub const IID_IDXGIFactoryMedia: GUID = .{ .Data1 = 1105711602, .Data2 = 42385, .Data3 = 20347, .Data4 = .{ 162, 229, 250, 156, 132, 62, 28, 18 } };
 pub const IDXGIFactoryMedia = extern struct {
     lpVtbl: *const Vtbl,
@@ -286018,6 +287952,36 @@ pub const IDXGIFactoryMedia = extern struct {
     }
     pub fn CreateDecodeSwapChainForCompositionSurfaceHandle(self: *IDXGIFactoryMedia, pDevice: [*c]IUnknown, hSurface: HANDLE, pDesc: [*c]DXGI_DECODE_SWAP_CHAIN_DESC, pYuvDecodeBuffers: [*c]IDXGIResource, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGIDecodeSwapChain) HRESULT {
         return self.lpVtbl.CreateDecodeSwapChainForCompositionSurfaceHandle(self, pDevice, hSurface, pDesc, pYuvDecodeBuffers, pRestrictToOutput, ppSwapChain);
+    }
+};
+pub const IID_IDXGIFactoryMedia2: GUID = .{ .Data1 = 2565606288, .Data2 = 11032, .Data3 = 17062, .Data4 = .{ 159, 207, 67, 180, 111, 101, 64, 34 } };
+pub const IDXGIFactoryMedia2 = extern struct {
+    lpVtbl: *const Vtbl,
+    pub const Vtbl = extern struct {
+        QueryInterface: *const fn (self: *IDXGIFactoryMedia2, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        AddRef: *const fn (self: *IDXGIFactoryMedia2) callconv(.winapi) u32,
+        Release: *const fn (self: *IDXGIFactoryMedia2) callconv(.winapi) u32,
+        CreateSwapChainForCompositionSurfaceHandle: *const fn (self: *IDXGIFactoryMedia2, pDevice: [*c]IUnknown, hSurface: HANDLE, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC1, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain1) callconv(.winapi) HRESULT,
+        CreateDecodeSwapChainForCompositionSurfaceHandle: *const fn (self: *IDXGIFactoryMedia2, pDevice: [*c]IUnknown, hSurface: HANDLE, pDesc: [*c]DXGI_DECODE_SWAP_CHAIN_DESC, pYuvDecodeBuffers: [*c]IDXGIResource, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGIDecodeSwapChain) callconv(.winapi) HRESULT,
+        CreateSwapChainForCompositionSurfaceHandle1: *const fn (self: *IDXGIFactoryMedia2, pDevice: [*c]IUnknown, hSurface: HANDLE, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC2, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain5) callconv(.winapi) HRESULT,
+    };
+    pub fn QueryInterface(self: *IDXGIFactoryMedia2, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.QueryInterface(self, riid, ppvObject);
+    }
+    pub fn AddRef(self: *IDXGIFactoryMedia2) u32 {
+        return self.lpVtbl.AddRef(self);
+    }
+    pub fn Release(self: *IDXGIFactoryMedia2) u32 {
+        return self.lpVtbl.Release(self);
+    }
+    pub fn CreateSwapChainForCompositionSurfaceHandle(self: *IDXGIFactoryMedia2, pDevice: [*c]IUnknown, hSurface: HANDLE, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC1, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain1) HRESULT {
+        return self.lpVtbl.CreateSwapChainForCompositionSurfaceHandle(self, pDevice, hSurface, pDesc, pRestrictToOutput, ppSwapChain);
+    }
+    pub fn CreateDecodeSwapChainForCompositionSurfaceHandle(self: *IDXGIFactoryMedia2, pDevice: [*c]IUnknown, hSurface: HANDLE, pDesc: [*c]DXGI_DECODE_SWAP_CHAIN_DESC, pYuvDecodeBuffers: [*c]IDXGIResource, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGIDecodeSwapChain) HRESULT {
+        return self.lpVtbl.CreateDecodeSwapChainForCompositionSurfaceHandle(self, pDevice, hSurface, pDesc, pYuvDecodeBuffers, pRestrictToOutput, ppSwapChain);
+    }
+    pub fn CreateSwapChainForCompositionSurfaceHandle1(self: *IDXGIFactoryMedia2, pDevice: [*c]IUnknown, hSurface: HANDLE, pDesc: [*c]const DXGI_SWAP_CHAIN_DESC2, pRestrictToOutput: [*c]IDXGIOutput, ppSwapChain: [*c][*c]IDXGISwapChain5) HRESULT {
+        return self.lpVtbl.CreateSwapChainForCompositionSurfaceHandle1(self, pDevice, hSurface, pDesc, pRestrictToOutput, ppSwapChain);
     }
 };
 pub const IID_IDXGIInfoQueue: GUID = .{ .Data1 = 3597943239, .Data2 = 26410, .Data3 = 18287, .Data4 = .{ 158, 130, 205, 85, 180, 73, 73, 206 } };
@@ -288036,6 +290000,188 @@ pub const IDXGISwapChain4 = extern struct {
     }
     pub fn SetHDRMetaData(self: *IDXGISwapChain4, Type: i32, Size_: u32, pMetaData: ?*anyopaque) HRESULT {
         return self.lpVtbl.SetHDRMetaData(self, Type, Size_, pMetaData);
+    }
+};
+pub const IID_IDXGISwapChain5: GUID = .{ .Data1 = 2424749858, .Data2 = 37688, .Data3 = 17339, .Data4 = .{ 135, 206, 119, 144, 182, 67, 138, 127 } };
+pub const IDXGISwapChain5 = extern struct {
+    lpVtbl: *const Vtbl,
+    pub const Vtbl = extern struct {
+        QueryInterface: *const fn (self: *IDXGISwapChain5, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        AddRef: *const fn (self: *IDXGISwapChain5) callconv(.winapi) u32,
+        Release: *const fn (self: *IDXGISwapChain5) callconv(.winapi) u32,
+        SetPrivateData: *const fn (self: *IDXGISwapChain5, Name: [*c]const GUID, DataSize: u32, pData: ?*const anyopaque) callconv(.winapi) HRESULT,
+        SetPrivateDataInterface: *const fn (self: *IDXGISwapChain5, Name: [*c]const GUID, pUnknown: [*c]const IUnknown) callconv(.winapi) HRESULT,
+        GetPrivateData: *const fn (self: *IDXGISwapChain5, Name: [*c]const GUID, pDataSize: [*c]u32, pData: ?*anyopaque) callconv(.winapi) HRESULT,
+        GetParent: *const fn (self: *IDXGISwapChain5, riid: [*c]const GUID, ppParent: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        GetDevice: *const fn (self: *IDXGISwapChain5, riid: [*c]const GUID, ppDevice: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        Present: *const fn (self: *IDXGISwapChain5, SyncInterval: u32, Flags: u32) callconv(.winapi) HRESULT,
+        GetBuffer: *const fn (self: *IDXGISwapChain5, Buffer: u32, riid: [*c]const GUID, ppSurface: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        SetFullscreenState: *const fn (self: *IDXGISwapChain5, Fullscreen: BOOL, pTarget: [*c]IDXGIOutput) callconv(.winapi) HRESULT,
+        GetFullscreenState: *const fn (self: *IDXGISwapChain5, pFullscreen: [*c]BOOL, ppTarget: [*c][*c]IDXGIOutput) callconv(.winapi) HRESULT,
+        GetDesc: *const fn (self: *IDXGISwapChain5, pDesc: [*c]DXGI_SWAP_CHAIN_DESC) callconv(.winapi) HRESULT,
+        ResizeBuffers: *const fn (self: *IDXGISwapChain5, BufferCount: u32, Width: u32, Height: u32, NewFormat: i32, SwapChainFlags: u32) callconv(.winapi) HRESULT,
+        ResizeTarget: *const fn (self: *IDXGISwapChain5, pNewTargetParameters: [*c]const DXGI_MODE_DESC) callconv(.winapi) HRESULT,
+        GetContainingOutput: *const fn (self: *IDXGISwapChain5, ppOutput: [*c][*c]IDXGIOutput) callconv(.winapi) HRESULT,
+        GetFrameStatistics: *const fn (self: *IDXGISwapChain5, pStats: [*c]DXGI_FRAME_STATISTICS) callconv(.winapi) HRESULT,
+        GetLastPresentCount: *const fn (self: *IDXGISwapChain5, pLastPresentCount: [*c]u32) callconv(.winapi) HRESULT,
+        GetDesc1: *const fn (self: *IDXGISwapChain5, pDesc: [*c]DXGI_SWAP_CHAIN_DESC1) callconv(.winapi) HRESULT,
+        GetFullscreenDesc: *const fn (self: *IDXGISwapChain5, pDesc: [*c]DXGI_SWAP_CHAIN_FULLSCREEN_DESC) callconv(.winapi) HRESULT,
+        GetHwnd: *const fn (self: *IDXGISwapChain5, pHwnd: [*c]HWND) callconv(.winapi) HRESULT,
+        GetCoreWindow: *const fn (self: *IDXGISwapChain5, refiid: [*c]const GUID, ppUnk: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        Present1: *const fn (self: *IDXGISwapChain5, SyncInterval: u32, PresentFlags: u32, pPresentParameters: [*c]const DXGI_PRESENT_PARAMETERS) callconv(.winapi) HRESULT,
+        IsTemporaryMonoSupported: *const fn (self: *IDXGISwapChain5) callconv(.winapi) BOOL,
+        GetRestrictToOutput: *const fn (self: *IDXGISwapChain5, ppRestrictToOutput: [*c][*c]IDXGIOutput) callconv(.winapi) HRESULT,
+        SetBackgroundColor: *const fn (self: *IDXGISwapChain5, pColor: [*c]const DXGI_RGBA) callconv(.winapi) HRESULT,
+        GetBackgroundColor: *const fn (self: *IDXGISwapChain5, pColor: [*c]DXGI_RGBA) callconv(.winapi) HRESULT,
+        SetRotation: *const fn (self: *IDXGISwapChain5, Rotation: i32) callconv(.winapi) HRESULT,
+        GetRotation: *const fn (self: *IDXGISwapChain5, pRotation: [*c]i32) callconv(.winapi) HRESULT,
+        SetSourceSize: *const fn (self: *IDXGISwapChain5, Width: u32, Height: u32) callconv(.winapi) HRESULT,
+        GetSourceSize: *const fn (self: *IDXGISwapChain5, pWidth: [*c]u32, pHeight: [*c]u32) callconv(.winapi) HRESULT,
+        SetMaximumFrameLatency: *const fn (self: *IDXGISwapChain5, MaxLatency: u32) callconv(.winapi) HRESULT,
+        GetMaximumFrameLatency: *const fn (self: *IDXGISwapChain5, pMaxLatency: [*c]u32) callconv(.winapi) HRESULT,
+        GetFrameLatencyWaitableObject: *const fn (self: *IDXGISwapChain5) callconv(.winapi) HANDLE,
+        SetMatrixTransform: *const fn (self: *IDXGISwapChain5, pMatrix: [*c]const DXGI_MATRIX_3X2_F) callconv(.winapi) HRESULT,
+        GetMatrixTransform: *const fn (self: *IDXGISwapChain5, pMatrix: [*c]DXGI_MATRIX_3X2_F) callconv(.winapi) HRESULT,
+        GetCurrentBackBufferIndex: *const fn (self: *IDXGISwapChain5) callconv(.winapi) u32,
+        CheckColorSpaceSupport: *const fn (self: *IDXGISwapChain5, ColorSpace: i32, pColorSpaceSupport: [*c]u32) callconv(.winapi) HRESULT,
+        SetColorSpace1: *const fn (self: *IDXGISwapChain5, ColorSpace: i32) callconv(.winapi) HRESULT,
+        ResizeBuffers1: *const fn (self: *IDXGISwapChain5, BufferCount: u32, Width: u32, Height: u32, Format: i32, SwapChainFlags: u32, pCreationNodeMask: [*c]const u32, ppPresentQueue: [*c][*c]IUnknown) callconv(.winapi) HRESULT,
+        SetHDRMetaData: *const fn (self: *IDXGISwapChain5, Type: i32, Size: u32, pMetaData: ?*anyopaque) callconv(.winapi) HRESULT,
+        GetDesc2: *const fn (self: *IDXGISwapChain5, pDesc: [*c]DXGI_SWAP_CHAIN_DESC2) callconv(.winapi) HRESULT,
+        GetColorSpace1: *const fn (self: *IDXGISwapChain5) callconv(.winapi) i32,
+        ResizeBuffers2: *const fn (self: *IDXGISwapChain5, BufferCount: u32, Width: u32, Height: u32, Format: i32, SwapChainFlags: u32, pCreationNodeMask: [*c]const u32, ppPresentQueue: [*c][*c]IUnknown, ColorSpace: i32) callconv(.winapi) HRESULT,
+    };
+    pub fn QueryInterface(self: *IDXGISwapChain5, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.QueryInterface(self, riid, ppvObject);
+    }
+    pub fn AddRef(self: *IDXGISwapChain5) u32 {
+        return self.lpVtbl.AddRef(self);
+    }
+    pub fn Release(self: *IDXGISwapChain5) u32 {
+        return self.lpVtbl.Release(self);
+    }
+    pub fn SetPrivateData(self: *IDXGISwapChain5, Name: [*c]const GUID, DataSize: u32, pData: ?*const anyopaque) HRESULT {
+        return self.lpVtbl.SetPrivateData(self, Name, DataSize, pData);
+    }
+    pub fn SetPrivateDataInterface(self: *IDXGISwapChain5, Name: [*c]const GUID, pUnknown: [*c]const IUnknown) HRESULT {
+        return self.lpVtbl.SetPrivateDataInterface(self, Name, pUnknown);
+    }
+    pub fn GetPrivateData(self: *IDXGISwapChain5, Name: [*c]const GUID, pDataSize: [*c]u32, pData: ?*anyopaque) HRESULT {
+        return self.lpVtbl.GetPrivateData(self, Name, pDataSize, pData);
+    }
+    pub fn GetParent(self: *IDXGISwapChain5, riid: [*c]const GUID, ppParent: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.GetParent(self, riid, ppParent);
+    }
+    pub fn GetDevice(self: *IDXGISwapChain5, riid: [*c]const GUID, ppDevice: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.GetDevice(self, riid, ppDevice);
+    }
+    pub fn Present(self: *IDXGISwapChain5, SyncInterval: u32, Flags: u32) HRESULT {
+        return self.lpVtbl.Present(self, SyncInterval, Flags);
+    }
+    pub fn GetBuffer(self: *IDXGISwapChain5, Buffer: u32, riid: [*c]const GUID, ppSurface: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.GetBuffer(self, Buffer, riid, ppSurface);
+    }
+    pub fn SetFullscreenState(self: *IDXGISwapChain5, Fullscreen: BOOL, pTarget: [*c]IDXGIOutput) HRESULT {
+        return self.lpVtbl.SetFullscreenState(self, Fullscreen, pTarget);
+    }
+    pub fn GetFullscreenState(self: *IDXGISwapChain5, pFullscreen: [*c]BOOL, ppTarget: [*c][*c]IDXGIOutput) HRESULT {
+        return self.lpVtbl.GetFullscreenState(self, pFullscreen, ppTarget);
+    }
+    pub fn GetDesc(self: *IDXGISwapChain5, pDesc: [*c]DXGI_SWAP_CHAIN_DESC) HRESULT {
+        return self.lpVtbl.GetDesc(self, pDesc);
+    }
+    pub fn ResizeBuffers(self: *IDXGISwapChain5, BufferCount: u32, Width: u32, Height: u32, NewFormat: i32, SwapChainFlags: u32) HRESULT {
+        return self.lpVtbl.ResizeBuffers(self, BufferCount, Width, Height, NewFormat, SwapChainFlags);
+    }
+    pub fn ResizeTarget(self: *IDXGISwapChain5, pNewTargetParameters: [*c]const DXGI_MODE_DESC) HRESULT {
+        return self.lpVtbl.ResizeTarget(self, pNewTargetParameters);
+    }
+    pub fn GetContainingOutput(self: *IDXGISwapChain5, ppOutput: [*c][*c]IDXGIOutput) HRESULT {
+        return self.lpVtbl.GetContainingOutput(self, ppOutput);
+    }
+    pub fn GetFrameStatistics(self: *IDXGISwapChain5, pStats: [*c]DXGI_FRAME_STATISTICS) HRESULT {
+        return self.lpVtbl.GetFrameStatistics(self, pStats);
+    }
+    pub fn GetLastPresentCount(self: *IDXGISwapChain5, pLastPresentCount: [*c]u32) HRESULT {
+        return self.lpVtbl.GetLastPresentCount(self, pLastPresentCount);
+    }
+    pub fn GetDesc1(self: *IDXGISwapChain5, pDesc: [*c]DXGI_SWAP_CHAIN_DESC1) HRESULT {
+        return self.lpVtbl.GetDesc1(self, pDesc);
+    }
+    pub fn GetFullscreenDesc(self: *IDXGISwapChain5, pDesc: [*c]DXGI_SWAP_CHAIN_FULLSCREEN_DESC) HRESULT {
+        return self.lpVtbl.GetFullscreenDesc(self, pDesc);
+    }
+    pub fn GetHwnd(self: *IDXGISwapChain5, pHwnd: [*c]HWND) HRESULT {
+        return self.lpVtbl.GetHwnd(self, pHwnd);
+    }
+    pub fn GetCoreWindow(self: *IDXGISwapChain5, refiid: [*c]const GUID, ppUnk: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.GetCoreWindow(self, refiid, ppUnk);
+    }
+    pub fn Present1(self: *IDXGISwapChain5, SyncInterval: u32, PresentFlags: u32, pPresentParameters: [*c]const DXGI_PRESENT_PARAMETERS) HRESULT {
+        return self.lpVtbl.Present1(self, SyncInterval, PresentFlags, pPresentParameters);
+    }
+    pub fn IsTemporaryMonoSupported(self: *IDXGISwapChain5) BOOL {
+        return self.lpVtbl.IsTemporaryMonoSupported(self);
+    }
+    pub fn GetRestrictToOutput(self: *IDXGISwapChain5, ppRestrictToOutput: [*c][*c]IDXGIOutput) HRESULT {
+        return self.lpVtbl.GetRestrictToOutput(self, ppRestrictToOutput);
+    }
+    pub fn SetBackgroundColor(self: *IDXGISwapChain5, pColor: [*c]const DXGI_RGBA) HRESULT {
+        return self.lpVtbl.SetBackgroundColor(self, pColor);
+    }
+    pub fn GetBackgroundColor(self: *IDXGISwapChain5, pColor: [*c]DXGI_RGBA) HRESULT {
+        return self.lpVtbl.GetBackgroundColor(self, pColor);
+    }
+    pub fn SetRotation(self: *IDXGISwapChain5, Rotation: i32) HRESULT {
+        return self.lpVtbl.SetRotation(self, Rotation);
+    }
+    pub fn GetRotation(self: *IDXGISwapChain5, pRotation: [*c]i32) HRESULT {
+        return self.lpVtbl.GetRotation(self, pRotation);
+    }
+    pub fn SetSourceSize(self: *IDXGISwapChain5, Width: u32, Height: u32) HRESULT {
+        return self.lpVtbl.SetSourceSize(self, Width, Height);
+    }
+    pub fn GetSourceSize(self: *IDXGISwapChain5, pWidth: [*c]u32, pHeight: [*c]u32) HRESULT {
+        return self.lpVtbl.GetSourceSize(self, pWidth, pHeight);
+    }
+    pub fn SetMaximumFrameLatency(self: *IDXGISwapChain5, MaxLatency: u32) HRESULT {
+        return self.lpVtbl.SetMaximumFrameLatency(self, MaxLatency);
+    }
+    pub fn GetMaximumFrameLatency(self: *IDXGISwapChain5, pMaxLatency: [*c]u32) HRESULT {
+        return self.lpVtbl.GetMaximumFrameLatency(self, pMaxLatency);
+    }
+    pub fn GetFrameLatencyWaitableObject(self: *IDXGISwapChain5) HANDLE {
+        return self.lpVtbl.GetFrameLatencyWaitableObject(self);
+    }
+    pub fn SetMatrixTransform(self: *IDXGISwapChain5, pMatrix: [*c]const DXGI_MATRIX_3X2_F) HRESULT {
+        return self.lpVtbl.SetMatrixTransform(self, pMatrix);
+    }
+    pub fn GetMatrixTransform(self: *IDXGISwapChain5, pMatrix: [*c]DXGI_MATRIX_3X2_F) HRESULT {
+        return self.lpVtbl.GetMatrixTransform(self, pMatrix);
+    }
+    pub fn GetCurrentBackBufferIndex(self: *IDXGISwapChain5) u32 {
+        return self.lpVtbl.GetCurrentBackBufferIndex(self);
+    }
+    pub fn CheckColorSpaceSupport(self: *IDXGISwapChain5, ColorSpace: i32, pColorSpaceSupport: [*c]u32) HRESULT {
+        return self.lpVtbl.CheckColorSpaceSupport(self, ColorSpace, pColorSpaceSupport);
+    }
+    pub fn SetColorSpace1(self: *IDXGISwapChain5, ColorSpace: i32) HRESULT {
+        return self.lpVtbl.SetColorSpace1(self, ColorSpace);
+    }
+    pub fn ResizeBuffers1(self: *IDXGISwapChain5, BufferCount: u32, Width: u32, Height: u32, Format: i32, SwapChainFlags: u32, pCreationNodeMask: [*c]const u32, ppPresentQueue: [*c][*c]IUnknown) HRESULT {
+        return self.lpVtbl.ResizeBuffers1(self, BufferCount, Width, Height, Format, SwapChainFlags, pCreationNodeMask, ppPresentQueue);
+    }
+    pub fn SetHDRMetaData(self: *IDXGISwapChain5, Type: i32, Size_: u32, pMetaData: ?*anyopaque) HRESULT {
+        return self.lpVtbl.SetHDRMetaData(self, Type, Size_, pMetaData);
+    }
+    pub fn GetDesc2(self: *IDXGISwapChain5, pDesc: [*c]DXGI_SWAP_CHAIN_DESC2) HRESULT {
+        return self.lpVtbl.GetDesc2(self, pDesc);
+    }
+    pub fn GetColorSpace1(self: *IDXGISwapChain5) i32 {
+        return self.lpVtbl.GetColorSpace1(self);
+    }
+    pub fn ResizeBuffers2(self: *IDXGISwapChain5, BufferCount: u32, Width: u32, Height: u32, Format: i32, SwapChainFlags: u32, pCreationNodeMask: [*c]const u32, ppPresentQueue: [*c][*c]IUnknown, ColorSpace: i32) HRESULT {
+        return self.lpVtbl.ResizeBuffers2(self, BufferCount, Width, Height, Format, SwapChainFlags, pCreationNodeMask, ppPresentQueue, ColorSpace);
     }
 };
 pub const IID_IDXGISwapChainMedia: GUID = .{ .Data1 = 3717576971, .Data2 = 61535, .Data3 = 20330, .Data4 = .{ 189, 101, 37, 191, 178, 100, 189, 132 } };
@@ -381715,6 +383861,32 @@ pub const IMFMediaEngineTransferSource = extern struct {
     }
     pub fn TransferSourceToMediaEngine(self: *IMFMediaEngineTransferSource, destination: [*c]IMFMediaEngine) HRESULT {
         return self.lpVtbl.TransferSourceToMediaEngine(self, destination);
+    }
+};
+pub const IID_IMFMediaEngineVideoRendererEffect: GUID = .{ .Data1 = 1809781128, .Data2 = 28360, .Data3 = 17663, .Data4 = .{ 140, 204, 191, 202, 13, 18, 175, 163 } };
+pub const IMFMediaEngineVideoRendererEffect = extern struct {
+    lpVtbl: *const Vtbl,
+    pub const Vtbl = extern struct {
+        QueryInterface: *const fn (self: *IMFMediaEngineVideoRendererEffect, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        AddRef: *const fn (self: *IMFMediaEngineVideoRendererEffect) callconv(.winapi) u32,
+        Release: *const fn (self: *IMFMediaEngineVideoRendererEffect) callconv(.winapi) u32,
+        SetEffect: *const fn (self: *IMFMediaEngineVideoRendererEffect, pEffect: [*c]IUnknown) callconv(.winapi) HRESULT,
+        ClearEffect: *const fn (self: *IMFMediaEngineVideoRendererEffect) callconv(.winapi) HRESULT,
+    };
+    pub fn QueryInterface(self: *IMFMediaEngineVideoRendererEffect, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.QueryInterface(self, riid, ppvObject);
+    }
+    pub fn AddRef(self: *IMFMediaEngineVideoRendererEffect) u32 {
+        return self.lpVtbl.AddRef(self);
+    }
+    pub fn Release(self: *IMFMediaEngineVideoRendererEffect) u32 {
+        return self.lpVtbl.Release(self);
+    }
+    pub fn SetEffect(self: *IMFMediaEngineVideoRendererEffect, pEffect: [*c]IUnknown) HRESULT {
+        return self.lpVtbl.SetEffect(self, pEffect);
+    }
+    pub fn ClearEffect(self: *IMFMediaEngineVideoRendererEffect) HRESULT {
+        return self.lpVtbl.ClearEffect(self);
     }
 };
 pub const IID_IMFMediaEngineWebSupport: GUID = .{ .Data1 = 3123135393, .Data2 = 2016, .Data3 = 18671, .Data4 = .{ 132, 182, 154, 46, 208, 35, 202, 108 } };
@@ -566502,6 +568674,128 @@ pub const IWRdsProtocolConnection2 = extern struct {
         return self.lpVtbl.GetSerializedUserCredential(self, userCredential);
     }
 };
+pub const IID_IWRdsProtocolConnection3_Experimental: GUID = .{ .Data1 = 984120739, .Data2 = 62987, .Data3 = 17024, .Data4 = .{ 179, 133, 241, 204, 34, 173, 93, 159 } };
+pub const IWRdsProtocolConnection3_Experimental = extern struct {
+    lpVtbl: *const Vtbl,
+    pub const Vtbl = extern struct {
+        QueryInterface: *const fn (self: *IWRdsProtocolConnection3_Experimental, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        AddRef: *const fn (self: *IWRdsProtocolConnection3_Experimental) callconv(.winapi) u32,
+        Release: *const fn (self: *IWRdsProtocolConnection3_Experimental) callconv(.winapi) u32,
+        GetLogonErrorRedirector: *const fn (self: *IWRdsProtocolConnection3_Experimental, ppLogonErrorRedir: [*c][*c]IWRdsProtocolLogonErrorRedirector) callconv(.winapi) HRESULT,
+        AcceptConnection: *const fn (self: *IWRdsProtocolConnection3_Experimental) callconv(.winapi) HRESULT,
+        GetClientData: *const fn (self: *IWRdsProtocolConnection3_Experimental, pClientData: [*c]WTS_CLIENT_DATA) callconv(.winapi) HRESULT,
+        GetClientMonitorData: *const fn (self: *IWRdsProtocolConnection3_Experimental, pNumMonitors: [*c]u32, pPrimaryMonitor: [*c]u32) callconv(.winapi) HRESULT,
+        GetUserCredentials: *const fn (self: *IWRdsProtocolConnection3_Experimental, pUserCreds: [*c]WTS_USER_CREDENTIAL) callconv(.winapi) HRESULT,
+        GetLicenseConnection: *const fn (self: *IWRdsProtocolConnection3_Experimental, ppLicenseConnection: [*c][*c]IWRdsProtocolLicenseConnection) callconv(.winapi) HRESULT,
+        AuthenticateClientToSession: *const fn (self: *IWRdsProtocolConnection3_Experimental, SessionId: [*c]WTS_SESSION_ID) callconv(.winapi) HRESULT,
+        NotifySessionId: *const fn (self: *IWRdsProtocolConnection3_Experimental, SessionId: [*c]WTS_SESSION_ID, SessionHandle: HANDLE_PTR) callconv(.winapi) HRESULT,
+        GetInputHandles: *const fn (self: *IWRdsProtocolConnection3_Experimental, pKeyboardHandle: [*c]HANDLE_PTR, pMouseHandle: [*c]HANDLE_PTR, pBeepHandle: [*c]HANDLE_PTR) callconv(.winapi) HRESULT,
+        GetVideoHandle: *const fn (self: *IWRdsProtocolConnection3_Experimental, pVideoHandle: [*c]HANDLE_PTR) callconv(.winapi) HRESULT,
+        ConnectNotify: *const fn (self: *IWRdsProtocolConnection3_Experimental, SessionId: u32) callconv(.winapi) HRESULT,
+        IsUserAllowedToLogon: *const fn (self: *IWRdsProtocolConnection3_Experimental, SessionId: u32, UserToken: HANDLE_PTR, pDomainName: [*c]u16, pUserName: [*c]u16) callconv(.winapi) HRESULT,
+        SessionArbitrationEnumeration: *const fn (self: *IWRdsProtocolConnection3_Experimental, hUserToken: HANDLE_PTR, bSingleSessionPerUserEnabled: BOOL, pSessionIdArray: [*c]u32, pdwSessionIdentifierCount: [*c]u32) callconv(.winapi) HRESULT,
+        LogonNotify: *const fn (self: *IWRdsProtocolConnection3_Experimental, hClientToken: HANDLE_PTR, wszUserName: [*c]u16, wszDomainName: [*c]u16, SessionId: [*c]WTS_SESSION_ID, pWRdsConnectionSettings: [*c]WRDS_CONNECTION_SETTINGS) callconv(.winapi) HRESULT,
+        PreDisconnect: *const fn (self: *IWRdsProtocolConnection3_Experimental, DisconnectReason: u32) callconv(.winapi) HRESULT,
+        DisconnectNotify: *const fn (self: *IWRdsProtocolConnection3_Experimental) callconv(.winapi) HRESULT,
+        Close: *const fn (self: *IWRdsProtocolConnection3_Experimental) callconv(.winapi) HRESULT,
+        GetProtocolStatus: *const fn (self: *IWRdsProtocolConnection3_Experimental, pProtocolStatus: [*c]WTS_PROTOCOL_STATUS) callconv(.winapi) HRESULT,
+        GetLastInputTime: *const fn (self: *IWRdsProtocolConnection3_Experimental, pLastInputTime: [*c]u64) callconv(.winapi) HRESULT,
+        SetErrorInfo: *const fn (self: *IWRdsProtocolConnection3_Experimental, ulError: u32) callconv(.winapi) HRESULT,
+        CreateVirtualChannel: *const fn (self: *IWRdsProtocolConnection3_Experimental, szEndpointName: [*c]u8, bStatic: BOOL, RequestedPriority: u32, phChannel: [*c]usize) callconv(.winapi) HRESULT,
+        QueryProperty: *const fn (self: *IWRdsProtocolConnection3_Experimental, QueryType: GUID, ulNumEntriesIn: u32, ulNumEntriesOut: u32, pPropertyEntriesIn: [*c]WTS_PROPERTY_VALUE, pPropertyEntriesOut: [*c]WTS_PROPERTY_VALUE) callconv(.winapi) HRESULT,
+        GetShadowConnection: *const fn (self: *IWRdsProtocolConnection3_Experimental, ppShadowConnection: [*c][*c]IWRdsProtocolShadowConnection) callconv(.winapi) HRESULT,
+        NotifyCommandProcessCreated: *const fn (self: *IWRdsProtocolConnection3_Experimental, SessionId: u32) callconv(.winapi) HRESULT,
+        GetSerializedUserCredential: *const fn (self: *IWRdsProtocolConnection3_Experimental, userCredential: [*c][*c]WTS_SERIALIZED_USER_CREDENTIAL) callconv(.winapi) HRESULT,
+        GetSerializedUserCredentialInteractively: *const fn (self: *IWRdsProtocolConnection3_Experimental, scenarioId: [*c]const GUID, usernameHint: [*c]const u16, userCredential: [*c][*c]WTS_SERIALIZED_USER_CREDENTIAL) callconv(.winapi) HRESULT,
+    };
+    pub fn QueryInterface(self: *IWRdsProtocolConnection3_Experimental, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.QueryInterface(self, riid, ppvObject);
+    }
+    pub fn AddRef(self: *IWRdsProtocolConnection3_Experimental) u32 {
+        return self.lpVtbl.AddRef(self);
+    }
+    pub fn Release(self: *IWRdsProtocolConnection3_Experimental) u32 {
+        return self.lpVtbl.Release(self);
+    }
+    pub fn GetLogonErrorRedirector(self: *IWRdsProtocolConnection3_Experimental, ppLogonErrorRedir: [*c][*c]IWRdsProtocolLogonErrorRedirector) HRESULT {
+        return self.lpVtbl.GetLogonErrorRedirector(self, ppLogonErrorRedir);
+    }
+    pub fn AcceptConnection(self: *IWRdsProtocolConnection3_Experimental) HRESULT {
+        return self.lpVtbl.AcceptConnection(self);
+    }
+    pub fn GetClientData(self: *IWRdsProtocolConnection3_Experimental, pClientData: [*c]WTS_CLIENT_DATA) HRESULT {
+        return self.lpVtbl.GetClientData(self, pClientData);
+    }
+    pub fn GetClientMonitorData(self: *IWRdsProtocolConnection3_Experimental, pNumMonitors: [*c]u32, pPrimaryMonitor: [*c]u32) HRESULT {
+        return self.lpVtbl.GetClientMonitorData(self, pNumMonitors, pPrimaryMonitor);
+    }
+    pub fn GetUserCredentials(self: *IWRdsProtocolConnection3_Experimental, pUserCreds: [*c]WTS_USER_CREDENTIAL) HRESULT {
+        return self.lpVtbl.GetUserCredentials(self, pUserCreds);
+    }
+    pub fn GetLicenseConnection(self: *IWRdsProtocolConnection3_Experimental, ppLicenseConnection: [*c][*c]IWRdsProtocolLicenseConnection) HRESULT {
+        return self.lpVtbl.GetLicenseConnection(self, ppLicenseConnection);
+    }
+    pub fn AuthenticateClientToSession(self: *IWRdsProtocolConnection3_Experimental, SessionId: [*c]WTS_SESSION_ID) HRESULT {
+        return self.lpVtbl.AuthenticateClientToSession(self, SessionId);
+    }
+    pub fn NotifySessionId(self: *IWRdsProtocolConnection3_Experimental, SessionId: [*c]WTS_SESSION_ID, SessionHandle: HANDLE_PTR) HRESULT {
+        return self.lpVtbl.NotifySessionId(self, SessionId, SessionHandle);
+    }
+    pub fn GetInputHandles(self: *IWRdsProtocolConnection3_Experimental, pKeyboardHandle: [*c]HANDLE_PTR, pMouseHandle: [*c]HANDLE_PTR, pBeepHandle: [*c]HANDLE_PTR) HRESULT {
+        return self.lpVtbl.GetInputHandles(self, pKeyboardHandle, pMouseHandle, pBeepHandle);
+    }
+    pub fn GetVideoHandle(self: *IWRdsProtocolConnection3_Experimental, pVideoHandle: [*c]HANDLE_PTR) HRESULT {
+        return self.lpVtbl.GetVideoHandle(self, pVideoHandle);
+    }
+    pub fn ConnectNotify(self: *IWRdsProtocolConnection3_Experimental, SessionId: u32) HRESULT {
+        return self.lpVtbl.ConnectNotify(self, SessionId);
+    }
+    pub fn IsUserAllowedToLogon(self: *IWRdsProtocolConnection3_Experimental, SessionId: u32, UserToken: HANDLE_PTR, pDomainName: [*c]u16, pUserName: [*c]u16) HRESULT {
+        return self.lpVtbl.IsUserAllowedToLogon(self, SessionId, UserToken, pDomainName, pUserName);
+    }
+    pub fn SessionArbitrationEnumeration(self: *IWRdsProtocolConnection3_Experimental, hUserToken: HANDLE_PTR, bSingleSessionPerUserEnabled: BOOL, pSessionIdArray: [*c]u32, pdwSessionIdentifierCount: [*c]u32) HRESULT {
+        return self.lpVtbl.SessionArbitrationEnumeration(self, hUserToken, bSingleSessionPerUserEnabled, pSessionIdArray, pdwSessionIdentifierCount);
+    }
+    pub fn LogonNotify(self: *IWRdsProtocolConnection3_Experimental, hClientToken: HANDLE_PTR, wszUserName: [*c]u16, wszDomainName: [*c]u16, SessionId: [*c]WTS_SESSION_ID, pWRdsConnectionSettings: [*c]WRDS_CONNECTION_SETTINGS) HRESULT {
+        return self.lpVtbl.LogonNotify(self, hClientToken, wszUserName, wszDomainName, SessionId, pWRdsConnectionSettings);
+    }
+    pub fn PreDisconnect(self: *IWRdsProtocolConnection3_Experimental, DisconnectReason: u32) HRESULT {
+        return self.lpVtbl.PreDisconnect(self, DisconnectReason);
+    }
+    pub fn DisconnectNotify(self: *IWRdsProtocolConnection3_Experimental) HRESULT {
+        return self.lpVtbl.DisconnectNotify(self);
+    }
+    pub fn Close(self: *IWRdsProtocolConnection3_Experimental) HRESULT {
+        return self.lpVtbl.Close(self);
+    }
+    pub fn GetProtocolStatus(self: *IWRdsProtocolConnection3_Experimental, pProtocolStatus: [*c]WTS_PROTOCOL_STATUS) HRESULT {
+        return self.lpVtbl.GetProtocolStatus(self, pProtocolStatus);
+    }
+    pub fn GetLastInputTime(self: *IWRdsProtocolConnection3_Experimental, pLastInputTime: [*c]u64) HRESULT {
+        return self.lpVtbl.GetLastInputTime(self, pLastInputTime);
+    }
+    pub fn SetErrorInfo(self: *IWRdsProtocolConnection3_Experimental, ulError: u32) HRESULT {
+        return self.lpVtbl.SetErrorInfo(self, ulError);
+    }
+    pub fn CreateVirtualChannel(self: *IWRdsProtocolConnection3_Experimental, szEndpointName: [*c]u8, bStatic: BOOL, RequestedPriority: u32, phChannel: [*c]usize) HRESULT {
+        return self.lpVtbl.CreateVirtualChannel(self, szEndpointName, bStatic, RequestedPriority, phChannel);
+    }
+    pub fn QueryProperty(self: *IWRdsProtocolConnection3_Experimental, QueryType: GUID, ulNumEntriesIn: u32, ulNumEntriesOut: u32, pPropertyEntriesIn: [*c]WTS_PROPERTY_VALUE, pPropertyEntriesOut: [*c]WTS_PROPERTY_VALUE) HRESULT {
+        return self.lpVtbl.QueryProperty(self, QueryType, ulNumEntriesIn, ulNumEntriesOut, pPropertyEntriesIn, pPropertyEntriesOut);
+    }
+    pub fn GetShadowConnection(self: *IWRdsProtocolConnection3_Experimental, ppShadowConnection: [*c][*c]IWRdsProtocolShadowConnection) HRESULT {
+        return self.lpVtbl.GetShadowConnection(self, ppShadowConnection);
+    }
+    pub fn NotifyCommandProcessCreated(self: *IWRdsProtocolConnection3_Experimental, SessionId: u32) HRESULT {
+        return self.lpVtbl.NotifyCommandProcessCreated(self, SessionId);
+    }
+    pub fn GetSerializedUserCredential(self: *IWRdsProtocolConnection3_Experimental, userCredential: [*c][*c]WTS_SERIALIZED_USER_CREDENTIAL) HRESULT {
+        return self.lpVtbl.GetSerializedUserCredential(self, userCredential);
+    }
+    pub fn GetSerializedUserCredentialInteractively(self: *IWRdsProtocolConnection3_Experimental, scenarioId: [*c]const GUID, usernameHint: [*c]const u16, userCredential: [*c][*c]WTS_SERIALIZED_USER_CREDENTIAL) HRESULT {
+        return self.lpVtbl.GetSerializedUserCredentialInteractively(self, scenarioId, usernameHint, userCredential);
+    }
+};
 pub const IID_IWRdsProtocolConnectionCallback: GUID = .{ .Data1 = 4057400114, .Data2 = 53360, .Data3 = 20209, .Data4 = .{ 160, 136, 120, 49, 53, 54, 194, 214 } };
 pub const IWRdsProtocolConnectionCallback = extern struct {
     lpVtbl: *const Vtbl,
@@ -570384,6 +572678,66 @@ pub const IWTSVirtualChannelManager = extern struct {
     }
     pub fn CreateListener(self: *IWTSVirtualChannelManager, pszChannelName: [*c]const u8, uFlags: u32, pListenerCallback: [*c]IWTSListenerCallback, ppListener: [*c][*c]IWTSListener) HRESULT {
         return self.lpVtbl.CreateListener(self, pszChannelName, uFlags, pListenerCallback, ppListener);
+    }
+};
+pub const IID_IWTSWindowChangedCallback: GUID = .{ .Data1 = 3903094739, .Data2 = 6902, .Data3 = 19839, .Data4 = .{ 142, 21, 81, 92, 202, 225, 192, 12 } };
+pub const IWTSWindowChangedCallback = extern struct {
+    lpVtbl: *const Vtbl,
+    pub const Vtbl = extern struct {
+        QueryInterface: *const fn (self: *IWTSWindowChangedCallback, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        AddRef: *const fn (self: *IWTSWindowChangedCallback) callconv(.winapi) u32,
+        Release: *const fn (self: *IWTSWindowChangedCallback) callconv(.winapi) u32,
+        WindowChanged: *const fn (self: *IWTSWindowChangedCallback, windowInfo: [*c]const WTSWindowInfo) callconv(.winapi) HRESULT,
+    };
+    pub fn QueryInterface(self: *IWTSWindowChangedCallback, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.QueryInterface(self, riid, ppvObject);
+    }
+    pub fn AddRef(self: *IWTSWindowChangedCallback) u32 {
+        return self.lpVtbl.AddRef(self);
+    }
+    pub fn Release(self: *IWTSWindowChangedCallback) u32 {
+        return self.lpVtbl.Release(self);
+    }
+    pub fn WindowChanged(self: *IWTSWindowChangedCallback, windowInfo: [*c]const WTSWindowInfo) HRESULT {
+        return self.lpVtbl.WindowChanged(self, windowInfo);
+    }
+};
+pub const IID_IWTSWindowInfoService: GUID = .{ .Data1 = 704654459, .Data2 = 288, .Data3 = 19716, .Data4 = .{ 191, 177, 60, 115, 17, 12, 133, 129 } };
+pub const IWTSWindowInfoService = extern struct {
+    lpVtbl: *const Vtbl,
+    pub const Vtbl = extern struct {
+        QueryInterface: *const fn (self: *IWTSWindowInfoService, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) callconv(.winapi) HRESULT,
+        AddRef: *const fn (self: *IWTSWindowInfoService) callconv(.winapi) u32,
+        Release: *const fn (self: *IWTSWindowInfoService) callconv(.winapi) u32,
+        GetWindowInfo: *const fn (self: *IWTSWindowInfoService, remoteHwnd: HWND, windowInfo: [*c]WTSWindowInfo) callconv(.winapi) HRESULT,
+        GetRdpClientProcessId: *const fn (self: *IWTSWindowInfoService, processId: [*c]u32) callconv(.winapi) HRESULT,
+        GetRdpSessionType: *const fn (self: *IWTSWindowInfoService, sessionType: [*c]i32) callconv(.winapi) HRESULT,
+        SubscribeWindowChanged: *const fn (self: *IWTSWindowInfoService, remoteHwnd: HWND, windowChanged: [*c]IWTSWindowChangedCallback) callconv(.winapi) HRESULT,
+        UnsubscribeWindowChanged: *const fn (self: *IWTSWindowInfoService, remoteHwnd: HWND, windowChanged: [*c]IWTSWindowChangedCallback) callconv(.winapi) HRESULT,
+    };
+    pub fn QueryInterface(self: *IWTSWindowInfoService, riid: [*c]const GUID, ppvObject: [*c]?*anyopaque) HRESULT {
+        return self.lpVtbl.QueryInterface(self, riid, ppvObject);
+    }
+    pub fn AddRef(self: *IWTSWindowInfoService) u32 {
+        return self.lpVtbl.AddRef(self);
+    }
+    pub fn Release(self: *IWTSWindowInfoService) u32 {
+        return self.lpVtbl.Release(self);
+    }
+    pub fn GetWindowInfo(self: *IWTSWindowInfoService, remoteHwnd: HWND, windowInfo: [*c]WTSWindowInfo) HRESULT {
+        return self.lpVtbl.GetWindowInfo(self, remoteHwnd, windowInfo);
+    }
+    pub fn GetRdpClientProcessId(self: *IWTSWindowInfoService, processId: [*c]u32) HRESULT {
+        return self.lpVtbl.GetRdpClientProcessId(self, processId);
+    }
+    pub fn GetRdpSessionType(self: *IWTSWindowInfoService, sessionType: [*c]i32) HRESULT {
+        return self.lpVtbl.GetRdpSessionType(self, sessionType);
+    }
+    pub fn SubscribeWindowChanged(self: *IWTSWindowInfoService, remoteHwnd: HWND, windowChanged: [*c]IWTSWindowChangedCallback) HRESULT {
+        return self.lpVtbl.SubscribeWindowChanged(self, remoteHwnd, windowChanged);
+    }
+    pub fn UnsubscribeWindowChanged(self: *IWTSWindowInfoService, remoteHwnd: HWND, windowChanged: [*c]IWTSWindowChangedCallback) HRESULT {
+        return self.lpVtbl.UnsubscribeWindowChanged(self, remoteHwnd, windowChanged);
     }
 };
 pub const IID_IX500DistinguishedName: GUID = .{ .Data1 = 1921692419, .Data2 = 8573, .Data3 = 4570, .Data4 = .{ 178, 164, 0, 14, 123, 187, 43, 9 } };
@@ -593224,6 +595578,7 @@ pub extern "kernel32" fn CreateSymbolicLinkTransactedA(lpSymlinkFileName: [*c]co
 pub extern "kernel32" fn CreateSymbolicLinkTransactedW(lpSymlinkFileName: [*c]const u16, lpTargetFileName: [*c]const u16, dwFlags: u32, hTransaction: HANDLE) callconv(.winapi) BOOLEAN;
 pub extern "kernel32" fn CreateSymbolicLinkW(lpSymlinkFileName: [*c]const u16, lpTargetFileName: [*c]const u16, dwFlags: u32) callconv(.winapi) BOOLEAN;
 pub extern "user32" fn CreateSyntheticPointerDevice(pointerType: i32, maxCount: u32, mode: i32) callconv(.winapi) HSYNTHETICPOINTERDEVICE;
+pub extern "user32" fn CreateSyntheticPointerDevice2(pParams: [*c]SYNTHETIC_DEVICE_CREATION_PARAMS) callconv(.winapi) HSYNTHETICPOINTERDEVICE;
 pub extern "rtm" fn CreateTable(lpInterface: [*c]GUID, lpAllocateBuffer: LPALLOCATEBUFFER, lpAllocateMore: LPALLOCATEMORE, lpFreeBuffer: LPFREEBUFFER, lpvReserved: ?*anyopaque, ulTableType: u32, ulPropTagIndexColumn: u32, lpSPropTagArrayColumns: [*c]SPropTagArray, lppTableData: [*c][*c]ITableData) callconv(.winapi) i32;
 pub extern "kernel32" fn CreateTapePartition(hDevice: HANDLE, dwPartitionMethod: u32, dwCount: u32, dwSize: u32) callconv(.winapi) u32;
 pub extern "kernel32" fn CreateThread(lpThreadAttributes: [*c]SECURITY_ATTRIBUTES, dwStackSize: usize, lpStartAddress: LPTHREAD_START_ROUTINE, lpParameter: ?*anyopaque, dwCreationFlags: u32, lpThreadId: [*c]u32) callconv(.winapi) HANDLE;
@@ -596179,7 +598534,7 @@ pub extern "advapi32" fn GetAuditedPermissionsFromAclW(pacl: [*c]ACL, pTrustee: 
 pub extern "user32" fn GetAutoRotationState(pState: [*c]i32) callconv(.winapi) BOOL;
 pub extern "user32" fn GetAwarenessFromDpiAwarenessContext(value: DPI_AWARENESS_CONTEXT) callconv(.winapi) i32;
 pub extern "iphlpapi" fn GetBestInterface(dwDestAddr: u32, pdwBestIfIndex: [*c]u32) callconv(.winapi) u32;
-pub extern "iphlpapi" fn GetBestInterfaceEx(pDestAddr: [*c]SOCKADDR, pdwBestIfIndex: [*c]u32) callconv(.winapi) u32;
+pub extern "iphlpapi" fn GetBestInterfaceEx(DestinationAddress: [*c]SOCKADDR, BestIfIndex: [*c]u32) callconv(.winapi) u32;
 pub extern "inkobjcore" fn GetBestResultString(hrc: HRECOCONTEXT, pcSize: [*c]u32, pwcBestResult: [*c]u16) callconv(.winapi) HRESULT;
 pub extern "iphlpapi" fn GetBestRoute(dwDestAddr: u32, dwSourceAddr: u32, pBestRoute: [*c]MIB_IPFORWARDROW) callconv(.winapi) u32;
 pub extern "iphlpapi" fn GetBestRoute2(InterfaceLuid: [*c]NET_LUID_LH, InterfaceIndex: u32, SourceAddress: [*c]const SOCKADDR_INET, DestinationAddress: [*c]const SOCKADDR_INET, AddressSortOptions: u32, BestRoute: [*c]MIB_IPFORWARD_ROW2, BestSourceAddress: [*c]SOCKADDR_INET) callconv(.winapi) u32;
@@ -596889,6 +599244,8 @@ pub extern "user32" fn GetPointerFramePenInfo(pointerId: u32, pointerCount: [*c]
 pub extern "user32" fn GetPointerFramePenInfoHistory(pointerId: u32, entriesCount: [*c]u32, pointerCount: [*c]u32, penInfo: [*c]POINTER_PEN_INFO) callconv(.winapi) BOOL;
 pub extern "user32" fn GetPointerFrameTouchInfo(pointerId: u32, pointerCount: [*c]u32, touchInfo: [*c]POINTER_TOUCH_INFO) callconv(.winapi) BOOL;
 pub extern "user32" fn GetPointerFrameTouchInfoHistory(pointerId: u32, entriesCount: [*c]u32, pointerCount: [*c]u32, touchInfo: [*c]POINTER_TOUCH_INFO) callconv(.winapi) BOOL;
+pub extern "user32" fn GetPointerFrameTouchpadInfo(pointerId: u32, pointerCount: [*c]u32, touchpadInfo: [*c]POINTER_TOUCH_INFO) callconv(.winapi) BOOL;
+pub extern "user32" fn GetPointerFrameTouchpadInfoHistory(pointerId: u32, entriesCount: [*c]u32, pointerCount: [*c]u32, touchpadInfo: [*c]POINTER_TOUCH_INFO) callconv(.winapi) BOOL;
 pub extern "user32" fn GetPointerInfo(pointerId: u32, pointerInfo: [*c]POINTER_INFO) callconv(.winapi) BOOL;
 pub extern "user32" fn GetPointerInfoHistory(pointerId: u32, entriesCount: [*c]u32, pointerInfo: [*c]POINTER_INFO) callconv(.winapi) BOOL;
 pub extern "user32" fn GetPointerInputTransform(pointerId: u32, historyCount: u32, inputTransform: [*c]INPUT_TRANSFORM) callconv(.winapi) BOOL;
@@ -596896,6 +599253,8 @@ pub extern "user32" fn GetPointerPenInfo(pointerId: u32, penInfo: [*c]POINTER_PE
 pub extern "user32" fn GetPointerPenInfoHistory(pointerId: u32, entriesCount: [*c]u32, penInfo: [*c]POINTER_PEN_INFO) callconv(.winapi) BOOL;
 pub extern "user32" fn GetPointerTouchInfo(pointerId: u32, touchInfo: [*c]POINTER_TOUCH_INFO) callconv(.winapi) BOOL;
 pub extern "user32" fn GetPointerTouchInfoHistory(pointerId: u32, entriesCount: [*c]u32, touchInfo: [*c]POINTER_TOUCH_INFO) callconv(.winapi) BOOL;
+pub extern "user32" fn GetPointerTouchpadInfo(pointerId: u32, touchpadInfo: [*c]POINTER_TOUCH_INFO) callconv(.winapi) BOOL;
+pub extern "user32" fn GetPointerTouchpadInfoHistory(pointerId: u32, entriesCount: [*c]u32, touchpadInfo: [*c]POINTER_TOUCH_INFO) callconv(.winapi) BOOL;
 pub extern "user32" fn GetPointerType(pointerId: u32, pointerType: [*c]i32) callconv(.winapi) BOOL;
 pub extern "gdi32" fn GetPolyFillMode(hdc: HDC) callconv(.winapi) i32;
 pub extern "inkobjcore" fn GetPreferredPacketDescription(hrec: HRECOGNIZER, pPacketDescription: [*c]PACKET_DESCRIPTION) callconv(.winapi) HRESULT;
@@ -598551,6 +600910,7 @@ pub extern "propsys" fn InitVariantFromUInt64Array(prgn: [*c]const u64, cElems: 
 pub extern "propsys" fn InitVariantFromVariantArrayElem(varIn: [*c]const VARIANT, iElem: u32, pvar: [*c]VARIANT) callconv(.winapi) HRESULT;
 pub extern "user32" fn InjectSyntheticPointerInput(device: HSYNTHETICPOINTERDEVICE, pointerInfo: [*c]const POINTER_TYPE_INFO, count: u32) callconv(.winapi) BOOL;
 pub extern "user32" fn InjectTouchInput(count: u32, contacts: [*c]const POINTER_TOUCH_INFO) callconv(.winapi) BOOL;
+pub extern "user32" fn InjectTouchpadAction(hDevice: HSYNTHETICPOINTERDEVICE, action: i32) callconv(.winapi) BOOL;
 pub extern "user32" fn InSendMessage() callconv(.winapi) BOOL;
 pub extern "user32" fn InSendMessageEx(lpReserved: ?*anyopaque) callconv(.winapi) u32;
 pub extern "user32" fn InsertMenuA(hMenu: HMENU, uPosition: u32, uFlags: u32, uIDNewItem: usize, lpNewItem: [*c]const u8) callconv(.winapi) BOOL;
@@ -602518,6 +604878,8 @@ pub extern "advapi32" fn RegisterServiceCtrlHandlerW(lpServiceName: [*c]const u1
 pub extern "user32" fn RegisterShellHookWindow(hwnd: HWND) callconv(.winapi) BOOL;
 pub extern "user32" fn RegisterSuspendResumeNotification(hRecipient: HANDLE, Flags: u32) callconv(.winapi) HPOWERNOTIFY;
 pub extern "user32" fn RegisterTouchHitTestingWindow(hwnd: HWND, value: u32) callconv(.winapi) BOOL;
+pub extern "user32" fn RegisterTouchpadCapableThread(fEnable: BOOL) callconv(.winapi) BOOL;
+pub extern "user32" fn RegisterTouchpadCapableWindow(hWnd: HWND, fEnable: BOOL) callconv(.winapi) BOOL;
 pub extern "user32" fn RegisterTouchWindow(hwnd: HWND, ulFlags: u32) callconv(.winapi) BOOL;
 pub extern "advapi32" fn RegisterTraceGuidsA(RequestAddress: WMIDPREQUEST, RequestContext: ?*anyopaque, ControlGuid: [*c]const GUID, GuidCount: u32, TraceGuidReg: [*c]TRACE_GUID_REGISTRATION, MofImagePath: [*c]const u8, MofResourceName: [*c]const u8, RegistrationHandle: [*c]u64) callconv(.winapi) u32;
 pub extern "advapi32" fn RegisterTraceGuidsW(RequestAddress: WMIDPREQUEST, RequestContext: ?*anyopaque, ControlGuid: [*c]const GUID, GuidCount: u32, TraceGuidReg: [*c]TRACE_GUID_REGISTRATION, MofImagePath: [*c]const u16, MofResourceName: [*c]const u16, RegistrationHandle: [*c]u64) callconv(.winapi) u32;
@@ -602685,6 +605047,7 @@ pub extern "iscsidsc" fn ReportPersistentIScsiDevicesW(BufferSizeInChar: [*c]u32
 pub extern "iscsidsc" fn ReportRadiusServerListA(BufferSizeInChar: [*c]u32, Buffer: [*c]u8) callconv(.winapi) u32;
 pub extern "iscsidsc" fn ReportRadiusServerListW(BufferSizeInChar: [*c]u32, Buffer: [*c]u16) callconv(.winapi) u32;
 pub extern "dbghelp" fn ReportSymbolLoadSummary(hProcess: HANDLE, pLoadModule: [*c]const u16, pSymbolData: [*c]DBGHELP_DATA_REPORT_STRUCT) callconv(.winapi) BOOL;
+pub extern "user32" fn ReportWindowContentInertia(hWnd: HWND, bStartInertia: BOOL) callconv(.winapi) BOOL;
 pub extern "kernel32" fn RequestDeviceWakeup(hDevice: HANDLE) callconv(.winapi) BOOL;
 pub extern "kernel32" fn RequestWakeupLatency(latency: i32) callconv(.winapi) BOOL;
 pub extern "clfsw32" fn ReserveAndAppendLog(pvMarshal: ?*anyopaque, rgWriteEntries: [*c]CLS_WRITE_ENTRY, cWriteEntries: u32, plsnUndoNext: [*c]CLS_LSN, plsnPrevious: [*c]CLS_LSN, cReserveRecords: u32, rgcbReservation: [*c]i64, fFlags: u32, plsn: [*c]CLS_LSN, pOverlapped: [*c]OVERLAPPED) callconv(.winapi) BOOL;
@@ -603157,10 +605520,7 @@ pub const RtlAddGrowableFunctionTable = switch (arch) {
 };
 pub extern "ntdll" fn RtlAnsiStringToUnicodeString(DestinationString: [*c]UNICODE_STRING, SourceString: [*c]STRING, AllocateDestinationString: BOOLEAN) callconv(.winapi) NTSTATUS;
 pub extern "kernel32" fn RtlCaptureContext(ContextRecord: [*c]CONTEXT) callconv(.winapi) void;
-pub const RtlCaptureContext2 = switch (arch) {
-    .x86_64 => @extern(*const fn (ContextRecord: [*c]CONTEXT) callconv(.winapi) void, .{ .name = "RtlCaptureContext2", .library_name = "kernel32" }),
-    else => @compileError("RtlCaptureContext2 unsupported for target architecture"),
-};
+pub extern "kernel32" fn RtlCaptureContext2(ContextRecord: [*c]CONTEXT) callconv(.winapi) void;
 pub extern "kernel32" fn RtlCaptureStackBackTrace(FramesToSkip: u32, FramesToCapture: u32, BackTrace: [*c]?*anyopaque, BackTraceHash: [*c]u32) callconv(.winapi) u16;
 pub extern "ntdll" fn RtlCharToInteger(String: [*c]i8, Base: u32, Value: [*c]u32) callconv(.winapi) NTSTATUS;
 pub extern "kernel32" fn RtlCompareMemory(Source1: ?*const anyopaque, Source2: ?*const anyopaque, Length: usize) callconv(.winapi) usize;
@@ -603210,6 +605570,7 @@ pub extern "ntdll" fn RtlFreeOemString(OemString: [*c]STRING) callconv(.winapi) 
 pub extern "ntdll" fn RtlFreeUnicodeString(UnicodeString: [*c]UNICODE_STRING) callconv(.winapi) void;
 pub extern "advapi32" fn RtlGenRandom(RandomBuffer: ?*anyopaque, RandomBufferLength: u32) callconv(.winapi) BOOLEAN;
 pub extern "ntdll" fn RtlGetDeviceFamilyInfoEnum(pullUAPInfo: [*c]u64, pulDeviceFamily: [*c]u32, pulDeviceForm: [*c]u32) callconv(.winapi) void;
+pub extern "ntdll" fn RtlGetImageFileMachines(DosFileName: [*c]const u16, MachineTypeFlags: [*c]IMAGE_FILE_MACHINES) callconv(.winapi) u32;
 pub const RtlGetNonVolatileToken = switch (arch) {
     .x86_64, .aarch64 => @extern(*const fn (NvBuffer: ?*anyopaque, Size: usize, NvToken: [*c]?*anyopaque) callconv(.winapi) u32, .{ .name = "RtlGetNonVolatileToken", .library_name = "ntdll" }),
     else => @compileError("RtlGetNonVolatileToken unsupported for target architecture"),
@@ -603285,6 +605646,11 @@ pub const RtlVirtualUnwind = switch (arch) {
     .aarch64 => @extern(*const fn (HandlerType: u32, ImageBase: usize, ControlPc: usize, FunctionEntry: [*c]IMAGE_ARM64_RUNTIME_FUNCTION_ENTRY, ContextRecord: [*c]CONTEXT, HandlerData: [*c]?*anyopaque, EstablisherFrame: [*c]usize, ContextPointers: [*c]KNONVOLATILE_CONTEXT_POINTERS) callconv(.winapi) EXCEPTION_ROUTINE, .{ .name = "RtlVirtualUnwind", .library_name = "kernel32" }),
     .x86_64 => @extern(*const fn (HandlerType: u32, ImageBase: u64, ControlPc: u64, FunctionEntry: [*c]IMAGE_RUNTIME_FUNCTION_ENTRY, ContextRecord: [*c]CONTEXT, HandlerData: [*c]?*anyopaque, EstablisherFrame: [*c]u64, ContextPointers: [*c]KNONVOLATILE_CONTEXT_POINTERS) callconv(.winapi) EXCEPTION_ROUTINE, .{ .name = "RtlVirtualUnwind", .library_name = "kernel32" }),
     else => @compileError("RtlVirtualUnwind unsupported for target architecture"),
+};
+pub const RtlVirtualUnwind2 = switch (arch) {
+    .aarch64 => @extern(*const fn (HandlerType: u32, ImageBase: usize, ControlPc: usize, FunctionEntry: [*c]IMAGE_ARM64_RUNTIME_FUNCTION_ENTRY, ContextRecord: [*c]CONTEXT, MachineFrameUnwound: [*c]BOOLEAN, HandlerData: [*c]?*anyopaque, EstablisherFrame: [*c]usize, ContextPointers: [*c]KNONVOLATILE_CONTEXT_POINTERS, LowLimit: [*c]usize, HighLimit: [*c]usize, HandlerRoutine: [*c]EXCEPTION_ROUTINE, UnwindFlags: u32) callconv(.winapi) u32, .{ .name = "RtlVirtualUnwind2", .library_name = "kernel32" }),
+    .x86_64 => @extern(*const fn (HandlerType: u32, ImageBase: u64, ControlPc: u64, FunctionEntry: [*c]IMAGE_RUNTIME_FUNCTION_ENTRY, ContextRecord: [*c]CONTEXT, MachineFrameUnwound: [*c]BOOLEAN, HandlerData: [*c]?*anyopaque, EstablisherFrame: [*c]u64, ContextPointers: [*c]KNONVOLATILE_CONTEXT_POINTERS, LowLimit: [*c]u64, HighLimit: [*c]u64, HandlerRoutine: [*c]EXCEPTION_ROUTINE, UnwindFlags: u32) callconv(.winapi) u32, .{ .name = "RtlVirtualUnwind2", .library_name = "kernel32" }),
+    else => @compileError("RtlVirtualUnwind2 unsupported for target architecture"),
 };
 pub const RtlWriteNonVolatileMemory = switch (arch) {
     .x86_64, .aarch64 => @extern(*const fn (NvToken: ?*anyopaque, NvDestination: ?*anyopaque, Source: ?*const anyopaque, Size: usize, Flags: u32) callconv(.winapi) u32, .{ .name = "RtlWriteNonVolatileMemory", .library_name = "ntdll" }),
@@ -603836,6 +606202,7 @@ pub extern "clfsw32" fn SetLogFileSizeWithPolicy(hLog: HANDLE, pDesiredSize: [*c
 pub extern "kernel32" fn SetMailslotInfo(hMailslot: HANDLE, lReadTimeout: u32) callconv(.winapi) BOOL;
 pub extern "gdi32" fn SetMapMode(hdc: HDC, iMode: i32) callconv(.winapi) i32;
 pub extern "gdi32" fn SetMapperFlags(hdc: HDC, flags: u32) callconv(.winapi) u32;
+pub extern "user32" fn SetMaxTouchpadSensitivity(maxSensitivity: BOOL) callconv(.winapi) BOOL;
 pub extern "user32" fn SetMenu(hWnd: HWND, hMenu: HMENU) callconv(.winapi) BOOL;
 pub extern "user32" fn SetMenuContextHelpId(HMENU, u32) callconv(.winapi) BOOL;
 pub extern "user32" fn SetMenuDefaultItem(hMenu: HMENU, uItem: u32, fByPos: u32) callconv(.winapi) BOOL;
@@ -606694,6 +609061,7 @@ pub extern "webauthn" fn WebAuthNGetPlatformCredentialList(pGetCredentialsOption
 pub extern "webauthn" fn WebAuthNGetW3CExceptionDOMError(hr: HRESULT) callconv(.winapi) HRESULT;
 pub extern "webauthn" fn WebAuthNIsUserVerifyingPlatformAuthenticatorAvailable(pbIsUserVerifyingPlatformAuthenticatorAvailable: [*c]BOOL) callconv(.winapi) HRESULT;
 pub extern "webauthn" fn WebAuthNPluginAddAuthenticator(pPluginAddAuthenticatorOptions: [*c]WEBAUTHN_PLUGIN_ADD_AUTHENTICATOR_OPTIONS, ppPluginAddAuthenticatorResponse: [*c][*c]WEBAUTHN_PLUGIN_ADD_AUTHENTICATOR_RESPONSE) callconv(.winapi) HRESULT;
+pub extern "webauthn" fn WebAuthNPluginAddAuthenticator2(pPluginAddAuthenticatorOptions: [*c]WEBAUTHN_PLUGIN_ADD_AUTHENTICATOR_OPTIONS_2, ppPluginAddAuthenticatorResponse: [*c][*c]WEBAUTHN_PLUGIN_ADD_AUTHENTICATOR_RESPONSE) callconv(.winapi) HRESULT;
 pub extern "webauthn" fn WebAuthNPluginAuthenticatorAddCredentials(rclsid: [*c]const GUID, cCredentialDetails: u32, pCredentialDetails: [*c]WEBAUTHN_PLUGIN_CREDENTIAL_DETAILS) callconv(.winapi) HRESULT;
 pub extern "webauthn" fn WebAuthNPluginAuthenticatorFreeCredentialDetailsArray(cCredentialDetails: u32, pCredentialDetailsArray: [*c]WEBAUTHN_PLUGIN_CREDENTIAL_DETAILS) callconv(.winapi) void;
 pub extern "webauthn" fn WebAuthNPluginAuthenticatorGetAllCredentials(rclsid: [*c]const GUID, pcCredentialDetails: [*c]u32, ppCredentialDetailsArray: [*c][*c]WEBAUTHN_PLUGIN_CREDENTIAL_DETAILS) callconv(.winapi) HRESULT;
@@ -606707,10 +609075,12 @@ pub extern "webauthn" fn WebAuthNPluginGetOperationSigningPublicKey(rclsid: [*c]
 pub extern "webauthn" fn WebAuthNPluginGetUserVerificationCount(rclsid: [*c]const GUID, pdwVerificationCount: [*c]u32) callconv(.winapi) HRESULT;
 pub extern "webauthn" fn WebAuthNPluginGetUserVerificationPublicKey(rclsid: [*c]const GUID, pcbPublicKey: [*c]u32, ppbPublicKey: [*c][*c]u8) callconv(.winapi) HRESULT;
 pub extern "webauthn" fn WebAuthNPluginPerformUserVerification(pPluginUserVerification: [*c]WEBAUTHN_PLUGIN_USER_VERIFICATION_REQUEST, pcbResponse: [*c]u32, ppbResponse: [*c][*c]u8) callconv(.winapi) HRESULT;
+pub extern "webauthn" fn WebAuthNPluginPerformUserVerification2(pPluginUserVerification: [*c]WEBAUTHN_PLUGIN_USER_VERIFICATION_REQUEST_2, pcbResponse: [*c]u32, ppbResponse: [*c][*c]u8) callconv(.winapi) HRESULT;
 pub extern "webauthn" fn WebAuthNPluginRegisterStatusChangeCallback(callback: WEBAUTHN_PLUGIN_STATUS_CHANGE_CALLBACK, context: ?*anyopaque, rclsid: [*c]const GUID, pdwRegister: [*c]u32) callconv(.winapi) HRESULT;
 pub extern "webauthn" fn WebAuthNPluginRemoveAuthenticator(rclsid: [*c]const GUID) callconv(.winapi) HRESULT;
 pub extern "webauthn" fn WebAuthNPluginUnregisterStatusChangeCallback(pdwRegister: [*c]u32) callconv(.winapi) HRESULT;
 pub extern "webauthn" fn WebAuthNPluginUpdateAuthenticatorDetails(pPluginUpdateAuthenticatorDetails: [*c]WEBAUTHN_PLUGIN_UPDATE_AUTHENTICATOR_DETAILS) callconv(.winapi) HRESULT;
+pub extern "webauthn" fn WebAuthNPluginUpdateAuthenticatorDetails2(pPluginUpdateAuthenticatorDetails: [*c]WEBAUTHN_PLUGIN_UPDATE_AUTHENTICATOR_DETAILS_2) callconv(.winapi) HRESULT;
 pub extern "websocket" fn WebSocketAbortHandle(hWebSocket: WEB_SOCKET_HANDLE) callconv(.winapi) void;
 pub extern "websocket" fn WebSocketBeginClientHandshake(hWebSocket: WEB_SOCKET_HANDLE, pszSubprotocols: [*c][*c]const u8, ulSubprotocolCount: u32, pszExtensions: [*c][*c]const u8, ulExtensionCount: u32, pInitialHeaders: [*c]const WEB_SOCKET_HTTP_HEADER, ulInitialHeaderCount: u32, pAdditionalHeaders: [*c][*c]WEB_SOCKET_HTTP_HEADER, pulAdditionalHeaderCount: [*c]u32) callconv(.winapi) HRESULT;
 pub extern "websocket" fn WebSocketBeginServerHandshake(hWebSocket: WEB_SOCKET_HANDLE, pszSubprotocolSelected: [*c]const u8, pszExtensionSelected: [*c][*c]const u8, ulExtensionSelectedCount: u32, pRequestHeaders: [*c]const WEB_SOCKET_HTTP_HEADER, ulRequestHeaderCount: u32, pResponseHeaders: [*c][*c]WEB_SOCKET_HTTP_HEADER, pulResponseHeaderCount: [*c]u32) callconv(.winapi) HRESULT;
@@ -606789,76 +609159,286 @@ pub extern "opengl32" fn wglUseFontBitmapsW(HDC, u32, u32, u32) callconv(.winapi
 pub extern "opengl32" fn wglUseFontOutlinesA(HDC, u32, u32, u32, f32, f32, i32, [*c]GLYPHMETRICSFLOAT) callconv(.winapi) BOOL;
 pub extern "opengl32" fn wglUseFontOutlinesW(HDC, u32, u32, u32, f32, f32, i32, [*c]GLYPHMETRICSFLOAT) callconv(.winapi) BOOL;
 pub extern "shlwapi" fn WhichPlatform() callconv(.winapi) u32;
-pub extern "winhvplatform" fn WHvAcceptPartitionMigration(MigrationHandle: HANDLE, Partition: [*c]WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvAdviseGpaRange(Partition: WHV_PARTITION_HANDLE, GpaRanges: [*c]const WHV_MEMORY_RANGE_ENTRY, GpaRangesCount: u32, Advice: i32, AdviceBuffer: ?*const anyopaque, AdviceBufferSizeInBytes: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvAllocateVpciResource(ProviderId: [*c]const GUID, Flags: i32, ResourceDescriptor: ?*const anyopaque, ResourceDescriptorSizeInBytes: u32, VpciResource: [*c]HANDLE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvCancelPartitionMigration(Partition: WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvCancelRunVirtualProcessor(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, Flags: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvCompletePartitionMigration(Partition: WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvCreateNotificationPort(Partition: WHV_PARTITION_HANDLE, Parameters: [*c]const WHV_NOTIFICATION_PORT_PARAMETERS, EventHandle: HANDLE, PortHandle: [*c]?*anyopaque) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvCreatePartition(Partition: [*c]WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvCreateTrigger(Partition: WHV_PARTITION_HANDLE, Parameters: [*c]const WHV_TRIGGER_PARAMETERS, TriggerHandle: [*c]?*anyopaque, EventHandle: [*c]HANDLE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvCreateVirtualProcessor(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, Flags: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvCreateVirtualProcessor2(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, Properties: [*c]const WHV_VIRTUAL_PROCESSOR_PROPERTY, PropertyCount: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvCreateVpciDevice(Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, VpciResource: HANDLE, Flags: i32, NotificationEventHandle: HANDLE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvDeleteNotificationPort(Partition: WHV_PARTITION_HANDLE, PortHandle: ?*anyopaque) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvDeletePartition(Partition: WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvDeleteTrigger(Partition: WHV_PARTITION_HANDLE, TriggerHandle: ?*anyopaque) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvDeleteVirtualProcessor(Partition: WHV_PARTITION_HANDLE, VpIndex: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvDeleteVpciDevice(Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64) callconv(.winapi) HRESULT;
-pub extern "winhvemulation" fn WHvEmulatorCreateEmulator(Callbacks: [*c]const WHV_EMULATOR_CALLBACKS, Emulator: [*c]?*anyopaque) callconv(.winapi) HRESULT;
-pub extern "winhvemulation" fn WHvEmulatorDestroyEmulator(Emulator: ?*anyopaque) callconv(.winapi) HRESULT;
-pub extern "winhvemulation" fn WHvEmulatorTryIoEmulation(Emulator: ?*anyopaque, Context: ?*anyopaque, VpContext: [*c]const WHV_VP_EXIT_CONTEXT, IoInstructionContext: [*c]const WHV_X64_IO_PORT_ACCESS_CONTEXT, EmulatorReturnStatus: [*c]WHV_EMULATOR_STATUS) callconv(.winapi) HRESULT;
-pub extern "winhvemulation" fn WHvEmulatorTryMmioEmulation(Emulator: ?*anyopaque, Context: ?*anyopaque, VpContext: [*c]const WHV_VP_EXIT_CONTEXT, MmioInstructionContext: [*c]const WHV_MEMORY_ACCESS_CONTEXT, EmulatorReturnStatus: [*c]WHV_EMULATOR_STATUS) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvGetCapability(CapabilityCode: i32, CapabilityBuffer: ?*anyopaque, CapabilityBufferSizeInBytes: u32, WrittenSizeInBytes: [*c]u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvGetInterruptTargetVpSet(Partition: WHV_PARTITION_HANDLE, Destination: u64, DestinationMode: i32, TargetVps: [*c]u32, VpCount: u32, TargetVpCount: [*c]u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvGetPartitionCounters(Partition: WHV_PARTITION_HANDLE, CounterSet: i32, Buffer: ?*anyopaque, BufferSizeInBytes: u32, BytesWritten: [*c]u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvGetPartitionProperty(Partition: WHV_PARTITION_HANDLE, PropertyCode: i32, PropertyBuffer: ?*anyopaque, PropertyBufferSizeInBytes: u32, WrittenSizeInBytes: [*c]u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvGetVirtualProcessorCounters(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, CounterSet: i32, Buffer: ?*anyopaque, BufferSizeInBytes: u32, BytesWritten: [*c]u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvGetVirtualProcessorCpuidOutput(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, Eax: u32, Ecx: u32, CpuidOutput: [*c]WHV_CPUID_OUTPUT) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvGetVirtualProcessorInterruptControllerState(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, State: ?*anyopaque, StateSize: u32, WrittenSize: [*c]u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvGetVirtualProcessorInterruptControllerState2(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, State: ?*anyopaque, StateSize: u32, WrittenSize: [*c]u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvGetVirtualProcessorRegisters(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, RegisterNames: [*c]const i32, RegisterCount: u32, RegisterValues: [*c]WHV_REGISTER_VALUE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvGetVirtualProcessorState(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, StateType: i32, Buffer: ?*anyopaque, BufferSizeInBytes: u32, BytesWritten: [*c]u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvGetVirtualProcessorXsaveState(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, Buffer: ?*anyopaque, BufferSizeInBytes: u32, BytesWritten: [*c]u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvGetVpciDeviceInterruptTarget(Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, Index: u32, MultiMessageNumber: u32, Target: [*c]WHV_VPCI_INTERRUPT_TARGET, TargetSizeInBytes: u32, BytesWritten: [*c]u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvGetVpciDeviceNotification(Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, Notification: [*c]WHV_VPCI_DEVICE_NOTIFICATION, NotificationSizeInBytes: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvGetVpciDeviceProperty(Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, PropertyCode: i32, PropertyBuffer: ?*anyopaque, PropertyBufferSizeInBytes: u32, WrittenSizeInBytes: [*c]u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvMapGpaRange(Partition: WHV_PARTITION_HANDLE, SourceAddress: ?*anyopaque, GuestAddress: u64, SizeInBytes: u64, Flags: i32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvMapGpaRange2(Partition: WHV_PARTITION_HANDLE, Process: HANDLE, SourceAddress: ?*anyopaque, GuestAddress: u64, SizeInBytes: u64, Flags: i32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvMapVpciDeviceInterrupt(Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, Index: u32, MessageCount: u32, Target: [*c]const WHV_VPCI_INTERRUPT_TARGET, MsiAddress: [*c]u64, MsiData: [*c]u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvMapVpciDeviceMmioRanges(Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, MappingCount: [*c]u32, Mappings: [*c][*c]WHV_VPCI_MMIO_MAPPING) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvPostVirtualProcessorSynicMessage(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, SintIndex: u32, Message: ?*const anyopaque, MessageSizeInBytes: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvQueryGpaRangeDirtyBitmap(Partition: WHV_PARTITION_HANDLE, GuestAddress: u64, RangeSizeInBytes: u64, Bitmap: [*c]u64, BitmapSizeInBytes: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvReadGpaRange(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, GuestAddress: u64, Controls: WHV_ACCESS_GPA_CONTROLS, Data: ?*anyopaque, DataSizeInBytes: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvReadVpciDeviceRegister(Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, Register: [*c]const WHV_VPCI_DEVICE_REGISTER, Data: ?*anyopaque) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvRegisterPartitionDoorbellEvent(Partition: WHV_PARTITION_HANDLE, MatchData: [*c]const WHV_DOORBELL_MATCH_DATA, EventHandle: HANDLE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvRequestInterrupt(Partition: WHV_PARTITION_HANDLE, Interrupt: [*c]const WHV_INTERRUPT_CONTROL, InterruptControlSize: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvRequestVpciDeviceInterrupt(Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, MsiAddress: u64, MsiData: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvResetPartition(Partition: WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvResumePartitionTime(Partition: WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvRetargetVpciDeviceInterrupt(Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, MsiAddress: u64, MsiData: u32, Target: [*c]const WHV_VPCI_INTERRUPT_TARGET) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvRunVirtualProcessor(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, ExitContext: ?*anyopaque, ExitContextSizeInBytes: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvSetNotificationPortProperty(Partition: WHV_PARTITION_HANDLE, PortHandle: ?*anyopaque, PropertyCode: i32, PropertyValue: u64) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvSetPartitionProperty(Partition: WHV_PARTITION_HANDLE, PropertyCode: i32, PropertyBuffer: ?*const anyopaque, PropertyBufferSizeInBytes: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvSetupPartition(Partition: WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvSetVirtualProcessorInterruptControllerState(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, State: ?*const anyopaque, StateSize: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvSetVirtualProcessorInterruptControllerState2(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, State: ?*const anyopaque, StateSize: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvSetVirtualProcessorRegisters(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, RegisterNames: [*c]const i32, RegisterCount: u32, RegisterValues: [*c]const WHV_REGISTER_VALUE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvSetVirtualProcessorState(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, StateType: i32, Buffer: ?*const anyopaque, BufferSizeInBytes: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvSetVirtualProcessorXsaveState(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, Buffer: ?*const anyopaque, BufferSizeInBytes: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvSetVpciDevicePowerState(Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, PowerState: i32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvSignalVirtualProcessorSynicEvent(Partition: WHV_PARTITION_HANDLE, SynicEvent: WHV_SYNIC_EVENT_PARAMETERS, NewlySignaled: [*c]BOOL) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvStartPartitionMigration(Partition: WHV_PARTITION_HANDLE, MigrationHandle: [*c]HANDLE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvSuspendPartitionTime(Partition: WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvTranslateGva(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, Gva: u64, TranslateFlags: i32, TranslationResult: [*c]WHV_TRANSLATE_GVA_RESULT, Gpa: [*c]u64) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvUnmapGpaRange(Partition: WHV_PARTITION_HANDLE, GuestAddress: u64, SizeInBytes: u64) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvUnmapVpciDeviceInterrupt(Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, Index: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvUnmapVpciDeviceMmioRanges(Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvUnregisterPartitionDoorbellEvent(Partition: WHV_PARTITION_HANDLE, MatchData: [*c]const WHV_DOORBELL_MATCH_DATA) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvUpdateTriggerParameters(Partition: WHV_PARTITION_HANDLE, Parameters: [*c]const WHV_TRIGGER_PARAMETERS, TriggerHandle: ?*anyopaque) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvWriteGpaRange(Partition: WHV_PARTITION_HANDLE, VpIndex: u32, GuestAddress: u64, Controls: WHV_ACCESS_GPA_CONTROLS, Data: ?*const anyopaque, DataSizeInBytes: u32) callconv(.winapi) HRESULT;
-pub extern "winhvplatform" fn WHvWriteVpciDeviceRegister(Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, Register: [*c]const WHV_VPCI_DEVICE_REGISTER, Data: ?*const anyopaque) callconv(.winapi) HRESULT;
+pub const WHvAcceptPartitionMigration = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (MigrationHandle: HANDLE, Partition: [*c]WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT, .{ .name = "WHvAcceptPartitionMigration", .library_name = "winhvplatform" }),
+    else => @compileError("WHvAcceptPartitionMigration unsupported for target architecture"),
+};
+pub const WHvAdviseGpaRange = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, GpaRanges: [*c]const WHV_MEMORY_RANGE_ENTRY, GpaRangesCount: u32, Advice: i32, AdviceBuffer: ?*const anyopaque, AdviceBufferSizeInBytes: u32) callconv(.winapi) HRESULT, .{ .name = "WHvAdviseGpaRange", .library_name = "winhvplatform" }),
+    else => @compileError("WHvAdviseGpaRange unsupported for target architecture"),
+};
+pub const WHvAllocateVpciResource = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (ProviderId: [*c]const GUID, Flags: i32, ResourceDescriptor: ?*const anyopaque, ResourceDescriptorSizeInBytes: u32, VpciResource: [*c]HANDLE) callconv(.winapi) HRESULT, .{ .name = "WHvAllocateVpciResource", .library_name = "winhvplatform" }),
+    else => @compileError("WHvAllocateVpciResource unsupported for target architecture"),
+};
+pub const WHvCancelPartitionMigration = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT, .{ .name = "WHvCancelPartitionMigration", .library_name = "winhvplatform" }),
+    else => @compileError("WHvCancelPartitionMigration unsupported for target architecture"),
+};
+pub const WHvCancelRunVirtualProcessor = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, Flags: u32) callconv(.winapi) HRESULT, .{ .name = "WHvCancelRunVirtualProcessor", .library_name = "winhvplatform" }),
+    else => @compileError("WHvCancelRunVirtualProcessor unsupported for target architecture"),
+};
+pub const WHvCompletePartitionMigration = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT, .{ .name = "WHvCompletePartitionMigration", .library_name = "winhvplatform" }),
+    else => @compileError("WHvCompletePartitionMigration unsupported for target architecture"),
+};
+pub const WHvCreateNotificationPort = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, Parameters: [*c]const WHV_NOTIFICATION_PORT_PARAMETERS, EventHandle: HANDLE, PortHandle: [*c]?*anyopaque) callconv(.winapi) HRESULT, .{ .name = "WHvCreateNotificationPort", .library_name = "winhvplatform" }),
+    else => @compileError("WHvCreateNotificationPort unsupported for target architecture"),
+};
+pub const WHvCreatePartition = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: [*c]WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT, .{ .name = "WHvCreatePartition", .library_name = "winhvplatform" }),
+    else => @compileError("WHvCreatePartition unsupported for target architecture"),
+};
+pub const WHvCreateTrigger = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, Parameters: [*c]const WHV_TRIGGER_PARAMETERS, TriggerHandle: [*c]?*anyopaque, EventHandle: [*c]HANDLE) callconv(.winapi) HRESULT, .{ .name = "WHvCreateTrigger", .library_name = "winhvplatform" }),
+    else => @compileError("WHvCreateTrigger unsupported for target architecture"),
+};
+pub const WHvCreateVirtualProcessor = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, Flags: u32) callconv(.winapi) HRESULT, .{ .name = "WHvCreateVirtualProcessor", .library_name = "winhvplatform" }),
+    else => @compileError("WHvCreateVirtualProcessor unsupported for target architecture"),
+};
+pub const WHvCreateVirtualProcessor2 = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, Properties: [*c]const WHV_VIRTUAL_PROCESSOR_PROPERTY, PropertyCount: u32) callconv(.winapi) HRESULT, .{ .name = "WHvCreateVirtualProcessor2", .library_name = "winhvplatform" }),
+    else => @compileError("WHvCreateVirtualProcessor2 unsupported for target architecture"),
+};
+pub const WHvCreateVpciDevice = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, VpciResource: HANDLE, Flags: i32, NotificationEventHandle: HANDLE) callconv(.winapi) HRESULT, .{ .name = "WHvCreateVpciDevice", .library_name = "winhvplatform" }),
+    else => @compileError("WHvCreateVpciDevice unsupported for target architecture"),
+};
+pub const WHvDeleteNotificationPort = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, PortHandle: ?*anyopaque) callconv(.winapi) HRESULT, .{ .name = "WHvDeleteNotificationPort", .library_name = "winhvplatform" }),
+    else => @compileError("WHvDeleteNotificationPort unsupported for target architecture"),
+};
+pub const WHvDeletePartition = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT, .{ .name = "WHvDeletePartition", .library_name = "winhvplatform" }),
+    else => @compileError("WHvDeletePartition unsupported for target architecture"),
+};
+pub const WHvDeleteTrigger = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, TriggerHandle: ?*anyopaque) callconv(.winapi) HRESULT, .{ .name = "WHvDeleteTrigger", .library_name = "winhvplatform" }),
+    else => @compileError("WHvDeleteTrigger unsupported for target architecture"),
+};
+pub const WHvDeleteVirtualProcessor = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32) callconv(.winapi) HRESULT, .{ .name = "WHvDeleteVirtualProcessor", .library_name = "winhvplatform" }),
+    else => @compileError("WHvDeleteVirtualProcessor unsupported for target architecture"),
+};
+pub const WHvDeleteVpciDevice = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64) callconv(.winapi) HRESULT, .{ .name = "WHvDeleteVpciDevice", .library_name = "winhvplatform" }),
+    else => @compileError("WHvDeleteVpciDevice unsupported for target architecture"),
+};
+pub const WHvEmulatorCreateEmulator = switch (arch) {
+    .x86_64 => @extern(*const fn (Callbacks: [*c]const WHV_EMULATOR_CALLBACKS, Emulator: [*c]?*anyopaque) callconv(.winapi) HRESULT, .{ .name = "WHvEmulatorCreateEmulator", .library_name = "winhvemulation" }),
+    else => @compileError("WHvEmulatorCreateEmulator unsupported for target architecture"),
+};
+pub const WHvEmulatorDestroyEmulator = switch (arch) {
+    .x86_64 => @extern(*const fn (Emulator: ?*anyopaque) callconv(.winapi) HRESULT, .{ .name = "WHvEmulatorDestroyEmulator", .library_name = "winhvemulation" }),
+    else => @compileError("WHvEmulatorDestroyEmulator unsupported for target architecture"),
+};
+pub const WHvEmulatorTryIoEmulation = switch (arch) {
+    .x86_64 => @extern(*const fn (Emulator: ?*anyopaque, Context: ?*anyopaque, VpContext: [*c]const WHV_X64_VP_EXIT_CONTEXT, IoInstructionContext: [*c]const WHV_X64_IO_PORT_ACCESS_CONTEXT, EmulatorReturnStatus: [*c]WHV_EMULATOR_STATUS) callconv(.winapi) HRESULT, .{ .name = "WHvEmulatorTryIoEmulation", .library_name = "winhvemulation" }),
+    else => @compileError("WHvEmulatorTryIoEmulation unsupported for target architecture"),
+};
+pub const WHvEmulatorTryMmioEmulation = switch (arch) {
+    .x86_64 => @extern(*const fn (Emulator: ?*anyopaque, Context: ?*anyopaque, VpContext: [*c]const WHV_X64_VP_EXIT_CONTEXT, MmioInstructionContext: [*c]const WHV_MEMORY_ACCESS_CONTEXT, EmulatorReturnStatus: [*c]WHV_EMULATOR_STATUS) callconv(.winapi) HRESULT, .{ .name = "WHvEmulatorTryMmioEmulation", .library_name = "winhvemulation" }),
+    else => @compileError("WHvEmulatorTryMmioEmulation unsupported for target architecture"),
+};
+pub const WHvGetCapability = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (CapabilityCode: i32, CapabilityBuffer: ?*anyopaque, CapabilityBufferSizeInBytes: u32, WrittenSizeInBytes: [*c]u32) callconv(.winapi) HRESULT, .{ .name = "WHvGetCapability", .library_name = "winhvplatform" }),
+    else => @compileError("WHvGetCapability unsupported for target architecture"),
+};
+pub const WHvGetInterruptTargetVpSet = switch (arch) {
+    .x86_64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, Destination: u64, DestinationMode: i32, TargetVps: [*c]u32, VpCount: u32, TargetVpCount: [*c]u32) callconv(.winapi) HRESULT, .{ .name = "WHvGetInterruptTargetVpSet", .library_name = "winhvplatform" }),
+    else => @compileError("WHvGetInterruptTargetVpSet unsupported for target architecture"),
+};
+pub const WHvGetPartitionCounters = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, CounterSet: i32, Buffer: ?*anyopaque, BufferSizeInBytes: u32, BytesWritten: [*c]u32) callconv(.winapi) HRESULT, .{ .name = "WHvGetPartitionCounters", .library_name = "winhvplatform" }),
+    else => @compileError("WHvGetPartitionCounters unsupported for target architecture"),
+};
+pub const WHvGetPartitionProperty = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, PropertyCode: i32, PropertyBuffer: ?*anyopaque, PropertyBufferSizeInBytes: u32, WrittenSizeInBytes: [*c]u32) callconv(.winapi) HRESULT, .{ .name = "WHvGetPartitionProperty", .library_name = "winhvplatform" }),
+    else => @compileError("WHvGetPartitionProperty unsupported for target architecture"),
+};
+pub const WHvGetVirtualProcessorCounters = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, CounterSet: i32, Buffer: ?*anyopaque, BufferSizeInBytes: u32, BytesWritten: [*c]u32) callconv(.winapi) HRESULT, .{ .name = "WHvGetVirtualProcessorCounters", .library_name = "winhvplatform" }),
+    else => @compileError("WHvGetVirtualProcessorCounters unsupported for target architecture"),
+};
+pub const WHvGetVirtualProcessorCpuidOutput = switch (arch) {
+    .x86_64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, Eax: u32, Ecx: u32, CpuidOutput: [*c]WHV_CPUID_OUTPUT) callconv(.winapi) HRESULT, .{ .name = "WHvGetVirtualProcessorCpuidOutput", .library_name = "winhvplatform" }),
+    else => @compileError("WHvGetVirtualProcessorCpuidOutput unsupported for target architecture"),
+};
+pub const WHvGetVirtualProcessorInterruptControllerState = switch (arch) {
+    .x86_64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, State: ?*anyopaque, StateSize: u32, WrittenSize: [*c]u32) callconv(.winapi) HRESULT, .{ .name = "WHvGetVirtualProcessorInterruptControllerState", .library_name = "winhvplatform" }),
+    else => @compileError("WHvGetVirtualProcessorInterruptControllerState unsupported for target architecture"),
+};
+pub const WHvGetVirtualProcessorInterruptControllerState2 = switch (arch) {
+    .x86_64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, State: ?*anyopaque, StateSize: u32, WrittenSize: [*c]u32) callconv(.winapi) HRESULT, .{ .name = "WHvGetVirtualProcessorInterruptControllerState2", .library_name = "winhvplatform" }),
+    else => @compileError("WHvGetVirtualProcessorInterruptControllerState2 unsupported for target architecture"),
+};
+pub const WHvGetVirtualProcessorRegisters = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, RegisterNames: [*c]const i32, RegisterCount: u32, RegisterValues: [*c]WHV_REGISTER_VALUE) callconv(.winapi) HRESULT, .{ .name = "WHvGetVirtualProcessorRegisters", .library_name = "winhvplatform" }),
+    else => @compileError("WHvGetVirtualProcessorRegisters unsupported for target architecture"),
+};
+pub const WHvGetVirtualProcessorState = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, StateType: i32, Buffer: ?*anyopaque, BufferSizeInBytes: u32, BytesWritten: [*c]u32) callconv(.winapi) HRESULT, .{ .name = "WHvGetVirtualProcessorState", .library_name = "winhvplatform" }),
+    else => @compileError("WHvGetVirtualProcessorState unsupported for target architecture"),
+};
+pub const WHvGetVirtualProcessorXsaveState = switch (arch) {
+    .x86_64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, Buffer: ?*anyopaque, BufferSizeInBytes: u32, BytesWritten: [*c]u32) callconv(.winapi) HRESULT, .{ .name = "WHvGetVirtualProcessorXsaveState", .library_name = "winhvplatform" }),
+    else => @compileError("WHvGetVirtualProcessorXsaveState unsupported for target architecture"),
+};
+pub const WHvGetVpciDeviceInterruptTarget = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, Index: u32, MultiMessageNumber: u32, Target: [*c]WHV_VPCI_INTERRUPT_TARGET, TargetSizeInBytes: u32, BytesWritten: [*c]u32) callconv(.winapi) HRESULT, .{ .name = "WHvGetVpciDeviceInterruptTarget", .library_name = "winhvplatform" }),
+    else => @compileError("WHvGetVpciDeviceInterruptTarget unsupported for target architecture"),
+};
+pub const WHvGetVpciDeviceNotification = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, Notification: [*c]WHV_VPCI_DEVICE_NOTIFICATION, NotificationSizeInBytes: u32) callconv(.winapi) HRESULT, .{ .name = "WHvGetVpciDeviceNotification", .library_name = "winhvplatform" }),
+    else => @compileError("WHvGetVpciDeviceNotification unsupported for target architecture"),
+};
+pub const WHvGetVpciDeviceProperty = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, PropertyCode: i32, PropertyBuffer: ?*anyopaque, PropertyBufferSizeInBytes: u32, WrittenSizeInBytes: [*c]u32) callconv(.winapi) HRESULT, .{ .name = "WHvGetVpciDeviceProperty", .library_name = "winhvplatform" }),
+    else => @compileError("WHvGetVpciDeviceProperty unsupported for target architecture"),
+};
+pub const WHvMapGpaRange = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, SourceAddress: ?*anyopaque, GuestAddress: u64, SizeInBytes: u64, Flags: i32) callconv(.winapi) HRESULT, .{ .name = "WHvMapGpaRange", .library_name = "winhvplatform" }),
+    else => @compileError("WHvMapGpaRange unsupported for target architecture"),
+};
+pub const WHvMapGpaRange2 = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, Process: HANDLE, SourceAddress: ?*anyopaque, GuestAddress: u64, SizeInBytes: u64, Flags: i32) callconv(.winapi) HRESULT, .{ .name = "WHvMapGpaRange2", .library_name = "winhvplatform" }),
+    else => @compileError("WHvMapGpaRange2 unsupported for target architecture"),
+};
+pub const WHvMapVpciDeviceInterrupt = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, Index: u32, MessageCount: u32, Target: [*c]const WHV_VPCI_INTERRUPT_TARGET, MsiAddress: [*c]u64, MsiData: [*c]u32) callconv(.winapi) HRESULT, .{ .name = "WHvMapVpciDeviceInterrupt", .library_name = "winhvplatform" }),
+    else => @compileError("WHvMapVpciDeviceInterrupt unsupported for target architecture"),
+};
+pub const WHvMapVpciDeviceMmioRanges = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, MappingCount: [*c]u32, Mappings: [*c][*c]WHV_VPCI_MMIO_MAPPING) callconv(.winapi) HRESULT, .{ .name = "WHvMapVpciDeviceMmioRanges", .library_name = "winhvplatform" }),
+    else => @compileError("WHvMapVpciDeviceMmioRanges unsupported for target architecture"),
+};
+pub const WHvPostVirtualProcessorSynicMessage = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, SintIndex: u32, Message: ?*const anyopaque, MessageSizeInBytes: u32) callconv(.winapi) HRESULT, .{ .name = "WHvPostVirtualProcessorSynicMessage", .library_name = "winhvplatform" }),
+    else => @compileError("WHvPostVirtualProcessorSynicMessage unsupported for target architecture"),
+};
+pub const WHvQueryGpaRangeDirtyBitmap = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, GuestAddress: u64, RangeSizeInBytes: u64, Bitmap: [*c]u64, BitmapSizeInBytes: u32) callconv(.winapi) HRESULT, .{ .name = "WHvQueryGpaRangeDirtyBitmap", .library_name = "winhvplatform" }),
+    else => @compileError("WHvQueryGpaRangeDirtyBitmap unsupported for target architecture"),
+};
+pub const WHvReadGpaRange = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, GuestAddress: u64, Controls: WHV_ACCESS_GPA_CONTROLS, Data: ?*anyopaque, DataSizeInBytes: u32) callconv(.winapi) HRESULT, .{ .name = "WHvReadGpaRange", .library_name = "winhvplatform" }),
+    else => @compileError("WHvReadGpaRange unsupported for target architecture"),
+};
+pub const WHvReadVpciDeviceRegister = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, Register: [*c]const WHV_VPCI_DEVICE_REGISTER, Data: ?*anyopaque) callconv(.winapi) HRESULT, .{ .name = "WHvReadVpciDeviceRegister", .library_name = "winhvplatform" }),
+    else => @compileError("WHvReadVpciDeviceRegister unsupported for target architecture"),
+};
+pub const WHvRegisterPartitionDoorbellEvent = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, MatchData: [*c]const WHV_DOORBELL_MATCH_DATA, EventHandle: HANDLE) callconv(.winapi) HRESULT, .{ .name = "WHvRegisterPartitionDoorbellEvent", .library_name = "winhvplatform" }),
+    else => @compileError("WHvRegisterPartitionDoorbellEvent unsupported for target architecture"),
+};
+pub const WHvRequestInterrupt = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, Interrupt: [*c]const WHV_INTERRUPT_CONTROL, InterruptControlSize: u32) callconv(.winapi) HRESULT, .{ .name = "WHvRequestInterrupt", .library_name = "winhvplatform" }),
+    else => @compileError("WHvRequestInterrupt unsupported for target architecture"),
+};
+pub const WHvRequestVpciDeviceInterrupt = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, MsiAddress: u64, MsiData: u32) callconv(.winapi) HRESULT, .{ .name = "WHvRequestVpciDeviceInterrupt", .library_name = "winhvplatform" }),
+    else => @compileError("WHvRequestVpciDeviceInterrupt unsupported for target architecture"),
+};
+pub const WHvResetPartition = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT, .{ .name = "WHvResetPartition", .library_name = "winhvplatform" }),
+    else => @compileError("WHvResetPartition unsupported for target architecture"),
+};
+pub const WHvResumePartitionTime = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT, .{ .name = "WHvResumePartitionTime", .library_name = "winhvplatform" }),
+    else => @compileError("WHvResumePartitionTime unsupported for target architecture"),
+};
+pub const WHvRetargetVpciDeviceInterrupt = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, MsiAddress: u64, MsiData: u32, Target: [*c]const WHV_VPCI_INTERRUPT_TARGET) callconv(.winapi) HRESULT, .{ .name = "WHvRetargetVpciDeviceInterrupt", .library_name = "winhvplatform" }),
+    else => @compileError("WHvRetargetVpciDeviceInterrupt unsupported for target architecture"),
+};
+pub const WHvRunVirtualProcessor = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, ExitContext: ?*anyopaque, ExitContextSizeInBytes: u32) callconv(.winapi) HRESULT, .{ .name = "WHvRunVirtualProcessor", .library_name = "winhvplatform" }),
+    else => @compileError("WHvRunVirtualProcessor unsupported for target architecture"),
+};
+pub const WHvSetNotificationPortProperty = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, PortHandle: ?*anyopaque, PropertyCode: i32, PropertyValue: u64) callconv(.winapi) HRESULT, .{ .name = "WHvSetNotificationPortProperty", .library_name = "winhvplatform" }),
+    else => @compileError("WHvSetNotificationPortProperty unsupported for target architecture"),
+};
+pub const WHvSetPartitionProperty = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, PropertyCode: i32, PropertyBuffer: ?*const anyopaque, PropertyBufferSizeInBytes: u32) callconv(.winapi) HRESULT, .{ .name = "WHvSetPartitionProperty", .library_name = "winhvplatform" }),
+    else => @compileError("WHvSetPartitionProperty unsupported for target architecture"),
+};
+pub const WHvSetupPartition = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT, .{ .name = "WHvSetupPartition", .library_name = "winhvplatform" }),
+    else => @compileError("WHvSetupPartition unsupported for target architecture"),
+};
+pub const WHvSetVirtualProcessorInterruptControllerState = switch (arch) {
+    .x86_64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, State: ?*const anyopaque, StateSize: u32) callconv(.winapi) HRESULT, .{ .name = "WHvSetVirtualProcessorInterruptControllerState", .library_name = "winhvplatform" }),
+    else => @compileError("WHvSetVirtualProcessorInterruptControllerState unsupported for target architecture"),
+};
+pub const WHvSetVirtualProcessorInterruptControllerState2 = switch (arch) {
+    .x86_64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, State: ?*const anyopaque, StateSize: u32) callconv(.winapi) HRESULT, .{ .name = "WHvSetVirtualProcessorInterruptControllerState2", .library_name = "winhvplatform" }),
+    else => @compileError("WHvSetVirtualProcessorInterruptControllerState2 unsupported for target architecture"),
+};
+pub const WHvSetVirtualProcessorRegisters = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, RegisterNames: [*c]const i32, RegisterCount: u32, RegisterValues: [*c]const WHV_REGISTER_VALUE) callconv(.winapi) HRESULT, .{ .name = "WHvSetVirtualProcessorRegisters", .library_name = "winhvplatform" }),
+    else => @compileError("WHvSetVirtualProcessorRegisters unsupported for target architecture"),
+};
+pub const WHvSetVirtualProcessorState = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, StateType: i32, Buffer: ?*const anyopaque, BufferSizeInBytes: u32) callconv(.winapi) HRESULT, .{ .name = "WHvSetVirtualProcessorState", .library_name = "winhvplatform" }),
+    else => @compileError("WHvSetVirtualProcessorState unsupported for target architecture"),
+};
+pub const WHvSetVirtualProcessorXsaveState = switch (arch) {
+    .x86_64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, Buffer: ?*const anyopaque, BufferSizeInBytes: u32) callconv(.winapi) HRESULT, .{ .name = "WHvSetVirtualProcessorXsaveState", .library_name = "winhvplatform" }),
+    else => @compileError("WHvSetVirtualProcessorXsaveState unsupported for target architecture"),
+};
+pub const WHvSetVpciDevicePowerState = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, PowerState: i32) callconv(.winapi) HRESULT, .{ .name = "WHvSetVpciDevicePowerState", .library_name = "winhvplatform" }),
+    else => @compileError("WHvSetVpciDevicePowerState unsupported for target architecture"),
+};
+pub const WHvSignalVirtualProcessorSynicEvent = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, SynicEvent: WHV_SYNIC_EVENT_PARAMETERS, NewlySignaled: [*c]BOOL) callconv(.winapi) HRESULT, .{ .name = "WHvSignalVirtualProcessorSynicEvent", .library_name = "winhvplatform" }),
+    else => @compileError("WHvSignalVirtualProcessorSynicEvent unsupported for target architecture"),
+};
+pub const WHvStartPartitionMigration = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, MigrationHandle: [*c]HANDLE) callconv(.winapi) HRESULT, .{ .name = "WHvStartPartitionMigration", .library_name = "winhvplatform" }),
+    else => @compileError("WHvStartPartitionMigration unsupported for target architecture"),
+};
+pub const WHvSuspendPartitionTime = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE) callconv(.winapi) HRESULT, .{ .name = "WHvSuspendPartitionTime", .library_name = "winhvplatform" }),
+    else => @compileError("WHvSuspendPartitionTime unsupported for target architecture"),
+};
+pub const WHvTranslateGva = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, Gva: u64, TranslateFlags: i32, TranslationResult: [*c]WHV_TRANSLATE_GVA_RESULT, Gpa: [*c]u64) callconv(.winapi) HRESULT, .{ .name = "WHvTranslateGva", .library_name = "winhvplatform" }),
+    else => @compileError("WHvTranslateGva unsupported for target architecture"),
+};
+pub const WHvUnmapGpaRange = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, GuestAddress: u64, SizeInBytes: u64) callconv(.winapi) HRESULT, .{ .name = "WHvUnmapGpaRange", .library_name = "winhvplatform" }),
+    else => @compileError("WHvUnmapGpaRange unsupported for target architecture"),
+};
+pub const WHvUnmapVpciDeviceInterrupt = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, Index: u32) callconv(.winapi) HRESULT, .{ .name = "WHvUnmapVpciDeviceInterrupt", .library_name = "winhvplatform" }),
+    else => @compileError("WHvUnmapVpciDeviceInterrupt unsupported for target architecture"),
+};
+pub const WHvUnmapVpciDeviceMmioRanges = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64) callconv(.winapi) HRESULT, .{ .name = "WHvUnmapVpciDeviceMmioRanges", .library_name = "winhvplatform" }),
+    else => @compileError("WHvUnmapVpciDeviceMmioRanges unsupported for target architecture"),
+};
+pub const WHvUnregisterPartitionDoorbellEvent = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, MatchData: [*c]const WHV_DOORBELL_MATCH_DATA) callconv(.winapi) HRESULT, .{ .name = "WHvUnregisterPartitionDoorbellEvent", .library_name = "winhvplatform" }),
+    else => @compileError("WHvUnregisterPartitionDoorbellEvent unsupported for target architecture"),
+};
+pub const WHvUpdateTriggerParameters = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, Parameters: [*c]const WHV_TRIGGER_PARAMETERS, TriggerHandle: ?*anyopaque) callconv(.winapi) HRESULT, .{ .name = "WHvUpdateTriggerParameters", .library_name = "winhvplatform" }),
+    else => @compileError("WHvUpdateTriggerParameters unsupported for target architecture"),
+};
+pub const WHvWriteGpaRange = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, VpIndex: u32, GuestAddress: u64, Controls: WHV_ACCESS_GPA_CONTROLS, Data: ?*const anyopaque, DataSizeInBytes: u32) callconv(.winapi) HRESULT, .{ .name = "WHvWriteGpaRange", .library_name = "winhvplatform" }),
+    else => @compileError("WHvWriteGpaRange unsupported for target architecture"),
+};
+pub const WHvWriteVpciDeviceRegister = switch (arch) {
+    .x86_64, .aarch64 => @extern(*const fn (Partition: WHV_PARTITION_HANDLE, LogicalDeviceId: u64, Register: [*c]const WHV_VPCI_DEVICE_REGISTER, Data: ?*const anyopaque) callconv(.winapi) HRESULT, .{ .name = "WHvWriteVpciDeviceRegister", .library_name = "winhvplatform" }),
+    else => @compileError("WHvWriteVpciDeviceRegister unsupported for target architecture"),
+};
 pub extern "windowscodecs" fn WICConvertBitmapSource(dstFormat: [*c]GUID, pISrc: [*c]IWICBitmapSource, ppIDst: [*c][*c]IWICBitmapSource) callconv(.winapi) HRESULT;
 pub extern "windowscodecs" fn WICCreateBitmapFromSection(width: u32, height: u32, pixelFormat: [*c]GUID, hSection: HANDLE, stride: u32, offset: u32, ppIBitmap: [*c][*c]IWICBitmap) callconv(.winapi) HRESULT;
 pub extern "windowscodecs" fn WICCreateBitmapFromSectionEx(width: u32, height: u32, pixelFormat: [*c]GUID, hSection: HANDLE, stride: u32, offset: u32, desiredAccessLevel: i32, ppIBitmap: [*c][*c]IWICBitmap) callconv(.winapi) HRESULT;
@@ -607721,6 +610301,7 @@ pub const __WARNING_RETURN_UNINIT_VAR: u32 = 6101;
 pub const __WARNING_RETURNING_BAD_RESULT: u32 = 28196;
 pub const __WARNING_UNSAFE_STRING_FUNCTION: u32 = 25025;
 pub const __WARNING_USING_UNINIT_VAR: u32 = 6001;
+pub const __WARNING_WRITE_OVERRUN: u32 = 6386;
 pub const _A_EXEC: u32 = 64;
 pub const _A_NAME_IS_UTF: u32 = 128;
 pub const _ARM64_MULT_INTRINS_SUPPORTED: u32 = 0;
@@ -607907,6 +610488,7 @@ pub const AAL5_SSCS_SSCOP_ASSURED: u32 = 1;
 pub const AAL5_SSCS_SSCOP_NON_ASSURED: u32 = 2;
 pub const AALTYPE_5: i32 = 5;
 pub const AALTYPE_USER: i32 = 16;
+pub const ABC_OVERLAYDESKTOPICONS: u32 = 1;
 pub const ABE_BOTTOM: u32 = 3;
 pub const ABE_LEFT: u32 = 0;
 pub const ABE_RIGHT: u32 = 2;
@@ -610179,6 +612761,7 @@ pub const APPMODEL_ERROR_NO_PACKAGE: u32 = 15700;
 pub const APPMODEL_ERROR_PACKAGE_IDENTITY_CORRUPT: u32 = 15702;
 pub const APPMODEL_ERROR_PACKAGE_NOT_AVAILABLE: u32 = 15706;
 pub const APPMODEL_ERROR_PACKAGE_RUNTIME_CORRUPT: u32 = 15701;
+pub const AppModelPackageFeature_SignedSBOM: i32 = 1;
 pub const APPNAME: i32 = 1;
 pub const APPNAMEBUFFERLEN: u32 = 40;
 pub const AppPolicyClrCompat_ClassicDesktop: i32 = 1;
@@ -610467,6 +613050,9 @@ pub const ARM64_RegisterX8: i32 = 75;
 pub const ARM64_RegisterX9: i32 = 76;
 pub const ARM64_RegisterXFp: i32 = 96;
 pub const ARM64_RegisterXLr: i32 = 97;
+pub const ARM64_SVCR_SM: u64 = 1;
+pub const ARM64_SVCR_ZA: u64 = 2;
+pub const ARM64_TPIDR2_BLOCK_ALIGN: u32 = 16;
 pub const ARP_HW_802: i32 = 6;
 pub const ARP_HW_ENET: i32 = 1;
 pub const ARP_REQUEST: i32 = 1;
@@ -610638,6 +613224,7 @@ pub const ASSEMBLYINFO_FLAG_PAYLOADRESIDENT: u32 = 2;
 pub const ASSERT_ALTERNATE: u32 = 9;
 pub const ASSERT_BREAKPOINT: u32 = 524291;
 pub const ASSERT_PRIMARY: u32 = 8;
+pub const ASSERTBUGCODE_I3CHOST_DRIVER: u32 = 1059;
 pub const Assertive: i32 = 2;
 pub const ASSIGN_DRIVE_LETTERS_FAILED: u32 = 114;
 pub const ASSIGNED: i32 = 1;
@@ -611626,6 +614213,7 @@ pub const BATTERY_SYSTEM_BATTERY: u32 = 2147483648;
 pub const BATTERY_TAG_CHANGE_WMI_GUID: GUID = .{ .Data1 = 1579118105, .Data2 = 34694, .Data3 = 19747, .Data4 = .{ 148, 252, 158, 116, 107, 213, 216, 136 } };
 pub const BATTERY_TAG_INVALID: u32 = 0;
 pub const BATTERY_TEMPERATURE_WMI_GUID: GUID = .{ .Data1 = 441622861, .Data2 = 44494, .Data3 = 19012, .Data4 = .{ 154, 62, 200, 216, 241, 95, 242, 194 } };
+pub const BATTERY_TEST_EXEMPT: u32 = 16;
 pub const BATTERY_TYPE_ALKALINE: u8 = 2;
 pub const BATTERY_TYPE_DISCONNECTED: u8 = 0;
 pub const BATTERY_TYPE_NIMH: u8 = 3;
@@ -611771,6 +614359,29 @@ pub const BCRYPT_CHAIN_MODE_NA = L("ChainingModeN/A");
 pub const BCRYPT_CHAINING_MODE = L("ChainingMode");
 pub const BCRYPT_CIPHER_INTERFACE: u32 = 1;
 pub const BCRYPT_CIPHER_OPERATION: u32 = 1;
+pub const BCRYPT_COMPOSITE_MLDSA_ALG_HANDLE: BCRYPT_ALG_HANDLE = @ptrFromInt(1169);
+pub const BCRYPT_COMPOSITE_MLDSA_ALGORITHM = L("Composite-ML-DSA");
+pub const BCRYPT_COMPOSITE_MLDSA_PARAMETER_SET_44_ECDSA_P256_SHA256 = L("44-ECDSA-P256-SHA256");
+pub const BCRYPT_COMPOSITE_MLDSA_PARAMETER_SET_65_ECDSA_P256_SHA512 = L("65-ECDSA-P256-SHA512");
+pub const BCRYPT_COMPOSITE_MLDSA_PARAMETER_SET_65_ECDSA_P384_SHA512 = L("65-ECDSA-P384-SHA512");
+pub const BCRYPT_COMPOSITE_MLDSA_PARAMETER_SET_87_ECDSA_P384_SHA512 = L("87-ECDSA-P384-SHA512");
+pub const BCRYPT_COMPOSITE_MLDSA_PRIVATE_MAGIC: u32 = 1263750467;
+pub const BCRYPT_COMPOSITE_MLDSA_PUBLIC_MAGIC: u32 = 1263553859;
+pub const BCRYPT_COMPOSITE_MLKEM_ALG_HANDLE: BCRYPT_ALG_HANDLE = @ptrFromInt(1185);
+pub const BCRYPT_COMPOSITE_MLKEM_ALGORITHM = L("Composite-ML-KEM");
+pub const BCRYPT_COMPOSITE_MLKEM_DECAPSULATION_BLOB = L("COMPMLKEMPRIVATELAMPSBLOB");
+pub const BCRYPT_COMPOSITE_MLKEM_ENCAPSULATION_BLOB = L("COMPMLKEMPUBLICBLOB");
+pub const BCRYPT_COMPOSITE_MLKEM_PARAMETER_SET_1024_P384 = L("1024-P384");
+pub const BCRYPT_COMPOSITE_MLKEM_PARAMETER_SET_768_P256 = L("768-P256");
+pub const BCRYPT_COMPOSITE_MLKEM_PARAMETER_SET_768_X25519 = L("768-X25519");
+pub const BCRYPT_COMPOSITE_MLKEM_PRIVATE_BLOB = L("COMPMLKEMPRIVATELAMPSBLOB");
+pub const BCRYPT_COMPOSITE_MLKEM_PRIVATE_IRTF_SEED_BLOB = L("COMPMLKEMPRIVATEIRTFSEEDBLOB");
+pub const BCRYPT_COMPOSITE_MLKEM_PRIVATE_IRTF_SEED_MAGIC: u32 = 1397443907;
+pub const BCRYPT_COMPOSITE_MLKEM_PRIVATE_LAMPS_BLOB = L("COMPMLKEMPRIVATELAMPSBLOB");
+pub const BCRYPT_COMPOSITE_MLKEM_PRIVATE_LAMPS_MAGIC: u32 = 1380666691;
+pub const BCRYPT_COMPOSITE_MLKEM_PRIVATE_MAGIC: u32 = 1380666691;
+pub const BCRYPT_COMPOSITE_MLKEM_PUBLIC_BLOB = L("COMPMLKEMPUBLICBLOB");
+pub const BCRYPT_COMPOSITE_MLKEM_PUBLIC_MAGIC: u32 = 1347112259;
 pub const BCRYPT_COPY_AFTER_PADDING_CHECK_FAILURE_FLAG: u32 = 256;
 pub const BCRYPT_CSHAKE128_ALG_HANDLE: BCRYPT_ALG_HANDLE = @ptrFromInt(1041);
 pub const BCRYPT_CSHAKE128_ALGORITHM = L("CSHAKE128");
@@ -612002,6 +614613,7 @@ pub const BCRYPT_PAD_PQDSA: u32 = 32;
 pub const BCRYPT_PAD_PSS: u32 = 8;
 pub const BCRYPT_PADDING_SCHEMES = L("PaddingSchemes");
 pub const BCRYPT_PARAMETER_SET_NAME = L("ParameterSetName");
+pub const BCRYPT_PARAMETER_SET_NAME_LIST = L("ParameterSetNameList");
 pub const BCRYPT_PBKDF2_ALG_HANDLE: BCRYPT_ALG_HANDLE = @ptrFromInt(817);
 pub const BCRYPT_PBKDF2_ALGORITHM = L("PBKDF2");
 pub const BCRYPT_PCP_PLATFORM_TYPE_PROPERTY = L("PCP_PLATFORM_TYPE");
@@ -613305,6 +615917,20 @@ pub const BOOKLET_EDGE_RIGHT: u32 = 1;
 pub const BOOKLET_PRINT: u32 = 2;
 pub const Bool: u32 = 9;
 pub const BOOT_LOG_CONF: u32 = 3;
+pub const BOOT_PARTITION_FUNCTION_ACTIVATE: u32 = 2;
+pub const BOOT_PARTITION_FUNCTION_DOWNLOAD: u32 = 1;
+pub const BOOT_PARTITION_FUNCTION_GET_INFO: u32 = 3;
+pub const BOOT_PARTITION_REQUEST_BLOCK_STRUCTURE_VERSION: u32 = 1;
+pub const BOOT_PARTITION_STATUS_ERROR: u32 = 1;
+pub const BOOT_PARTITION_STATUS_ILLEGAL_REQUEST: u32 = 2;
+pub const BOOT_PARTITION_STATUS_INPUT_BUFFER_TOO_BIG: u32 = 4;
+pub const BOOT_PARTITION_STATUS_INVALID_ALIGNMENT: u32 = 8;
+pub const BOOT_PARTITION_STATUS_INVALID_IMAGE: u32 = 7;
+pub const BOOT_PARTITION_STATUS_INVALID_PARAMETER: u32 = 3;
+pub const BOOT_PARTITION_STATUS_INVALID_SLOT: u32 = 6;
+pub const BOOT_PARTITION_STATUS_OUTPUT_BUFFER_TOO_SMALL: u32 = 5;
+pub const BOOT_PARTITION_STATUS_SUCCESS: u32 = 0;
+pub const BOOT_PARTITION_STATUS_WRITE_PROHIBITED: u32 = 9;
 pub const BOOTING_IN_SAFEMODE_DSREPAIR: u32 = 170;
 pub const BOOTING_IN_SAFEMODE_MINIMAL: u32 = 168;
 pub const BOOTING_IN_SAFEMODE_NETWORK: u32 = 169;
@@ -614703,6 +617329,7 @@ pub const CBA_DUPLICATE_SYMBOL: u32 = 5;
 pub const CBA_ENGINE_PRESENT: u32 = 1610612736;
 pub const CBA_EVENT: u32 = 16;
 pub const CBA_MAP_JIT_SYMBOL: u32 = 2684354560;
+pub const CBA_QUERY_IF_SYMBOL_DOWNLOAD_DISALLOWED: u32 = 64;
 pub const CBA_READ_MEMORY: u32 = 6;
 pub const CBA_SET_OPTIONS: u32 = 8;
 pub const CBA_SRCSRV_EVENT: u32 = 1073741824;
@@ -617014,6 +619641,8 @@ pub const CI_STATE_SCANNING: u32 = 16;
 pub const CI_STATE_SHADOW_MERGE: u32 = 1;
 pub const CI_STATE_STARTING: u32 = 8192;
 pub const CI_STATE_USER_ACTIVE: u32 = 4096;
+pub const CI_VERSION_CORRID: u32 = 2048;
+pub const CI_VERSION_QUERY_METADATA: u32 = 2304;
 pub const CI_VERSION_WDS30: u32 = 258;
 pub const CI_VERSION_WDS40: u32 = 265;
 pub const CI_VERSION_WIN70: u32 = 1792;
@@ -617315,6 +619944,7 @@ pub const CLCTL_RESOURCE_PREPARE_UPGRADE: i32 = 4202730;
 pub const CLCTL_RESOURCE_UPGRADE_COMPLETED: i32 = 4202734;
 pub const CLCTL_RESOURCE_UPGRADE_DLL: i32 = 4194490;
 pub const CLCTL_RESUME_IO: i32 = 5242946;
+pub const CLCTL_RLUA_GET_PWD: i32 = 802;
 pub const CLCTL_RW_MODIFY_NOOP: i32 = 4194990;
 pub const CLCTL_SCALEOUT_COMMAND: i32 = 4205974;
 pub const CLCTL_SCALEOUT_CONTROL: i32 = 4205978;
@@ -618423,9 +621053,11 @@ pub const CLUSAPI_RESOURCE_ONLINE_IGNORE_AFFINITY_RULE: u32 = 32;
 pub const CLUSAPI_RESOURCE_ONLINE_IGNORE_RESOURCE_STATUS: u32 = 1;
 pub const CLUSAPI_RESOURCE_ONLINE_NECESSARY_FOR_QUORUM: u32 = 4;
 pub const CLUSAPI_VALID_CHANGE_RESOURCE_GROUP_FLAGS: u64 = 1;
-pub const CLUSAPI_VERSION: u32 = 3077;
+pub const CLUSAPI_VERSION: u32 = 3079;
 pub const CLUSAPI_VERSION_CU: u32 = 3075;
+pub const CLUSAPI_VERSION_DT: u32 = 3079;
 pub const CLUSAPI_VERSION_GA: u32 = 3077;
+pub const CLUSAPI_VERSION_GE: u32 = 3078;
 pub const CLUSAPI_VERSION_NI: u32 = 2572;
 pub const CLUSAPI_VERSION_RS3: u32 = 2560;
 pub const CLUSAPI_VERSION_SERVER2008: u32 = 1536;
@@ -618651,6 +621283,7 @@ pub const CLUSCTL_RESOURCE_QUERY_DELETE: i32 = 16777657;
 pub const CLUSCTL_RESOURCE_QUERY_MAINTENANCE_MODE: i32 = 16777697;
 pub const CLUSCTL_RESOURCE_REMOVE_DEPENDENCY: i32 = 22020118;
 pub const CLUSCTL_RESOURCE_REMOVE_OWNER: i32 = 22020126;
+pub const CLUSCTL_RESOURCE_RLUA_GET_PWD: i32 = 16778018;
 pub const CLUSCTL_RESOURCE_RLUA_GET_VIRTUAL_SERVER_TOKEN: i32 = 16777581;
 pub const CLUSCTL_RESOURCE_RLUA_SET_PWD_INFO: i32 = 16777594;
 pub const CLUSCTL_RESOURCE_RLUA_SET_PWD_INFOEX: i32 = 16778010;
@@ -618809,6 +621442,7 @@ pub const CLUSGRP_STATUS_WAITING_TO_START: u64 = 16;
 pub const CLUSIONREASON_DEFAULT: i32 = 1;
 pub const CLUSIONREASON_GROUPPOLICY: i32 = 3;
 pub const CLUSIONREASON_UNKNOWNSCOPE: i32 = 0;
+pub const CLUSIONREASON_USAGE: i32 = 4;
 pub const CLUSIONREASON_USER: i32 = 2;
 pub const CLUSPROP_FORMAT_BINARY: i32 = 1;
 pub const CLUSPROP_FORMAT_DWORD: i32 = 2;
@@ -619049,6 +621683,7 @@ pub const CLUSREG_NAME_NETNAME_ALIASES = L("Aliases");
 pub const CLUSREG_NAME_NETNAME_CONTAINERGUID = L("CryptoContainerGUID");
 pub const CLUSREG_NAME_NETNAME_CREATING_DC = L("CreatingDC");
 pub const CLUSREG_NAME_NETNAME_DNN_DISABLE_CLONES = L("DisableClones");
+pub const CLUSREG_NAME_NETNAME_DNS_AUTHENTICATION = L("DnsAuthenticationMode");
 pub const CLUSREG_NAME_NETNAME_DNS_NAME = L("DnsName");
 pub const CLUSREG_NAME_NETNAME_DNS_SUFFIX = L("DnsSuffix");
 pub const CLUSREG_NAME_NETNAME_EXCLUDE_NETWORKS = L("ExcludeNetworks");
@@ -619065,6 +621700,8 @@ pub const CLUSREG_NAME_NETNAME_RESOURCE_DATA = L("ResourceData");
 pub const CLUSREG_NAME_NETNAME_STATUS_DNS = L("StatusDNS");
 pub const CLUSREG_NAME_NETNAME_STATUS_KERBEROS = L("StatusKerberos");
 pub const CLUSREG_NAME_NETNAME_STATUS_NETBIOS = L("StatusNetBIOS");
+pub const CLUSREG_NAME_NETNAME_USE_DNS = L("DnsEnabled");
+pub const CLUSREG_NAME_NETNAME_USE_DYNAMIC_DNS = L("UseDynamicDNS");
 pub const CLUSREG_NAME_NETNAME_VCO_CONTAINER = L("VcoContainer");
 pub const CLUSREG_NAME_NODE_BUILD_NUMBER = L("BuildNumber");
 pub const CLUSREG_NAME_NODE_CSDVERSION = L("CSDVersion");
@@ -620605,6 +623242,8 @@ pub const COD_WEARABLE_MINOR_HELMET: u32 = 4;
 pub const COD_WEARABLE_MINOR_JACKET: u32 = 3;
 pub const COD_WEARABLE_MINOR_PAGER: u32 = 2;
 pub const COD_WEARABLE_MINOR_WRIST_WATCH: u32 = 1;
+pub const CODE_INTEGRITY_REPORT_GENERATION_VERSION_CURRENT: u32 = 1;
+pub const CODE_INTEGRITY_REPORT_RECORD_VERSION_CURRENT: u32 = 1;
 pub const CODEC_API_QP_MAP_INT16: i32 = 1;
 pub const CODEC_API_QP_MAP_INT32: i32 = 2;
 pub const CODEC_API_QP_MAP_INT8: i32 = 0;
@@ -621273,6 +623912,10 @@ pub const COMPRESS_INFORMATION_CLASS_BLOCK_SIZE: i32 = 1;
 pub const COMPRESS_INFORMATION_CLASS_INVALID: i32 = 0;
 pub const COMPRESS_INFORMATION_CLASS_LEVEL: i32 = 2;
 pub const COMPRESS_RAW: u32 = 536870912;
+pub const CompressedMemoryStream: i32 = 25;
+pub const CompressedMemoryStreamFinishCallback: i32 = 22;
+pub const CompressedMemoryStreamSQL: i32 = 28672;
+pub const CompressedMemoryStreamStartCallback: i32 = 21;
 pub const COMPRESSION_ENGINE_HIBER: u32 = 512;
 pub const COMPRESSION_ENGINE_MAXIMUM: u32 = 256;
 pub const COMPRESSION_ENGINE_STANDARD: u32 = 0;
@@ -622098,9 +624741,11 @@ pub const COPYFILE_SIS_REPLACE: u32 = 2;
 pub const COPYFILE2_CALLBACK_CHUNK_FINISHED: i32 = 2;
 pub const COPYFILE2_CALLBACK_CHUNK_STARTED: i32 = 1;
 pub const COPYFILE2_CALLBACK_ERROR: i32 = 6;
-pub const COPYFILE2_CALLBACK_MAX: i32 = 7;
+pub const COPYFILE2_CALLBACK_MAX: i32 = 9;
 pub const COPYFILE2_CALLBACK_NONE: i32 = 0;
 pub const COPYFILE2_CALLBACK_POLL_CONTINUE: i32 = 5;
+pub const COPYFILE2_CALLBACK_SPARSE_CHUNK_FINISHED: i32 = 8;
+pub const COPYFILE2_CALLBACK_SPARSE_CHUNK_STARTED: i32 = 7;
 pub const COPYFILE2_CALLBACK_STREAM_FINISHED: i32 = 4;
 pub const COPYFILE2_CALLBACK_STREAM_STARTED: i32 = 3;
 pub const COPYFILE2_IO_CYCLE_SIZE_MAX: u32 = 1073741824;
@@ -624515,6 +627160,307 @@ pub const CWP_ALL: u32 = 0;
 pub const CWP_SKIPDISABLED: u32 = 2;
 pub const CWP_SKIPINVISIBLE: u32 = 1;
 pub const CWP_SKIPTRANSPARENT: u32 = 4;
+pub const CXL_CACHEMEM_PRIMARY_RANGE_OFFSET: u32 = 4096;
+pub const CXL_CLEAR_POISON_WRITE_DATA_SIZE: u32 = 64;
+pub const CXL_COMPONENT_REGISTER_BLOCK_ID: u32 = 1;
+pub const CXL_COMPONENT_REGISTER_SIZE: u32 = 65536;
+pub const CXL_DEVICE_REGISTER_BLOCK_ID: u32 = 3;
+pub const CXL_DPA_ADDRESS_MASK: u64 = 18446744073709551552;
+pub const CXL_FIRMWARE_REVISION_LENGTH: u32 = 16;
+pub const CXL_MAILBOX_COMMAND_TIMEOUT_IN_SEC: u32 = 2;
+pub const CXL_MAXIMUM_FIRMWARE_SLOTS: u32 = 4;
+pub const CXL_MEMORY_LOW_PART_MASK: u32 = 4026531840;
+pub const CxlAdditionalHealthStatus_Critical: i32 = 2;
+pub const CxlAdditionalHealthStatus_Normal: i32 = 0;
+pub const CxlAdditionalHealthStatus_Warning: i32 = 1;
+pub const CxlCacheMemCapabilityID_BIDecoderCapability: i32 = 12;
+pub const CxlCacheMemCapabilityID_BIRouteTableCapability: i32 = 11;
+pub const CxlCacheMemCapabilityID_CacheIDDecoderCapability: i32 = 14;
+pub const CxlCacheMemCapabilityID_CacheIDRouteTableCapability: i32 = 13;
+pub const CxlCacheMemCapabilityID_Capability: i32 = 1;
+pub const CxlCacheMemCapabilityID_ExtendedHDMDecoderCapability: i32 = 15;
+pub const CxlCacheMemCapabilityID_ExtendedMetadataCapability: i32 = 16;
+pub const CxlCacheMemCapabilityID_ExtendedRegisterCapability: i32 = 10;
+pub const CxlCacheMemCapabilityID_ExtendedSecurityCapability: i32 = 6;
+pub const CxlCacheMemCapabilityID_HDMDecoderCapability: i32 = 5;
+pub const CxlCacheMemCapabilityID_IDECapability: i32 = 7;
+pub const CxlCacheMemCapabilityID_LinkCapability: i32 = 4;
+pub const CxlCacheMemCapabilityID_NullCapability: i32 = 0;
+pub const CxlCacheMemCapabilityID_RASCapability: i32 = 2;
+pub const CxlCacheMemCapabilityID_SecurityCapability: i32 = 3;
+pub const CxlCacheMemCapabilityID_SnoopFilterCapability: i32 = 8;
+pub const CxlCacheMemCapabilityID_TimeoutAndIsolationCapability: i32 = 9;
+pub const CxlCommandReturnCode_Aborted: i32 = 18;
+pub const CxlCommandReturnCode_ActivationFailed_ColdResetRequired: i32 = 13;
+pub const CxlCommandReturnCode_ActivationFailed_FWRolledBack: i32 = 12;
+pub const CxlCommandReturnCode_BackgroundCommandStarted: i32 = 1;
+pub const CxlCommandReturnCode_Busy: i32 = 6;
+pub const CxlCommandReturnCode_FeatureTransferInProgress: i32 = 27;
+pub const CxlCommandReturnCode_FeatureTransferOutOfOrder: i32 = 28;
+pub const CxlCommandReturnCode_FWTransferInProgress: i32 = 8;
+pub const CxlCommandReturnCode_FWTransferOutOfOrder: i32 = 9;
+pub const CxlCommandReturnCode_FWVerificationFailed: i32 = 10;
+pub const CxlCommandReturnCode_IncorrectPassphrase: i32 = 20;
+pub const CxlCommandReturnCode_InjectPoisonLimitReached: i32 = 16;
+pub const CxlCommandReturnCode_InternalError: i32 = 4;
+pub const CxlCommandReturnCode_Interrupted: i32 = 24;
+pub const CxlCommandReturnCode_InvalidExtentList: i32 = 30;
+pub const CxlCommandReturnCode_InvalidHandle: i32 = 14;
+pub const CxlCommandReturnCode_InvalidInput: i32 = 2;
+pub const CxlCommandReturnCode_InvalidLog: i32 = 23;
+pub const CxlCommandReturnCode_InvalidPayloadLength: i32 = 22;
+pub const CxlCommandReturnCode_InvalidPhysicalAddress: i32 = 15;
+pub const CxlCommandReturnCode_InvalidSecurityState: i32 = 19;
+pub const CxlCommandReturnCode_InvalidSlot: i32 = 11;
+pub const CxlCommandReturnCode_Max: i32 = 33;
+pub const CxlCommandReturnCode_MediaDisabled: i32 = 7;
+pub const CxlCommandReturnCode_PermanentMediaFailure: i32 = 17;
+pub const CxlCommandReturnCode_RequestAbortNotSupportedByBackgroundOperation: i32 = 32;
+pub const CxlCommandReturnCode_ResourcesExhausted: i32 = 29;
+pub const CxlCommandReturnCode_RetryRequired: i32 = 5;
+pub const CxlCommandReturnCode_Success: i32 = 0;
+pub const CxlCommandReturnCode_TransferOutOfOrder: i32 = 31;
+pub const CxlCommandReturnCode_Unsupported: i32 = 3;
+pub const CxlCommandReturnCode_UnsupportedFeatureSelectionValue: i32 = 26;
+pub const CxlCommandReturnCode_UnsupportedFeatureVersion: i32 = 25;
+pub const CxlCommandReturnCode_UnsupportedMailboxOrCCI: i32 = 21;
+pub const CxlDeviceCapabilityArrayType_InferredFromPciClassCode: i32 = 0;
+pub const CxlDeviceCapabilityArrayType_Max: i32 = 3;
+pub const CxlDeviceCapabilityArrayType_MemoryDeviceCapabilities: i32 = 1;
+pub const CxlDeviceCapabilityArrayType_SwitchMailboxCCICapabilities: i32 = 2;
+pub const CxlDeviceCapabilityID_CapabilityArray: i32 = 0;
+pub const CxlDeviceCapabilityID_DeviceStatusRegisters: i32 = 1;
+pub const CxlDeviceCapabilityID_MemoryDeviceStatusRegisters: i32 = 16384;
+pub const CxlDeviceCapabilityID_PrimaryMailboxRegisters: i32 = 2;
+pub const CxlDeviceCapabilityID_SecondaryMailboxRegisters: i32 = 3;
+pub const CxlDeviceEventSubtype_InvalidConfigurationData: i32 = 1;
+pub const CxlDeviceEventSubtype_NotReported: i32 = 0;
+pub const CxlDeviceEventSubtype_UnsuportedMemoryMediaFru: i32 = 3;
+pub const CxlDeviceEventSubtype_UnsupportedConfigurationData: i32 = 2;
+pub const CxlDeviceEventType_DataPathError: i32 = 4;
+pub const CxlDeviceEventType_HealthStatusChange: i32 = 0;
+pub const CxlDeviceEventType_LifeUsedChange: i32 = 2;
+pub const CxlDeviceEventType_LsaError: i32 = 5;
+pub const CxlDeviceEventType_MediaStatusChange: i32 = 1;
+pub const CxlDeviceEventType_MemoryMediaFruError: i32 = 7;
+pub const CxlDeviceEventType_PowerManagementFault: i32 = 8;
+pub const CxlDeviceEventType_TemperatureChange: i32 = 3;
+pub const CxlDeviceEventType_UnrecorverableInternalSideBandBusError: i32 = 6;
+pub const CxlDRAMEventType_AdvProgCorrMemErrCounterExp: i32 = 5;
+pub const CxlDRAMEventType_CkidViolation: i32 = 6;
+pub const CxlDRAMEventType_DataPathError: i32 = 3;
+pub const CxlDRAMEventType_InvAddress: i32 = 2;
+pub const CxlDRAMEventType_MediaEccError: i32 = 0;
+pub const CxlDRAMEventType_ScrubMediaEccError: i32 = 1;
+pub const CxlDRAMEventType_TeStateViolation: i32 = 4;
+pub const CxlEventRecordSeverity_Failure: i32 = 2;
+pub const CxlEventRecordSeverity_Fatal: i32 = 3;
+pub const CxlEventRecordSeverity_Informational: i32 = 0;
+pub const CxlEventRecordSeverity_Max: i32 = 4;
+pub const CxlEventRecordSeverity_Warning: i32 = 1;
+pub const CxlGeneralMediaEventType_AdvProgCorrMemErrCounterExp: i32 = 5;
+pub const CxlGeneralMediaEventType_CkidViolation: i32 = 6;
+pub const CxlGeneralMediaEventType_DataPathError: i32 = 2;
+pub const CxlGeneralMediaEventType_InvAddress: i32 = 1;
+pub const CxlGeneralMediaEventType_MediaEccError: i32 = 0;
+pub const CxlGeneralMediaEventType_ScrubMediaEccError: i32 = 4;
+pub const CxlGeneralMediaEventType_TeStateViolation: i32 = 3;
+pub const CxlHdmDecoderCount_1: i32 = 0;
+pub const CxlHdmDecoderCount_10: i32 = 5;
+pub const CxlHdmDecoderCount_12: i32 = 6;
+pub const CxlHdmDecoderCount_14: i32 = 7;
+pub const CxlHdmDecoderCount_16: i32 = 8;
+pub const CxlHdmDecoderCount_2: i32 = 1;
+pub const CxlHdmDecoderCount_20: i32 = 9;
+pub const CxlHdmDecoderCount_24: i32 = 10;
+pub const CxlHdmDecoderCount_28: i32 = 11;
+pub const CxlHdmDecoderCount_32: i32 = 12;
+pub const CxlHdmDecoderCount_4: i32 = 2;
+pub const CxlHdmDecoderCount_6: i32 = 3;
+pub const CxlHdmDecoderCount_8: i32 = 4;
+pub const CxlHdmDecoderCount_Max: i32 = 13;
+pub const CxlInterleaveGranularity_1024: i32 = 2;
+pub const CxlInterleaveGranularity_16384: i32 = 6;
+pub const CxlInterleaveGranularity_2048: i32 = 3;
+pub const CxlInterleaveGranularity_256: i32 = 0;
+pub const CxlInterleaveGranularity_4096: i32 = 4;
+pub const CxlInterleaveGranularity_512: i32 = 1;
+pub const CxlInterleaveGranularity_8192: i32 = 5;
+pub const CxlInterleaveGranularity_Max: i32 = 7;
+pub const CxlInterleaveWays_12Way: i32 = 10;
+pub const CxlInterleaveWays_16Way: i32 = 4;
+pub const CxlInterleaveWays_1Way: i32 = 0;
+pub const CxlInterleaveWays_2Way: i32 = 1;
+pub const CxlInterleaveWays_3Way: i32 = 8;
+pub const CxlInterleaveWays_4Way: i32 = 2;
+pub const CxlInterleaveWays_6Way: i32 = 9;
+pub const CxlInterleaveWays_8Way: i32 = 3;
+pub const CxlInterleaveWays_Max: i32 = 11;
+pub const CxlMailboxActivateFWAction_Max: i32 = 2;
+pub const CxlMailboxActivateFWAction_Online: i32 = 0;
+pub const CxlMailboxActivateFWAction_OnNextReset: i32 = 1;
+pub const CxlMailboxCapabilityType_FMApiCommands: i32 = 2;
+pub const CxlMailboxCapabilityType_InferredFromPciClassCode: i32 = 0;
+pub const CxlMailboxCapabilityType_Max: i32 = 3;
+pub const CxlMailboxCapabilityType_MemoryDeviceCommands: i32 = 1;
+pub const CxlMailboxCommand_ActivateFW: i32 = 514;
+pub const CxlMailboxCommand_AddDynamicCapacityResponse: i32 = 18434;
+pub const CxlMailboxCommand_BackgroundOperationStatus: i32 = 2;
+pub const CxlMailboxCommand_ClaimOwnership: i32 = 1793;
+pub const CxlMailboxCommand_ClearEventRecords: i32 = 257;
+pub const CxlMailboxCommand_ClearLog: i32 = 1027;
+pub const CxlMailboxCommand_ClearPoison: i32 = 17154;
+pub const CxlMailboxCommand_DisablePassphrase: i32 = 17666;
+pub const CxlMailboxCommand_EventNotification: i32 = 262;
+pub const CxlMailboxCommand_FreezeSecurityState: i32 = 17668;
+pub const CxlMailboxCommand_GetAlertConfiguration: i32 = 16897;
+pub const CxlMailboxCommand_GetDynamicCapacityConfiguration: i32 = 18432;
+pub const CxlMailboxCommand_GetDynamicCapacityExtentList: i32 = 18433;
+pub const CxlMailboxCommand_GetEventInterruptPolicy: i32 = 258;
+pub const CxlMailboxCommand_GetEventRecords: i32 = 256;
+pub const CxlMailboxCommand_GetFeature: i32 = 1281;
+pub const CxlMailboxCommand_GetFWInfo: i32 = 512;
+pub const CxlMailboxCommand_GetGAMBuffer: i32 = 265;
+pub const CxlMailboxCommand_GetGDTConfiguration: i32 = 18707;
+pub const CxlMailboxCommand_GetGFDDcRegionConfiguration: i32 = 18690;
+pub const CxlMailboxCommand_GetGFDDcRegionExtentLists: i32 = 18692;
+pub const CxlMailboxCommand_GetGFDDmpConfiguration: i32 = 18693;
+pub const CxlMailboxCommand_GetGFDQoSBWLimit: i32 = 18705;
+pub const CxlMailboxCommand_GetGFDQoSControl: i32 = 18702;
+pub const CxlMailboxCommand_GetGFDQoSStatus: i32 = 18704;
+pub const CxlMailboxCommand_GetGFDSatEntry: i32 = 18700;
+pub const CxlMailboxCommand_GetGFDStatus: i32 = 18689;
+pub const CxlMailboxCommand_GetHealthInfo: i32 = 16896;
+pub const CxlMailboxCommand_GetLog: i32 = 1025;
+pub const CxlMailboxCommand_GetLogCapabilities: i32 = 1026;
+pub const CxlMailboxCommand_GetLSA: i32 = 16642;
+pub const CxlMailboxCommand_GetMCTPEventInterruptPolicy: i32 = 260;
+pub const CxlMailboxCommand_GetPartitionInfo: i32 = 16640;
+pub const CxlMailboxCommand_GetPoisonList: i32 = 17152;
+pub const CxlMailboxCommand_GetResponseMessageLimit: i32 = 3;
+pub const CxlMailboxCommand_GetScanMediaCapabilities: i32 = 17155;
+pub const CxlMailboxCommand_GetScanMediaResults: i32 = 17157;
+pub const CxlMailboxCommand_GetSecurityState: i32 = 17664;
+pub const CxlMailboxCommand_GetShutdownState: i32 = 16899;
+pub const CxlMailboxCommand_GetSLDQoSControl: i32 = 18176;
+pub const CxlMailboxCommand_GetSLDQoSStatus: i32 = 18178;
+pub const CxlMailboxCommand_GetSupportedFeatures: i32 = 1280;
+pub const CxlMailboxCommand_GetSupportedLogs: i32 = 1024;
+pub const CxlMailboxCommand_GetSupportedLogSubList: i32 = 1029;
+pub const CxlMailboxCommand_GetTimestamp: i32 = 768;
+pub const CxlMailboxCommand_GFDDynamicCapacityAdd: i32 = 18695;
+pub const CxlMailboxCommand_GFDDynamicCapacityAddReference: i32 = 18697;
+pub const CxlMailboxCommand_GFDDynamicCapacityListTags: i32 = 18699;
+pub const CxlMailboxCommand_GFDDynamicCapacityRelease: i32 = 18696;
+pub const CxlMailboxCommand_GFDDynamicCapacityRemoveReference: i32 = 18698;
+pub const CxlMailboxCommand_GFDEnhancedEventNotification: i32 = 263;
+pub const CxlMailboxCommand_GFDtoGAEEnhancedEventNotification: i32 = 264;
+pub const CxlMailboxCommand_Identify: i32 = 1;
+pub const CxlMailboxCommand_IdentifyGFD: i32 = 18688;
+pub const CxlMailboxCommand_IdentifyMemoryDevice: i32 = 16384;
+pub const CxlMailboxCommand_IdentifyPBRComponent: i32 = 1792;
+pub const CxlMailboxCommand_InjectPoison: i32 = 17153;
+pub const CxlMailboxCommand_MediaOperations: i32 = 17410;
+pub const CxlMailboxCommand_passphraseSecureErase: i32 = 17669;
+pub const CxlMailboxCommand_PerformMaintenance: i32 = 1536;
+pub const CxlMailboxCommand_PopulateLog: i32 = 1028;
+pub const CxlMailboxCommand_ReadCDAT: i32 = 1794;
+pub const CxlMailboxCommand_ReleaseDynamicCapacity: i32 = 18435;
+pub const CxlMailboxCommand_RequestAbortBackgroundOperation: i32 = 5;
+pub const CxlMailboxCommand_Sanitize: i32 = 17408;
+pub const CxlMailboxCommand_ScanMedia: i32 = 17156;
+pub const CxlMailboxCommand_SecureErase: i32 = 17409;
+pub const CxlMailboxCommand_SecurityReceive: i32 = 17921;
+pub const CxlMailboxCommand_SecuritySend: i32 = 17920;
+pub const CxlMailboxCommand_SetAlertConfiguration: i32 = 16898;
+pub const CxlMailboxCommand_SetEventInterruptPolicy: i32 = 259;
+pub const CxlMailboxCommand_SetFeature: i32 = 1282;
+pub const CxlMailboxCommand_SetGAMBuffer: i32 = 266;
+pub const CxlMailboxCommand_SetGDTConfiguration: i32 = 18708;
+pub const CxlMailboxCommand_SetGFDDcRegionConfiguration: i32 = 18691;
+pub const CxlMailboxCommand_SetGFDDmpConfiguration: i32 = 18694;
+pub const CxlMailboxCommand_SetGFDQoSBWLimit: i32 = 18706;
+pub const CxlMailboxCommand_SetGFDQoSControl: i32 = 18703;
+pub const CxlMailboxCommand_SetGFDSatEntry: i32 = 18701;
+pub const CxlMailboxCommand_SetLSA: i32 = 16643;
+pub const CxlMailboxCommand_SetMCTPEventInterruptPolicy: i32 = 261;
+pub const CxlMailboxCommand_SetPartitionInfo: i32 = 16641;
+pub const CxlMailboxCommand_SetPassphrase: i32 = 17665;
+pub const CxlMailboxCommand_SetResponseMessageLimit: i32 = 4;
+pub const CxlMailboxCommand_SetShutdownState: i32 = 16900;
+pub const CxlMailboxCommand_SetSLDQoSControl: i32 = 18177;
+pub const CxlMailboxCommand_SetTimestamp: i32 = 769;
+pub const CxlMailboxCommand_TransferFW: i32 = 513;
+pub const CxlMailboxCommand_Unlock: i32 = 17667;
+pub const CxlMailboxErrorRecordSource_External: i32 = 1;
+pub const CxlMailboxErrorRecordSource_Injected: i32 = 3;
+pub const CxlMailboxErrorRecordSource_Internal: i32 = 2;
+pub const CxlMailboxErrorRecordSource_Max: i32 = 5;
+pub const CxlMailboxErrorRecordSource_Unknown: i32 = 0;
+pub const CxlMailboxErrorRecordSource_VendorSpecific: i32 = 4;
+pub const CxlMailboxEventRecords_DynamicCapacityEventLog: i32 = 4;
+pub const CxlMailboxEventRecords_FailureEventLog: i32 = 2;
+pub const CxlMailboxEventRecords_FatalEventLog: i32 = 3;
+pub const CxlMailboxEventRecords_InformationalEventLog: i32 = 0;
+pub const CxlMailboxEventRecords_WarningEventLog: i32 = 1;
+pub const CxlMailboxInterruptPolicyMode_FwInterrupt: i32 = 2;
+pub const CxlMailboxInterruptPolicyMode_MsiMsiX: i32 = 1;
+pub const CxlMailboxInterruptPolicyMode_NoInterrupts: i32 = 0;
+pub const CxlMailboxInterruptPolicyMode_Reserved: i32 = 3;
+pub const CxlMailboxTransferFWAction_AbortTransfer: i32 = 4;
+pub const CxlMailboxTransferFWAction_ContinueFWTransfer: i32 = 2;
+pub const CxlMailboxTransferFWAction_EndTransfer: i32 = 3;
+pub const CxlMailboxTransferFWAction_FullFWTransfer: i32 = 0;
+pub const CxlMailboxTransferFWAction_InitiateFWTransfer: i32 = 1;
+pub const CxlMailboxTransferFWAction_Max: i32 = 5;
+pub const CxlMediaStatus_AllDataLossImminent: i32 = 9;
+pub const CxlMediaStatus_AllDataLossPowerLoss: i32 = 7;
+pub const CxlMediaStatus_AllDataLossShutdown: i32 = 8;
+pub const CxlMediaStatus_AllDataLost: i32 = 3;
+pub const CxlMediaStatus_Normal: i32 = 0;
+pub const CxlMediaStatus_NotReady: i32 = 1;
+pub const CxlMediaStatus_WritePersistencyLossImminent: i32 = 6;
+pub const CxlMediaStatus_WritePersistencyLossPowerLoss: i32 = 4;
+pub const CxlMediaStatus_WritePersistencyLossShutdown: i32 = 5;
+pub const CxlMediaStatus_WritePersistencyLost: i32 = 2;
+pub const CxlMemoryDeviceMediaStatus_Disabled: i32 = 3;
+pub const CxlMemoryDeviceMediaStatus_Error: i32 = 2;
+pub const CxlMemoryDeviceMediaStatus_Max: i32 = 4;
+pub const CxlMemoryDeviceMediaStatus_NotReady: i32 = 0;
+pub const CxlMemoryDeviceMediaStatus_Ready: i32 = 1;
+pub const CxlMemoryEventSubtype_InternalDatapathError: i32 = 1;
+pub const CxlMemoryEventSubtype_MediaLinkCommandTrainingError: i32 = 2;
+pub const CxlMemoryEventSubtype_MediaLinkCrcError: i32 = 4;
+pub const CxlMemoryEventSubtype_MediaLinkDataTrainingError: i32 = 3;
+pub const CxlMemoryEventSubtype_NotReported: i32 = 0;
+pub const CxlSpareResources_NoneAvailable: i32 = 0;
+pub const CxlSpareResources_OneAvailable: i32 = 1;
+pub const CxlSpareResources_ThreeOrMoreAvailable: i32 = 3;
+pub const CxlSpareResources_TwoAvailable: i32 = 2;
+pub const CxlSparingResult_GeneralFailure: i32 = 255;
+pub const CxlSparingResult_ResourcesExhausted: i32 = 1;
+pub const CxlSparingResult_Success: i32 = 0;
+pub const CxlTransactionType_HostInjectPoison: i32 = 4;
+pub const CxlTransactionType_HostRead: i32 = 1;
+pub const CxlTransactionType_HostScanMedia: i32 = 3;
+pub const CxlTransactionType_HostWrite: i32 = 2;
+pub const CxlTransactionType_InternalMediaCheckScrub: i32 = 7;
+pub const CxlTransactionType_MediaInitialization: i32 = 8;
+pub const CxlTransactionType_MediaManagement: i32 = 6;
+pub const CxlTransactionType_MediaPatrolScrub: i32 = 5;
+pub const CxlTransactionType_Unknown: i32 = 0;
+pub const CxlType3CommandEffectsLog: GUID = .{ .Data1 = 3049302285, .Data2 = 16831, .Data3 = 30795, .Data4 = .{ 143, 121, 150, 177, 98, 59, 63, 23 } };
+pub const CxlType3ComponentStateDumpLog: GUID = .{ .Data1 = 3484744371, .Data2 = 46593, .Data3 = 12867, .Data4 = .{ 148, 62, 94, 153, 98, 242, 53, 103 } };
+pub const CxlType3DDR5ErrorCheckScrubLog: GUID = .{ .Data1 = 1611494129, .Data2 = 43431, .Data3 = 1603, .Data4 = .{ 160, 3, 17, 148, 143, 158, 7, 124 } };
+pub const CxlType3EventRecord_DRAM: GUID = .{ .Data1 = 3016432992, .Data2 = 1692, .Data3 = 43854, .Data4 = .{ 184, 175, 78, 155, 251, 92, 150, 36 } };
+pub const CxlType3EventRecord_DynamicCapacity: GUID = .{ .Data1 = 2813302218, .Data2 = 33777, .Data3 = 6208, .Data4 = .{ 140, 47, 149, 38, 142, 16, 26, 42 } };
+pub const CxlType3EventRecord_GeneralMedia: GUID = .{ .Data1 = 1997196795, .Data2 = 24770, .Data3 = 32577, .Data4 = .{ 133, 169, 8, 139, 22, 33, 235, 166 } };
+pub const CxlType3EventRecord_MemoryModule: GUID = .{ .Data1 = 1970574078, .Data2 = 23005, .Data3 = 14659, .Data4 = .{ 165, 134, 121, 186, 177, 19, 183, 116 } };
+pub const CxlType3EventRecord_MemorySparing: GUID = .{ .Data1 = 1077551079, .Data2 = 10541, .Data3 = 37440, .Data4 = .{ 138, 57, 77, 28, 150, 108, 124, 101 } };
+pub const CxlType3MediaTestCapabilityLog: GUID = .{ .Data1 = 748937190, .Data2 = 16081, .Data3 = 23626, .Data4 = .{ 140, 168, 153, 190, 187, 247, 49, 164 } };
+pub const CxlType3MediaTestResultsLongLog: GUID = .{ .Data1 = 1040973505, .Data2 = 122, .Data3 = 36420, .Data4 = .{ 162, 78, 166, 170, 187, 254, 88, 122 } };
+pub const CxlType3MediaTestResultsShortLog: GUID = .{ .Data1 = 576005420, .Data2 = 58508, .Data3 = 60433, .Data4 = .{ 185, 9, 2, 66, 172, 18, 0, 2 } };
+pub const CxlType3VendorDebugLog: GUID = .{ .Data1 = 3642300510, .Data2 = 43281, .Data3 = 3136, .Data4 = .{ 129, 31, 214, 7, 25, 64, 61, 134 } };
 pub const CYGNET_12_WO: i32 = 69;
 pub const CYPHER_BLOCK_LENGTH: u32 = 8;
 pub const D2D1_2DAFFINETRANSFORM_INTERPOLATION_MODE_ANISOTROPIC: i32 = 4;
@@ -627213,6 +630159,13 @@ pub const D3D11_DEBUG_FEATURE_PRESENT_PER_RENDER_OP: u32 = 4;
 pub const D3D11_DECODER_BITSTREAM_ENCRYPTION_TYPE_CBCS: GUID = .{ .Data1 = 1110283033, .Data2 = 40225, .Data3 = 19383, .Data4 = .{ 147, 113, 250, 245, 168, 44, 62, 4 } };
 pub const D3D11_DECODER_BITSTREAM_ENCRYPTION_TYPE_CENC: GUID = .{ .Data1 = 2957005365, .Data2 = 49469, .Data3 = 17650, .Data4 = .{ 154, 229, 221, 72, 224, 142, 91, 103 } };
 pub const D3D11_DECODER_ENCRYPTION_HW_CENC: GUID = .{ .Data1 = 2312547407, .Data2 = 2546, .Data3 = 16937, .Data4 = .{ 178, 205, 55, 116, 10, 109, 253, 129 } };
+pub const D3D11_DECODER_PROFILE_APV_VLD_400_10: GUID = .{ .Data1 = 924092514, .Data2 = 27606, .Data3 = 17944, .Data4 = .{ 130, 147, 119, 123, 104, 107, 8, 36 } };
+pub const D3D11_DECODER_PROFILE_APV_VLD_422_10: GUID = .{ .Data1 = 577400989, .Data2 = 44562, .Data3 = 17605, .Data4 = .{ 186, 33, 22, 79, 238, 183, 249, 182 } };
+pub const D3D11_DECODER_PROFILE_APV_VLD_422_12: GUID = .{ .Data1 = 4143010477, .Data2 = 38117, .Data3 = 19450, .Data4 = .{ 146, 39, 103, 108, 221, 239, 244, 43 } };
+pub const D3D11_DECODER_PROFILE_APV_VLD_444_10: GUID = .{ .Data1 = 1783270781, .Data2 = 30224, .Data3 = 18079, .Data4 = .{ 133, 95, 57, 241, 48, 81, 192, 19 } };
+pub const D3D11_DECODER_PROFILE_APV_VLD_444_12: GUID = .{ .Data1 = 4043545116, .Data2 = 57864, .Data3 = 17857, .Data4 = .{ 149, 44, 4, 8, 65, 182, 118, 103 } };
+pub const D3D11_DECODER_PROFILE_APV_VLD_4444_10: GUID = .{ .Data1 = 3359087033, .Data2 = 38485, .Data3 = 19349, .Data4 = .{ 128, 8, 86, 163, 34, 206, 93, 129 } };
+pub const D3D11_DECODER_PROFILE_APV_VLD_4444_12: GUID = .{ .Data1 = 1786134243, .Data2 = 19717, .Data3 = 18430, .Data4 = .{ 164, 41, 114, 52, 116, 182, 157, 124 } };
 pub const D3D11_DECODER_PROFILE_AV1_VLD_12BIT_PROFILE2: GUID = .{ .Data1 = 387084297, .Data2 = 40975, .Data3 = 19681, .Data4 = .{ 153, 78, 191, 64, 129, 246, 243, 240 } };
 pub const D3D11_DECODER_PROFILE_AV1_VLD_12BIT_PROFILE2_420: GUID = .{ .Data1 = 763412182, .Data2 = 40108, .Data3 = 18485, .Data4 = .{ 158, 145, 50, 123, 188, 79, 158, 232 } };
 pub const D3D11_DECODER_PROFILE_AV1_VLD_PROFILE0: GUID = .{ .Data1 = 3099479243, .Data2 = 53075, .Data3 = 18106, .Data4 = .{ 141, 89, 214, 184, 166, 218, 93, 42 } };
@@ -637084,8 +640037,10 @@ pub const DEBUG_CES_EXTENSIONS: u32 = 1024;
 pub const DEBUG_CES_LOG_FILE: u32 = 64;
 pub const DEBUG_CES_PROCESS_OPTIONS: u32 = 512;
 pub const DEBUG_CES_RADIX: u32 = 128;
+pub const DEBUG_CES_STEP_FILTERS: u32 = 65536;
 pub const DEBUG_CES_SYSTEMS: u32 = 2048;
 pub const DEBUG_CES_TEXT_REPLACEMENTS: u32 = 16384;
+pub const DEBUG_CES_VIEWS: u32 = 32768;
 pub const DEBUG_CLASS_IMAGE_FILE: u32 = 3;
 pub const DEBUG_CLASS_KERNEL: u32 = 1;
 pub const DEBUG_CLASS_UNINITIALIZED: u32 = 0;
@@ -638809,6 +641764,7 @@ pub const DESCR_GROUP_METHODDEF: i32 = 0;
 pub const DESCR_GROUP_METHODIMPL: i32 = 1;
 pub const DescribedBy_Property_GUID: GUID = .{ .Data1 = 2086167992, .Data2 = 39314, .Data3 = 16637, .Data4 = .{ 141, 176, 107, 241, 211, 23, 249, 152 } };
 pub const DESCRIPTION: i32 = 4;
+pub const Desktop: i32 = 0;
 pub const DESKTOP_CREATEMENU: u32 = 4;
 pub const DESKTOP_CREATEWINDOW: u32 = 2;
 pub const DESKTOP_DELETE: u32 = 65536;
@@ -639364,6 +642320,7 @@ pub const DEVPKEY_PciDevice_SriovSupport: DEVPROPKEY = .{ .fmtid = .{ .Data1 = 9
 pub const DEVPKEY_PciDevice_SubClass: DEVPROPKEY = .{ .fmtid = .{ .Data1 = 984755761, .Data2 = 33380, .Data3 = 19278, .Data4 = .{ 154, 245, 168, 210, 216, 227, 62, 98 } }, .pid = 4 };
 pub const DEVPKEY_PciDevice_SupportedLinkSubState: DEVPROPKEY = .{ .fmtid = .{ .Data1 = 984755761, .Data2 = 33380, .Data3 = 19278, .Data4 = .{ 154, 245, 168, 210, 216, 227, 62, 98 } }, .pid = 36 };
 pub const DEVPKEY_PciDevice_SupportsDmwrOnEntireDeviceTree: DEVPROPKEY = .{ .fmtid = .{ .Data1 = 984755761, .Data2 = 33380, .Data3 = 19278, .Data4 = .{ 154, 245, 168, 210, 216, 227, 62, 98 } }, .pid = 46 };
+pub const DEVPKEY_PciDevice_TeeIOSupported: DEVPROPKEY = .{ .fmtid = .{ .Data1 = 984755761, .Data2 = 33380, .Data3 = 19278, .Data4 = .{ 154, 245, 168, 210, 216, 227, 62, 98 } }, .pid = 48 };
 pub const DEVPKEY_PciDevice_Uncorrectable_Error_Mask: DEVPROPKEY = .{ .fmtid = .{ .Data1 = 984755761, .Data2 = 33380, .Data3 = 19278, .Data4 = .{ 154, 245, 168, 210, 216, 227, 62, 98 } }, .pid = 19 };
 pub const DEVPKEY_PciDevice_Uncorrectable_Error_Severity: DEVPROPKEY = .{ .fmtid = .{ .Data1 = 984755761, .Data2 = 33380, .Data3 = 19278, .Data4 = .{ 154, 245, 168, 210, 216, 227, 62, 98 } }, .pid = 20 };
 pub const DEVPKEY_PciDevice_UsbComponentRelation: DEVPROPKEY = .{ .fmtid = .{ .Data1 = 984755761, .Data2 = 33380, .Data3 = 19278, .Data4 = .{ 154, 245, 168, 210, 216, 227, 62, 98 } }, .pid = 43 };
@@ -639386,6 +642343,7 @@ pub const DEVPKEY_PciRootBus_PCIExpressNativePMEControl: DEVPROPKEY = .{ .fmtid 
 pub const DEVPKEY_PciRootBus_PCISegmentGroupsSupport: DEVPROPKEY = .{ .fmtid = .{ .Data1 = 3625450536, .Data2 = 31038, .Data3 = 19358, .Data4 = .{ 153, 112, 70, 157, 139, 230, 48, 115 } }, .pid = 10 };
 pub const DEVPKEY_PciRootBus_SecondaryBusWidth: DEVPROPKEY = .{ .fmtid = .{ .Data1 = 3625450536, .Data2 = 31038, .Data3 = 19358, .Data4 = .{ 153, 112, 70, 157, 139, 230, 48, 115 } }, .pid = 5 };
 pub const DEVPKEY_PciRootBus_SecondaryInterface: DEVPROPKEY = .{ .fmtid = .{ .Data1 = 3625450536, .Data2 = 31038, .Data3 = 19358, .Data4 = .{ 153, 112, 70, 157, 139, 230, 48, 115 } }, .pid = 1 };
+pub const DEVPKEY_PciRootBus_Segment: DEVPROPKEY = .{ .fmtid = .{ .Data1 = 3625450536, .Data2 = 31038, .Data3 = 19358, .Data4 = .{ 153, 112, 70, 157, 139, 230, 48, 115 } }, .pid = 19 };
 pub const DEVPKEY_PciRootBus_SHPCNativeHotPlugControl: DEVPROPKEY = .{ .fmtid = .{ .Data1 = 3625450536, .Data2 = 31038, .Data3 = 19358, .Data4 = .{ 153, 112, 70, 157, 139, 230, 48, 115 } }, .pid = 13 };
 pub const DEVPKEY_PciRootBus_SupportedSpeedsAndModes: DEVPROPKEY = .{ .fmtid = .{ .Data1 = 3625450536, .Data2 = 31038, .Data3 = 19358, .Data4 = .{ 153, 112, 70, 157, 139, 230, 48, 115 } }, .pid = 3 };
 pub const DEVPKEY_PciRootBus_SystemMsiSupport: DEVPROPKEY = .{ .fmtid = .{ .Data1 = 3625450536, .Data2 = 31038, .Data3 = 19358, .Data4 = .{ 153, 112, 70, 157, 139, 230, 48, 115 } }, .pid = 18 };
@@ -639518,6 +642476,7 @@ pub const DevProp_PciDevice_SriovSupport_DidntGetVfBarSpace: u32 = 4;
 pub const DevProp_PciDevice_SriovSupport_MissingAcs: u32 = 1;
 pub const DevProp_PciDevice_SriovSupport_MissingPfDriver: u32 = 2;
 pub const DevProp_PciDevice_SriovSupport_NoBusResource: u32 = 3;
+pub const DevProp_PciDevice_SriovSupport_NoSriovCap: u32 = 5;
 pub const DevProp_PciDevice_SriovSupport_Ok: u32 = 0;
 pub const DevProp_PciExpressDevice_LinkSpeed_Five_Gbps: u32 = 2;
 pub const DevProp_PciExpressDevice_LinkSpeed_TwoAndHalf_Gbps: u32 = 1;
@@ -639920,6 +642879,7 @@ pub const DhcpUpdatePolicyName: i32 = 1;
 pub const DhcpUpdatePolicyOrder: i32 = 2;
 pub const DhcpUpdatePolicyRanges: i32 = 8;
 pub const DhcpUpdatePolicyStatus: i32 = 32;
+pub const DHCPV6_OPTION_CAPTIVE_PORTAL: u32 = 103;
 pub const DHCPV6_OPTION_CLIENTID: u32 = 1;
 pub const DHCPV6_OPTION_DNR: u32 = 144;
 pub const DHCPV6_OPTION_DNS_SERVERS: u32 = 23;
@@ -652561,6 +655521,7 @@ pub const DOMAIN_ALIAS_RID_BACKUP_OPS: i32 = 551;
 pub const DOMAIN_ALIAS_RID_CACHEABLE_PRINCIPALS_GROUP: i32 = 571;
 pub const DOMAIN_ALIAS_RID_CERTSVC_DCOM_ACCESS_GROUP: i32 = 574;
 pub const DOMAIN_ALIAS_RID_CRYPTO_OPERATORS: i32 = 569;
+pub const DOMAIN_ALIAS_RID_CUA_USERS: i32 = 586;
 pub const DOMAIN_ALIAS_RID_DCOM_USERS: i32 = 562;
 pub const DOMAIN_ALIAS_RID_DEFAULT_ACCOUNT: i32 = 581;
 pub const DOMAIN_ALIAS_RID_DEVICE_OWNERS: i32 = 583;
@@ -653403,6 +656364,7 @@ pub const DRIVER_VERIFIER_DETECTED_VIOLATION: u32 = 196;
 pub const DRIVER_VERIFIER_DETECTED_VIOLATION_LIVEDUMP: u32 = 452;
 pub const DRIVER_VERIFIER_DMA_VIOLATION: u32 = 230;
 pub const DRIVER_VERIFIER_IOMANAGER_VIOLATION: u32 = 201;
+pub const DRIVER_VERIFIER_MISMATCH: u32 = 221;
 pub const DRIVER_VERIFIER_TRACKING_LIVE_DUMP: u32 = 485;
 pub const DRIVER_VIOLATION: u32 = 289;
 pub const DRIVER_W9X_SUSPECT_COMPATID_RANK: u32 = 65535;
@@ -653516,9 +656478,11 @@ pub const DRMSPECTYPE_FILENAME: i32 = 1;
 pub const DRMSPECTYPE_UNKNOWN: i32 = 0;
 pub const DRMTIMETYPE_SYSTEMLOCAL: i32 = 1;
 pub const DRMTIMETYPE_SYSTEMUTC: i32 = 0;
+pub const DROPEFFECT_BACKGROUNDTARGET: u32 = 536870912;
 pub const DROPEFFECT_COPY: u32 = 1;
 pub const DROPEFFECT_LINK: u32 = 4;
 pub const DROPEFFECT_MOVE: u32 = 2;
+pub const DROPEFFECT_NEWTARGET: u32 = 1073741824;
 pub const DROPEFFECT_NONE: u32 = 0;
 pub const DROPEFFECT_SCROLL: u32 = 2147483648;
 pub const DROPIMAGE_COPY: i32 = 1;
@@ -653708,6 +656672,7 @@ pub const DS_CONTEXTHELP: i32 = 8192;
 pub const DS_CONTROL: i32 = 1024;
 pub const DS_DEFERRED: i32 = 4;
 pub const DS_DIRECTORY_SERVICE_10_REQUIRED: u32 = 8388608;
+pub const DS_DIRECTORY_SERVICE_12_REQUIRED: u32 = 67108864;
 pub const DS_DIRECTORY_SERVICE_13_REQUIRED: u32 = 33554432;
 pub const DS_DIRECTORY_SERVICE_6_REQUIRED: u32 = 524288;
 pub const DS_DIRECTORY_SERVICE_8_REQUIRED: u32 = 2097152;
@@ -653726,6 +656691,7 @@ pub const DS_DOMAIN_NATIVE_MODE: u32 = 16;
 pub const DS_DOMAIN_PRIMARY: u32 = 8;
 pub const DS_DOMAIN_TREE_ROOT: u32 = 4;
 pub const DS_DS_10_FLAG: u32 = 65536;
+pub const DS_DS_12_FLAG: u32 = 524288;
 pub const DS_DS_13_FLAG: u32 = 262144;
 pub const DS_DS_8_FLAG: u32 = 16384;
 pub const DS_DS_9_FLAG: u32 = 32768;
@@ -654619,6 +657585,7 @@ pub const DT_RTLREADING: u32 = 131072;
 pub const DT_SINGLELINE: u32 = 32;
 pub const DT_TABSTOP: u32 = 128;
 pub const DT_TOP: u32 = 0;
+pub const DT_UPGRADE_VERSION: u32 = 1;
 pub const DT_VCENTER: u32 = 4;
 pub const DT_WORD_ELLIPSIS: u32 = 262144;
 pub const DT_WORDBREAK: u32 = 16;
@@ -656071,9 +659038,13 @@ pub const DXCORE_HARDWARE_TYPE_ATTRIBUTE_COMPUTE_ACCELERATOR: GUID = .{ .Data1 =
 pub const DXCORE_HARDWARE_TYPE_ATTRIBUTE_GPU: GUID = .{ .Data1 = 3063853593, .Data2 = 15853, .Data3 = 17508, .Data4 = .{ 151, 159, 160, 11, 212, 104, 112, 6 } };
 pub const DXCORE_HARDWARE_TYPE_ATTRIBUTE_MEDIA_ACCELERATOR: GUID = .{ .Data1 = 1723709802, .Data2 = 1291, .Data3 = 17607, .Data4 = .{ 164, 253, 209, 68, 206, 10, 180, 67 } };
 pub const DXCORE_HARDWARE_TYPE_ATTRIBUTE_NPU: GUID = .{ .Data1 = 3563143364, .Data2 = 44503, .Data3 = 17691, .Data4 = .{ 158, 86, 6, 254, 140, 59, 88, 237 } };
+pub const DXCoreAdapterPreference_HighPerformance: u32 = 2;
+pub const DXCoreAdapterPreference_MinimumPower: u32 = 1;
 pub const DXCoreHardwareTypeFilterFlags_None: u32 = 0;
 pub const DXCoreRuntimeFilterFlags_D3D12: u32 = 2;
 pub const DXCoreRuntimeFilterFlags_None: u32 = 0;
+pub const DXCoreSingleAdapterHybridMode_HighPerformance: u32 = 2;
+pub const DXCoreSingleAdapterHybridMode_MinimumPower: u32 = 1;
 pub const DxcValidatorFlags_Default: u32 = 0;
 pub const DxcValidatorFlags_InPlaceEdit: u32 = 1;
 pub const DxcValidatorFlags_ModuleOnly: u32 = 4;
@@ -656095,6 +659066,14 @@ pub const DXGI_ADAPTER_FLAG3_REMOTE: i32 = 1;
 pub const DXGI_ADAPTER_FLAG3_SOFTWARE: i32 = 2;
 pub const DXGI_ADAPTER_FLAG3_SUPPORT_MONITORED_FENCES: i32 = 8;
 pub const DXGI_ADAPTER_FLAG3_SUPPORT_NON_MONITORED_FENCES: i32 = 16;
+pub const DXGI_ADAPTER_FLAG4_ACG_COMPATIBLE: i32 = 4;
+pub const DXGI_ADAPTER_FLAG4_KEYED_MUTEX_CONFORMANCE: i32 = 32;
+pub const DXGI_ADAPTER_FLAG4_NONE: i32 = 0;
+pub const DXGI_ADAPTER_FLAG4_REMOTE: i32 = 1;
+pub const DXGI_ADAPTER_FLAG4_SOFTWARE: i32 = 2;
+pub const DXGI_ADAPTER_FLAG4_SUPPORT_MONITORED_FENCES: i32 = 8;
+pub const DXGI_ADAPTER_FLAG4_SUPPORT_NON_MONITORED_FENCES: i32 = 16;
+pub const DXGI_ADAPTER_FLAG4_SUPPORT_SINGLE_ADAPTER_HYBRID_MODE: i32 = 64;
 pub const DXGI_ALPHA_MODE_IGNORE: i32 = 3;
 pub const DXGI_ALPHA_MODE_PREMULTIPLIED: i32 = 1;
 pub const DXGI_ALPHA_MODE_STRAIGHT: i32 = 2;
@@ -656102,6 +659081,7 @@ pub const DXGI_ALPHA_MODE_UNSPECIFIED: i32 = 0;
 pub const DXGI_CENTER_MULTISAMPLE_QUALITY_PATTERN: u32 = 4294967294;
 pub const DXGI_COLOR_SPACE_CUSTOM: i32 = -1;
 pub const DXGI_COLOR_SPACE_RESERVED: i32 = 4;
+pub const DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P2020: i32 = 25;
 pub const DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P709: i32 = 1;
 pub const DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020: i32 = 12;
 pub const DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P2020: i32 = 17;
@@ -656372,6 +659352,8 @@ pub const DXGI_MSG_DXGIGetDebugInterface1_InvalidFlags: i32 = 231;
 pub const DXGI_MSG_DXGIGetDebugInterface1_NULL_ppDebug: i32 = 230;
 pub const DXGI_MSG_IDXGIAdapter_EnumOutputs_UnavailableInSession0: i32 = 127;
 pub const DXGI_MSG_IDXGIAdapter_EnumOutputs2_InvalidEnumOutputs2Flag: i32 = 257;
+pub const DXGI_MSG_IDXGIAdapter5_GetSingleAdapterHybridMode_Unsupported: i32 = 303;
+pub const DXGI_MSG_IDXGIAdapter5_SetSingleAdapterHybridMode_Unsupported: i32 = 304;
 pub const DXGI_MSG_IDXGIDecodeSwapChain_GetDestSize_InvalidPointer: i32 = 245;
 pub const DXGI_MSG_IDXGIDecodeSwapChain_GetSourceRect_InvalidPointer: i32 = 243;
 pub const DXGI_MSG_IDXGIDecodeSwapChain_GetTargetRect_InvalidPointer: i32 = 244;
@@ -656458,6 +659440,8 @@ pub const DXGI_MSG_IDXGIFactory2_RegisterOcclusionStatusEvent_UnsupportedOS: i32
 pub const DXGI_MSG_IDXGIFactory2_RegisterOcclusionStatusWindow_UnsupportedOS: i32 = 192;
 pub const DXGI_MSG_IDXGIFactory2_UnregisterStatus_CookieNotFound: i32 = 129;
 pub const DXGI_MSG_IDXGIFactory7_UnregisterAdaptersChangedEvent_CookieNotFound: i32 = 293;
+pub const DXGI_MSG_IDXGIFactory8_CreateSwapChain_InvalidColorSpace: i32 = 300;
+pub const DXGI_MSG_IDXGIFactory8_CreateSwapChain_InvalidColorSpaceFlag: i32 = 299;
 pub const DXGI_MSG_IDXGIObject_GetPrivateData_puiDataSizeIsNULL: i32 = 64;
 pub const DXGI_MSG_IDXGIOutput_DuplicateOutput_PerMonitorDpiShimApplied: i32 = 291;
 pub const DXGI_MSG_IDXGIOutput_DuplicateOutput1_PerMonitorDpiRequired: i32 = 292;
@@ -656667,6 +659651,8 @@ pub const DXGI_MSG_IDXGISwapChain3_SetHDRMetaData_InvalidPointer: i32 = 280;
 pub const DXGI_MSG_IDXGISwapChain3_SetHDRMetaData_InvalidSize: i32 = 279;
 pub const DXGI_MSG_IDXGISwapChain3_SetHDRMetaData_InvalidType: i32 = 281;
 pub const DXGI_MSG_IDXGISwapChain4_SetHDRMetaData_MetadataUnchanged: i32 = 295;
+pub const DXGI_MSG_IDXGISwapChain5_ResizeBuffers2_InvalidColorSpace: i32 = 301;
+pub const DXGI_MSG_IDXGISwapChain5_SetColorSpace1_Unsupported: i32 = 302;
 pub const DXGI_MSG_Phone_IDXGIFactory_CreateSwapChain_DISCARD_BufferCount: i32 = 1001;
 pub const DXGI_MSG_Phone_IDXGIFactory_CreateSwapChain_FailedRegisterWithCompositor: i32 = 1025;
 pub const DXGI_MSG_Phone_IDXGIFactory_CreateSwapChain_FLIP_Modern_CoreWindow_Only: i32 = 1028;
@@ -656742,6 +659728,9 @@ pub const DXGI_SCALING_NONE: i32 = 1;
 pub const DXGI_SCALING_STRETCH: i32 = 0;
 pub const DXGI_SHARED_RESOURCE_READ: u32 = 2147483648;
 pub const DXGI_SHARED_RESOURCE_WRITE: u32 = 1;
+pub const DXGI_SINGLE_ADAPTER_HYBRID_MODE_HIGH_PERFORMANCE: i32 = 2;
+pub const DXGI_SINGLE_ADAPTER_HYBRID_MODE_MINIMUM_POWER: i32 = 1;
+pub const DXGI_SINGLE_ADAPTER_HYBRID_MODE_UNSPECIFIED: i32 = 0;
 pub const DXGI_STANDARD_MULTISAMPLE_QUALITY_PATTERN: u32 = 4294967295;
 pub const DXGI_STATUS_CLIPPED: HRESULT = 142213122;
 pub const DXGI_STATUS_DDA_WAS_STILL_DRAWING: HRESULT = 142213130;
@@ -656767,6 +659756,7 @@ pub const DXGI_SWAP_CHAIN_FLAG_NONPREROTATED: i32 = 1;
 pub const DXGI_SWAP_CHAIN_FLAG_RESTRICT_SHARED_RESOURCE_DRIVER: i32 = 16;
 pub const DXGI_SWAP_CHAIN_FLAG_RESTRICTED_CONTENT: i32 = 8;
 pub const DXGI_SWAP_CHAIN_FLAG_RESTRICTED_TO_ALL_HOLOGRAPHIC_DISPLAYS: i32 = 4096;
+pub const DXGI_SWAP_CHAIN_FLAG_USE_DEFAULT_COLOR_SPACE: i32 = 32768;
 pub const DXGI_SWAP_CHAIN_FLAG_YUV_VIDEO: i32 = 512;
 pub const DXGI_SWAP_EFFECT_DISCARD: i32 = 0;
 pub const DXGI_SWAP_EFFECT_FLIP_DISCARD: i32 = 4;
@@ -656785,6 +659775,8 @@ pub const DXGK_WIN32K_PARAM_FLAG_UPDATEREGISTRY: u32 = 1;
 pub const DXVA_ALPHA_BLEND_COMBINATION_BUFFER: u32 = 13;
 pub const DXVA_ALPHA_BLEND_COMBINATION_FUNCTION: u32 = 3;
 pub const DXVA_ALPHA_BLEND_DATA_LOAD_FUNCTION: u32 = 2;
+pub const DXVA_APV_MAX_COMPONENTS: u32 = 4;
+pub const DXVA_APV_QM_DIMENSION: u32 = 8;
 pub const DXVA_AYUV_BUFFER: u32 = 8;
 pub const DXVA_BIDIRECTIONAL_AVERAGING_H263_TRUNC: u32 = 1;
 pub const DXVA_BIDIRECTIONAL_AVERAGING_MPEG2_ROUND: u32 = 0;
@@ -656861,6 +659853,13 @@ pub const DXVA_HIGHLIGHT_BUFFER: u32 = 11;
 pub const DXVA_IA44_SURFACE_BUFFER: u32 = 9;
 pub const DXVA_INVERSE_QUANTIZATION_MATRIX_BUFFER: u32 = 5;
 pub const DXVA_MACROBLOCK_CONTROL_BUFFER: u32 = 2;
+pub const DXVA_ModeAPV_VLD_400_10: GUID = .{ .Data1 = 924092514, .Data2 = 27606, .Data3 = 17944, .Data4 = .{ 130, 147, 119, 123, 104, 107, 8, 36 } };
+pub const DXVA_ModeAPV_VLD_422_10: GUID = .{ .Data1 = 577400989, .Data2 = 44562, .Data3 = 17605, .Data4 = .{ 186, 33, 22, 79, 238, 183, 249, 182 } };
+pub const DXVA_ModeAPV_VLD_422_12: GUID = .{ .Data1 = 4143010477, .Data2 = 38117, .Data3 = 19450, .Data4 = .{ 146, 39, 103, 108, 221, 239, 244, 43 } };
+pub const DXVA_ModeAPV_VLD_444_10: GUID = .{ .Data1 = 1783270781, .Data2 = 30224, .Data3 = 18079, .Data4 = .{ 133, 95, 57, 241, 48, 81, 192, 19 } };
+pub const DXVA_ModeAPV_VLD_444_12: GUID = .{ .Data1 = 4043545116, .Data2 = 57864, .Data3 = 17857, .Data4 = .{ 149, 44, 4, 8, 65, 182, 118, 103 } };
+pub const DXVA_ModeAPV_VLD_4444_10: GUID = .{ .Data1 = 3359087033, .Data2 = 38485, .Data3 = 19349, .Data4 = .{ 128, 8, 86, 163, 34, 206, 93, 129 } };
+pub const DXVA_ModeAPV_VLD_4444_12: GUID = .{ .Data1 = 1786134243, .Data2 = 19717, .Data3 = 18430, .Data4 = .{ 164, 41, 114, 52, 116, 182, 157, 124 } };
 pub const DXVA_ModeAV1_VLD_12bit_Profile2: GUID = .{ .Data1 = 387084297, .Data2 = 40975, .Data3 = 19681, .Data4 = .{ 153, 78, 191, 64, 129, 246, 243, 240 } };
 pub const DXVA_ModeAV1_VLD_12bit_Profile2_420: GUID = .{ .Data1 = 763412182, .Data2 = 40108, .Data3 = 18485, .Data4 = .{ 158, 145, 50, 123, 188, 79, 158, 232 } };
 pub const DXVA_ModeAV1_VLD_Profile0: GUID = .{ .Data1 = 3099479243, .Data2 = 53075, .Data3 = 18106, .Data4 = .{ 141, 89, 214, 184, 166, 218, 93, 42 } };
@@ -657924,6 +660923,7 @@ pub const EAP_E_USER_ROOT_CERT_LAST: i32 = -2143157249;
 pub const EAP_E_USER_ROOT_CERT_NOT_FOUND: u32 = 2151809792;
 pub const EAP_EMPTY_CREDENTIAL: i32 = 0;
 pub const EAP_FLAG_CONFG_READONLY: u32 = 524288;
+pub const EAP_FLAG_DISABLE_SESSION_RESUMPTION: u32 = 67108864;
 pub const EAP_FLAG_FULL_AUTH: u32 = 4096;
 pub const EAP_FLAG_GUEST_ACCESS: u32 = 64;
 pub const EAP_FLAG_LOGON: u32 = 4;
@@ -658203,6 +661203,9 @@ pub const eAudioConstrictionOff: i32 = 0;
 pub const eAUTH_TYPE_ANONYMOUS: i32 = 0;
 pub const eAUTH_TYPE_BASIC: i32 = 2;
 pub const eAUTH_TYPE_NTLM: i32 = 1;
+pub const eAV1EncoderOperatingMode_Auto: i32 = 0;
+pub const eAV1EncoderOperatingMode_Optimized: i32 = 2;
+pub const eAV1EncoderOperatingMode_Reference: i32 = 1;
 pub const eAVAudioChannelConfig_BACK_CENTER: i32 = 256;
 pub const eAVAudioChannelConfig_BACK_LEFT: i32 = 16;
 pub const eAVAudioChannelConfig_BACK_RIGHT: i32 = 32;
@@ -658242,6 +661245,7 @@ pub const eAVDecDDOperationalMode_LINE: i32 = 1;
 pub const eAVDecDDOperationalMode_NONE: i32 = 0;
 pub const eAVDecDDOperationalMode_PORTABLE11: i32 = 6;
 pub const eAVDecDDOperationalMode_PORTABLE14: i32 = 7;
+pub const eAVDecDDOperationalMode_PORTABLE16: i32 = 8;
 pub const eAVDecDDOperationalMode_PORTABLE8: i32 = 5;
 pub const eAVDecDDOperationalMode_RF: i32 = 2;
 pub const eAVDecDDStereoDownMixMode_Auto: i32 = 0;
@@ -658539,6 +661543,9 @@ pub const eAVEncVideoColorTransferMatrix_SameAsSource: i32 = 0;
 pub const eAVEncVideoColorTransferMatrix_SMPTE240M: i32 = 3;
 pub const eAVEncVideoContentType_FixedCameraAngle: i32 = 1;
 pub const eAVEncVideoContentType_Unknown: i32 = 0;
+pub const eAVEncVideoEncodeD3D12ReconstructedPictureMode_Copy: i32 = 1;
+pub const eAVEncVideoEncodeD3D12ReconstructedPictureMode_None: i32 = 0;
+pub const eAVEncVideoEncodeD3D12ReconstructedPictureMode_Shared: i32 = 2;
 pub const eAVEncVideoFilmContent_FilmOnly: i32 = 1;
 pub const eAVEncVideoFilmContent_Mixed: i32 = 2;
 pub const eAVEncVideoFilmContent_VideoOnly: i32 = 0;
@@ -660013,6 +663020,26 @@ pub const ENDPOINT_SYSFX_DISABLED: u32 = 1;
 pub const ENDPOINT_SYSFX_ENABLED: u32 = 0;
 pub const EndpointFormFactor_enum_count: i32 = 11;
 pub const EndpointIoControlType: i32 = 0;
+pub const EndpointParamRegNone: i32 = 0;
+pub const EndpointParamRegR8: i32 = 9;
+pub const EndpointParamRegR9: i32 = 10;
+pub const EndpointParamRegRAX: i32 = 1;
+pub const EndpointParamRegRCX: i32 = 2;
+pub const EndpointParamRegRDX: i32 = 3;
+pub const EndpointParamRegXMM0: i32 = 200;
+pub const EndpointParamRegXMM1: i32 = 201;
+pub const EndpointParamRegXMM2: i32 = 202;
+pub const EndpointParamRegXMM3: i32 = 203;
+pub const EndpointReturnTypeNone: i32 = 0;
+pub const EndpointReturnTypeQ0: i32 = 5;
+pub const EndpointReturnTypeQ0_Q1: i32 = 6;
+pub const EndpointReturnTypeQ0_Q2: i32 = 7;
+pub const EndpointReturnTypeQ0_Q3: i32 = 8;
+pub const EndpointReturnTypeX0: i32 = 1;
+pub const EndpointReturnTypeX0_X1: i32 = 2;
+pub const EndpointReturnTypeX0_X2: i32 = 3;
+pub const EndpointReturnTypeX0_X3: i32 = 4;
+pub const EndpointReturnTypeX8: i32 = 9;
 pub const ENDSESSION_CLOSEAPP: u32 = 1;
 pub const ENDSESSION_CRITICAL: u32 = 1073741824;
 pub const ENDSESSION_LOGOFF: u32 = 2147483648;
@@ -661231,6 +664258,7 @@ pub const ERROR_CHILD_PROCESS_BLOCKED: u32 = 367;
 pub const ERROR_CHILD_WINDOW_MENU: u32 = 1436;
 pub const ERROR_CIMFS_IMAGE_CORRUPT: u32 = 470;
 pub const ERROR_CIMFS_IMAGE_VERSION_NOT_SUPPORTED: u32 = 471;
+pub const ERROR_CIMFS_VERIFICATION_FAILED: u32 = 524;
 pub const ERROR_CIRCULAR_DEPENDENCY: u32 = 1059;
 pub const ERROR_CLASS_ALREADY_EXISTS: u32 = 1410;
 pub const ERROR_CLASS_DOES_NOT_EXIST: u32 = 1411;
@@ -661433,8 +664461,11 @@ pub const ERROR_CMD_NOT_FOUND: u32 = 15004;
 pub const ERROR_CMD_TOO_LONG: u32 = 700;
 pub const ERROR_CNU_NOT_READY: u32 = 6256;
 pub const ERROR_CNU_RUN_ALREADY_IN_PROGRESS: u32 = 6254;
+pub const ERROR_CNU_RUN_INIT_FAILED: u32 = 6257;
 pub const ERROR_CNU_RUN_NAME_NOT_FOUND: u32 = 6253;
 pub const ERROR_CNU_RUN_NOT_IN_PROGRESS: u32 = 6255;
+pub const ERROR_CNU_RUN_PREPARE_CLUSTER_FAILED: u32 = 6258;
+pub const ERROR_CNU_RUN_PROCESS_CLUSTER_FAILED: u32 = 6259;
 pub const ERROR_CNU_TEMPLATE_ALREADY_EXISTS: u32 = 6251;
 pub const ERROR_CNU_TEMPLATE_NAME_NOT_FOUND: u32 = 6252;
 pub const ERROR_COLORSPACE_MISMATCH: u32 = 2021;
@@ -661641,6 +664672,7 @@ pub const ERROR_DEVICE_INSTALL_BLOCKED: u32 = 3758096968;
 pub const ERROR_DEVICE_INSTALLER_NOT_READY: u32 = 3758096966;
 pub const ERROR_DEVICE_INTERFACE_ACTIVE: u32 = 3758096923;
 pub const ERROR_DEVICE_INTERFACE_REMOVED: u32 = 3758096924;
+pub const ERROR_DEVICE_NACKED: u32 = 484;
 pub const ERROR_DEVICE_NO_RESOURCES: u32 = 322;
 pub const ERROR_DEVICE_NOT_AVAILABLE: u32 = 4319;
 pub const ERROR_DEVICE_NOT_CONNECTED: u32 = 1167;
@@ -662766,6 +665798,7 @@ pub const ERROR_HV_ACCESS_DENIED: u32 = 3224698886;
 pub const ERROR_HV_ACKNOWLEDGED: u32 = 3224698902;
 pub const ERROR_HV_CPUID_FEATURE_VALIDATION: u32 = 3224698940;
 pub const ERROR_HV_CPUID_XSAVE_FEATURE_VALIDATION: u32 = 3224698941;
+pub const ERROR_HV_DEVICE_ALREADY_IN_DOMAIN: u32 = 3224698982;
 pub const ERROR_HV_DEVICE_NOT_IN_DOMAIN: u32 = 3224698998;
 pub const ERROR_HV_EVENT_BUFFER_ALREADY_FREED: u32 = 3224698996;
 pub const ERROR_HV_FEATURE_UNAVAILABLE: u32 = 3224698910;
@@ -663129,6 +666162,7 @@ pub const ERROR_INVALID_NETNAME: u32 = 1214;
 pub const ERROR_INVALID_OPERATION: u32 = 4317;
 pub const ERROR_INVALID_OPERATION_ON_QUORUM: u32 = 5068;
 pub const ERROR_INVALID_OPLOCK_PROTOCOL: u32 = 301;
+pub const ERROR_INVALID_OPLOCK_REQUEST: u32 = 522;
 pub const ERROR_INVALID_OPTION_TAG: u32 = 15009;
 pub const ERROR_INVALID_OPTION_VALUE: u32 = 15014;
 pub const ERROR_INVALID_ORDINAL: u32 = 182;
@@ -663423,6 +666457,7 @@ pub const ERROR_LINE_NOT_FOUND: u32 = 3758096642;
 pub const ERROR_LINK_FAILURE: u32 = 829;
 pub const ERROR_LINUX_SUBSYSTEM_NOT_PRESENT: u32 = 414;
 pub const ERROR_LINUX_SUBSYSTEM_UPDATE_REQUIRED: u32 = 444;
+pub const ERROR_LINUX_SUBSYSTEM_UPDATE_REQUIRED_LIFTED_REQUIRED: u32 = 820;
 pub const ERROR_LISTBOX_ID_NOT_FOUND: u32 = 1416;
 pub const ERROR_LM_CROSS_ENCRYPTION_REQUIRED: u32 = 1390;
 pub const ERROR_LOCAL_POLICY_MODIFICATION_NOT_SUPPORTED: u32 = 8653;
@@ -664583,6 +667618,7 @@ pub const ERROR_SLIP_REQUIRES_IP: u32 = 729;
 pub const ERROR_SLOT_NOT_PRESENT: u32 = 4;
 pub const ERROR_SMART_CARD_REQUIRED: u32 = 779;
 pub const ERROR_SMARTCARD_SUBSYSTEM_FAILURE: u32 = 1264;
+pub const ERROR_SMB_ALTERNATIVE_PORT_CONFLICT: HRESULT = -1067646965;
 pub const ERROR_SMB_BAD_CLUSTER_DIALECT: HRESULT = -1067646975;
 pub const ERROR_SMB_CERT_NO_PRIVATE_KEY: HRESULT = -1067646970;
 pub const ERROR_SMB_ENCRYPTION_NOT_SUPPORTED_BY_PEER: HRESULT = -1067646971;
@@ -665073,6 +668109,9 @@ pub const ERROR_VID_CHILD_GPA_PAGE_SET_CORRUPTED: u32 = 3224829966;
 pub const ERROR_VID_DUPLICATE_HANDLER: u32 = 3224829953;
 pub const ERROR_VID_EXCEEDED_KM_CONTEXT_COUNT_LIMIT: u32 = 3224829982;
 pub const ERROR_VID_EXCEEDED_MBP_ENTRY_MAP_LIMIT: u32 = 3224829964;
+pub const ERROR_VID_GPA_RANGE_INVALID_FLAGS: u32 = 3224830016;
+pub const ERROR_VID_GPA_RANGE_INVARIANTS_MISMATCH: u32 = 3224830026;
+pub const ERROR_VID_GPA_RANGE_OVERLAP_PROHIBITED: u32 = 3224830024;
 pub const ERROR_VID_HANDLER_NOT_PRESENT: u32 = 3224829956;
 pub const ERROR_VID_INSUFFICIENT_RESOURCES_HV_DEPOSIT: u32 = 3224829997;
 pub const ERROR_VID_INSUFFICIENT_RESOURCES_PHYSICAL_BUFFER: u32 = 3224829996;
@@ -665088,12 +668127,34 @@ pub const ERROR_VID_INVALID_OBJECT_NAME: u32 = 3224829957;
 pub const ERROR_VID_INVALID_PPM_HANDLE: u32 = 3224829976;
 pub const ERROR_VID_INVALID_PROCESSOR_STATE: u32 = 3224829981;
 pub const ERROR_VID_KM_INTERFACE_ALREADY_INITIALIZED: u32 = 3224829983;
+pub const ERROR_VID_KSR_ALREADY_PERSISTED: u32 = 3224830018;
+pub const ERROR_VID_KSR_ALREADY_UNPERSISTED: u32 = 3224830019;
+pub const ERROR_VID_KSR_CLIENT_TYPE_MISMATCH: u32 = 3224830021;
+pub const ERROR_VID_KSR_INVALID_PERSIST_ID: u32 = 3224830014;
+pub const ERROR_VID_KSR_INVALID_PERSISTENCE_OPTIONS: u32 = 3224830015;
+pub const ERROR_VID_KSR_INVALID_STATE: u32 = 3224830022;
+pub const ERROR_VID_KSR_IOHANDLER_PROPERTY_MISMATCH: u32 = 3224830008;
+pub const ERROR_VID_KSR_MEMORY_PARTITION_STATE_SIZE_MISMATCH: u32 = 3224830010;
+pub const ERROR_VID_KSR_METADATA_MISMATCH: u32 = 3224830011;
+pub const ERROR_VID_KSR_MSR_HANDLER_PROPERTY_MISMATCH: u32 = 3224830009;
+pub const ERROR_VID_KSR_NOT_READY: u32 = 3224830023;
+pub const ERROR_VID_KSR_PERSISTED_ITEMS_STILL_REGISTERED: u32 = 3224830004;
+pub const ERROR_VID_KSR_PERSISTENCE_DISALLOWED: u32 = 3224830020;
+pub const ERROR_VID_KSR_PSCI_HANDLER_PROPERTY_MISMATCH: u32 = 3224830027;
+pub const ERROR_VID_KSR_TOTAL_PAGE_COUNT_MISMATCH: u32 = 3224830012;
 pub const ERROR_VID_MB_PROPERTY_ALREADY_SET_RESET: u32 = 3224829984;
 pub const ERROR_VID_MB_STILL_REFERENCED: u32 = 3224829965;
 pub const ERROR_VID_MBP_ALREADY_LOCKED_USING_RESERVED_PAGE: u32 = 3224829989;
+pub const ERROR_VID_MBP_ARRAY_NOT_PERSISTED: u32 = 3224830013;
 pub const ERROR_VID_MBP_COUNT_EXCEEDED_LIMIT: u32 = 3224829990;
 pub const ERROR_VID_MBPS_ARE_LOCKED: u32 = 3224829977;
+pub const ERROR_VID_MEMORY_BLOCK_INVALID_FLAGS: u32 = 3224830017;
+pub const ERROR_VID_MEMORY_BLOCK_INVARIANTS_MISMATCH: u32 = 3224830002;
 pub const ERROR_VID_MEMORY_BLOCK_LOCK_COUNT_EXCEEDED: u32 = 3224829975;
+pub const ERROR_VID_MEMORY_BLOCK_PAGECOUNT_MISMATCH: u32 = 3224830007;
+pub const ERROR_VID_MEMORY_BLOCK_RESTORE_STATE_MISMATCH: u32 = 3224830003;
+pub const ERROR_VID_MEMORY_PARTITION_SETUP_FAILED: u32 = 3224830005;
+pub const ERROR_VID_MEMORY_RESERVE_NOT_ENABLED: u32 = 3224830006;
 pub const ERROR_VID_MEMORY_TYPE_NOT_SUPPORTED: u32 = 3224829998;
 pub const ERROR_VID_MESSAGE_QUEUE_ALREADY_EXISTS: u32 = 3224829963;
 pub const ERROR_VID_MESSAGE_QUEUE_CLOSED: u32 = 3224829978;
@@ -665104,8 +668165,10 @@ pub const ERROR_VID_NOTIFICATION_QUEUE_ALREADY_ASSOCIATED: u32 = 3224829969;
 pub const ERROR_VID_PAGE_RANGE_OVERFLOW: u32 = 3224829971;
 pub const ERROR_VID_PARTITION_ALREADY_EXISTS: u32 = 3224829960;
 pub const ERROR_VID_PARTITION_DOES_NOT_EXIST: u32 = 3224829961;
+pub const ERROR_VID_PARTITION_INVARIANTS_MISMATCH: u32 = 3224830001;
 pub const ERROR_VID_PARTITION_NAME_NOT_FOUND: u32 = 3224829962;
 pub const ERROR_VID_PARTITION_NAME_TOO_LONG: u32 = 3224829958;
+pub const ERROR_VID_PARTITION_NOT_HIERARCHICAL_HOST: u32 = 3224830025;
 pub const ERROR_VID_PROCESS_ALREADY_SET: u32 = 3224830000;
 pub const ERROR_VID_QUEUE_FULL: u32 = 3224829955;
 pub const ERROR_VID_REMOTE_NODE_PARENT_GPA_PAGES_USED: u32 = 2151088129;
@@ -665276,6 +668339,7 @@ pub const ERROR_VRF_VOLATILE_PROTECTED_DRIVER: u32 = 3085;
 pub const ERROR_VRF_VOLATILE_SAFE_MODE: u32 = 3082;
 pub const ERROR_VRF_VOLATILE_SETTINGS_CONFLICT: u32 = 3087;
 pub const ERROR_VSM_DMA_PROTECTION_NOT_IN_USE: u32 = 4561;
+pub const ERROR_VSM_FW_MEASUREMENTS_SEAL_FAILURE: u32 = 4566;
 pub const ERROR_VSM_KEY_CI_POLICY_ROLLBACK_DETECTED: u32 = 4562;
 pub const ERROR_VSM_NOT_INITIALIZED: u32 = 4560;
 pub const ERROR_VSMB_SAVED_STATE_CORRUPT: u32 = 3224830977;
@@ -666263,6 +669327,7 @@ pub const EVENT_CRAWL_SCHEDULED: i32 = 1073744884;
 pub const EVENT_DATA_DESCRIPTOR_TYPE_EVENT_METADATA: u32 = 1;
 pub const EVENT_DATA_DESCRIPTOR_TYPE_NONE: u32 = 0;
 pub const EVENT_DATA_DESCRIPTOR_TYPE_PROVIDER_METADATA: u32 = 2;
+pub const EVENT_DATA_DESCRIPTOR_TYPE_RESERVED1: u32 = 4;
 pub const EVENT_DATA_DESCRIPTOR_TYPE_TIMESTAMP_OVERRIDE: u32 = 3;
 pub const EVENT_DAV_REDIR_DELAYED_WRITE_FAILED: i32 = -2147468848;
 pub const EVENT_DCOM_ASSERTION_FAILURE: i32 = -1073731812;
@@ -666564,6 +669629,7 @@ pub const EVENT_HEADER_FLAG_EXTENDED_INFO: u32 = 1;
 pub const EVENT_HEADER_FLAG_NO_CPUTIME: u32 = 16;
 pub const EVENT_HEADER_FLAG_PRIVATE_SESSION: u32 = 2;
 pub const EVENT_HEADER_FLAG_PROCESSOR_INDEX: u32 = 512;
+pub const EVENT_HEADER_FLAG_RESERVED1: u32 = 1024;
 pub const EVENT_HEADER_FLAG_STRING_ONLY: u32 = 4;
 pub const EVENT_HEADER_FLAG_TRACE_MESSAGE: u32 = 8;
 pub const EVENT_HEADER_PROPERTY_FORWARDED_XML: u32 = 2;
@@ -667194,6 +670260,8 @@ pub const EVENT_WIN32_ERROR: i32 = -2147473633;
 pub const EVENT_WINNAT_SESSION_LIMIT_REACHED: i32 = -2147466648;
 pub const EVENT_WINSOCK_CLOSESOCKET_STUCK: i32 = -2147467646;
 pub const EVENT_WINSOCK_TDI_FILTER_DETECTED: i32 = -2147467647;
+pub const EVENT_WINSOCK_TDI_PROVIDER_BLOCKED: i32 = -2147467644;
+pub const EVENT_WINSOCK_TDI_PROVIDER_DETECTED: i32 = -2147467645;
 pub const EVENT_WMDM_CONTENT_TRANSFER: GUID = .{ .Data1 = 865901556, .Data2 = 48382, .Data3 = 20184, .Data4 = .{ 148, 223, 234, 248, 194, 106, 182, 27 } };
 pub const EVENT_WRITE_FLAG_INPRIVATE: u32 = 2;
 pub const EVENT_WRITE_FLAG_NO_FAULTING: u32 = 1;
@@ -667335,6 +670403,7 @@ pub const EventMetadataEventVersion: i32 = 1;
 pub const EventOpcodeInformation: i32 = 4;
 pub const EventProviderBinaryTrackInfo: i32 = 0;
 pub const EventProviderSetReserved1: i32 = 1;
+pub const EventProviderSetReserved2: i32 = 4;
 pub const EventProviderSetTraits: i32 = 2;
 pub const EventProviderUseDescriptorType: i32 = 3;
 pub const EventSecurityAddDACL: i32 = 2;
@@ -668035,6 +671104,7 @@ pub const FACILITY_SETUPAPI: u32 = 15;
 pub const FACILITY_SHARED_VHDX: u32 = 92;
 pub const FACILITY_SHELL: u32 = 39;
 pub const FACILITY_SIP_STATUS_CODE: u32 = 239;
+pub const FACILITY_SL_ACS: u32 = 20;
 pub const FACILITY_SL_ITF: u32 = 4;
 pub const FACILITY_SMB: u32 = 93;
 pub const FACILITY_SOS: u32 = 160;
@@ -668310,6 +671380,7 @@ pub const FAST_FAIL_INVALID_NEXT_THREAD: u32 = 30;
 pub const FAST_FAIL_INVALID_PFN: u32 = 63;
 pub const FAST_FAIL_INVALID_REFERENCE_COUNT: u32 = 14;
 pub const FAST_FAIL_INVALID_SET_OF_CONTEXT: u32 = 13;
+pub const FAST_FAIL_INVALID_SME_STATE: u32 = 78;
 pub const FAST_FAIL_INVALID_SYSCALL_NUMBER: u32 = 41;
 pub const FAST_FAIL_INVALID_THREAD: u32 = 40;
 pub const FAST_FAIL_INVALID_THREAD_STATE: u32 = 74;
@@ -668999,6 +672070,7 @@ pub const FILE_DEVICE_CHANGER: u32 = 48;
 pub const FILE_DEVICE_CONSOLE: u32 = 80;
 pub const FILE_DEVICE_CONTROLLER: u32 = 4;
 pub const FILE_DEVICE_CRYPT_PROVIDER: u32 = 63;
+pub const FILE_DEVICE_CXL_TYPE3: u32 = 103;
 pub const FILE_DEVICE_DATALINK: u32 = 5;
 pub const FILE_DEVICE_DEVAPI: u32 = 71;
 pub const FILE_DEVICE_DFS: u32 = 6;
@@ -669031,6 +672103,7 @@ pub const FILE_DEVICE_MOUSE: u32 = 15;
 pub const FILE_DEVICE_MT_COMPOSITE: u32 = 66;
 pub const FILE_DEVICE_MT_TRANSPORT: u32 = 67;
 pub const FILE_DEVICE_MULTI_UNC_PROVIDER: u32 = 16;
+pub const FILE_DEVICE_MULTITIER_MEMORY: u32 = 102;
 pub const FILE_DEVICE_NAMED_PIPE: u32 = 17;
 pub const FILE_DEVICE_NETWORK: u32 = 18;
 pub const FILE_DEVICE_NETWORK_BROWSER: u32 = 19;
@@ -669314,6 +672387,7 @@ pub const FileIdExtdDirectoryInfo: i32 = 19;
 pub const FileIdExtdDirectoryRestartInfo: i32 = 20;
 pub const FileIdInfo: i32 = 18;
 pub const FileIdType: i32 = 0;
+pub const FILEINFO_POSSIBLE_DEADLOCK_LIVE_DUMP: u32 = 519;
 pub const FileInformationInAssemblyOfAssemblyInActivationContext: i32 = 4;
 pub const FileInformationInAssemblyOfAssemblyInActivationContxt: i32 = 4;
 pub const FileIoGuid: GUID = .{ .Data1 = 2429279289, .Data2 = 19006, .Data3 = 4561, .Data4 = .{ 132, 244, 0, 0, 248, 4, 100, 227 } };
@@ -670659,6 +673733,7 @@ pub const FSCTL_ADD_OVERLAY: u32 = 623408;
 pub const FSCTL_ADVANCE_FILE_ID: u32 = 590532;
 pub const FSCTL_ALLOW_EXTENDED_DASD_IO: u32 = 589955;
 pub const FSCTL_CASCADES_REFS_SET_FILE_REMOTE: u32 = 591004;
+pub const FSCTL_CIMFS_QUERY_BACKING_REGION_NAMES: u32 = 591008;
 pub const FSCTL_CLEAN_VOLUME_METADATA: u32 = 590716;
 pub const FSCTL_CLEAR_ALL_LCN_WEAK_REFERENCES: u32 = 590956;
 pub const FSCTL_CLEAR_LCN_WEAK_REFERENCE: u32 = 590948;
@@ -670801,6 +673876,11 @@ pub const FSCTL_REFS_SET_VOLUME_COMPRESSION_INFO: u32 = 590932;
 pub const FSCTL_REFS_SET_VOLUME_DEDUP_INFO: u32 = 590960;
 pub const FSCTL_REFS_SET_VOLUME_IO_METRICS_INFO: u32 = 590984;
 pub const FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT: u32 = 590912;
+pub const FSCTL_REFS_VOLUME_ATTESTATION_BIND_TO_TPM: u32 = 591020;
+pub const FSCTL_REFS_VOLUME_ATTESTATION_INJECT_CERTIFICATE: u32 = 591016;
+pub const FSCTL_REFS_VOLUME_ATTESTATION_PREPARE_TO_SIGN: u32 = 591012;
+pub const FSCTL_REFS_VOLUME_ATTESTATION_QUERY_STATUS: u32 = 591024;
+pub const FSCTL_REFS_VOLUME_ATTESTATION_RESET: u32 = 591028;
 pub const FSCTL_REMOVE_OVERLAY: u32 = 623412;
 pub const FSCTL_REPAIR_COPIES: u32 = 639668;
 pub const FSCTL_REQUEST_BATCH_OPLOCK: u32 = 589832;
@@ -671455,6 +674535,7 @@ pub const FVE_E_BAD_INFORMATION: HRESULT = -2144272368;
 pub const FVE_E_BAD_PARTITION_SIZE: HRESULT = -2144272364;
 pub const FVE_E_BAD_TPM_DATUM_ASSOCIATION: HRESULT = -2144272135;
 pub const FVE_E_BCD_APPLICATIONS_PATH_INCORRECT: HRESULT = -2144272302;
+pub const FVE_E_BOOT_CRIT_DEVICE_UNEXPECTED_BEHAVIOR: HRESULT = -1070530291;
 pub const FVE_E_BOOTABLE_CDDVD: HRESULT = -2144272336;
 pub const FVE_E_BUFFER_TOO_LARGE: HRESULT = -2144272177;
 pub const FVE_E_CANNOT_ENCRYPT_NO_KEY: HRESULT = -2144272338;
@@ -671551,6 +674632,8 @@ pub const FVE_E_LIVEID_ACCOUNT_SUSPENDED: HRESULT = -2144272190;
 pub const FVE_E_LOCKED_VOLUME: HRESULT = -2144272384;
 pub const FVE_E_MATCHING_PCRS_TPM_FAILURE: HRESULT = -2144272133;
 pub const FVE_E_METADATA_FULL: HRESULT = -2144272148;
+pub const FVE_E_METHOD_MISMATCH: HRESULT = -1070530278;
+pub const FVE_E_MISSING_PROTECTORS: HRESULT = -1070530279;
 pub const FVE_E_MOR_FAILED: HRESULT = -2144272299;
 pub const FVE_E_MSA_BACKUP_CACHE_NOT_ALLOCATED: HRESULT = -2144272131;
 pub const FVE_E_MULTIPLE_NKP_CERTS: HRESULT = -2144272227;
@@ -671580,6 +674663,7 @@ pub const FVE_E_NOT_ALLOWED_IN_SAFE_MODE: HRESULT = -2144272320;
 pub const FVE_E_NOT_ALLOWED_IN_VERSION: HRESULT = -2144272301;
 pub const FVE_E_NOT_ALLOWED_ON_CLUSTER: HRESULT = -2144272210;
 pub const FVE_E_NOT_ALLOWED_ON_CSV_STACK: HRESULT = -2144272211;
+pub const FVE_E_NOT_ALLOWED_ON_EPHEMERAL_VOLUME: HRESULT = -1070530282;
 pub const FVE_E_NOT_ALLOWED_TO_UPGRADE_WHILE_CONVERTING: HRESULT = -2144272205;
 pub const FVE_E_NOT_DATA_VOLUME: HRESULT = -2144272359;
 pub const FVE_E_NOT_DE_VOLUME: HRESULT = -2144272169;
@@ -671677,10 +674761,11 @@ pub const FVE_E_TPM_INVALID_PCR: HRESULT = -2144272319;
 pub const FVE_E_TPM_NO_VMK: HRESULT = -2144272318;
 pub const FVE_E_TPM_NONEXISTENT: HRESULT = -2144272128;
 pub const FVE_E_TPM_NOT_OWNED: HRESULT = -2144272360;
-pub const FVE_E_TPM_PCRS_DO_NOT_MATCH_LOG: HRESULT = -1070530282;
+pub const FVE_E_TPM_PCRS_DO_NOT_MATCH_LOG: HRESULT = -1070530280;
 pub const FVE_E_TPM_SRK_AUTH_NOT_ZERO: HRESULT = -2144272347;
 pub const FVE_E_TPMPV2_USED_FAILURE: HRESULT = -1070530293;
 pub const FVE_E_TRANSIENT_STATE: HRESULT = -2144272297;
+pub const FVE_E_UNTRUSTED_OFFLOAD_STORAGE: HRESULT = -1070530281;
 pub const FVE_E_UPDATE_INVALID_CONFIG: HRESULT = -2144272152;
 pub const FVE_E_VIRTUALIZED_SPACE_TOO_BIG: HRESULT = -2144272247;
 pub const FVE_E_VOLUME_BOUND_ALREADY: HRESULT = -2144272353;
@@ -675154,6 +678239,10 @@ pub const GRADIENT_FILL_RECT_H: u32 = 0;
 pub const GRADIENT_FILL_RECT_V: u32 = 1;
 pub const GRADIENT_FILL_TRIANGLE: u32 = 2;
 pub const GRANT_ACCESS: i32 = 1;
+pub const GraphFormGraph: i32 = 1;
+pub const GraphFormLinearFlow: i32 = 3;
+pub const GraphFormTree: i32 = 2;
+pub const GraphFormUnspecified: i32 = 0;
 pub const Graphics: u32 = 0;
 pub const GRAPHICS_EFFECT_PROPERTY_MAPPING_COLOR_TO_VECTOR3: i32 = 9;
 pub const GRAPHICS_EFFECT_PROPERTY_MAPPING_COLOR_TO_VECTOR4: i32 = 10;
@@ -675538,6 +678627,7 @@ pub const GUID_ContainerFormatWebp: GUID = .{ .Data1 = 3767840994, .Data2 = 2661
 pub const GUID_ContainerFormatWmp: GUID = .{ .Data1 = 1470332074, .Data2 = 13946, .Data3 = 17728, .Data4 = .{ 145, 107, 241, 131, 197, 9, 58, 75 } };
 pub const GUID_CRITICAL_POWER_TRANSITION: GUID = .{ .Data1 = 3080876069, .Data2 = 58729, .Data3 = 18114, .Data4 = .{ 165, 4, 43, 150, 202, 210, 37, 161 } };
 pub const GUID_CustomForce: GUID = .{ .Data1 = 324279339, .Data2 = 36403, .Data3 = 4560, .Data4 = .{ 154, 208, 0, 160, 201, 160, 110, 53 } };
+pub const GUID_CXL_INTERFACE: GUID = .{ .Data1 = 772404458, .Data2 = 63092, .Data3 = 18198, .Data4 = .{ 140, 142, 69, 136, 118, 88, 6, 95 } };
 pub const GUID_D3COLD_AUX_POWER_AND_TIMING_INTERFACE: GUID = .{ .Data1 = 4511914, .Data2 = 63076, .Data3 = 17800, .Data4 = .{ 159, 252, 42, 254, 175, 89, 80, 185 } };
 pub const GUID_D3COLD_SUPPORT_INTERFACE: GUID = .{ .Data1 = 3011678437, .Data2 = 15568, .Data3 = 20381, .Data4 = .{ 153, 55, 245, 254, 43, 68, 212, 122 } };
 pub const GUID_D3DCallbacks: GUID = .{ .Data1 = 2079353232, .Data2 = 34708, .Data3 = 4560, .Data4 = .{ 145, 57, 8, 0, 54, 210, 239, 2 } };
@@ -675617,6 +678707,7 @@ pub const GUID_DEVCLASS_LEGACYDRIVER: GUID = .{ .Data1 = 2395735389, .Data2 = 11
 pub const GUID_DEVCLASS_MEDIA: GUID = .{ .Data1 = 1295444332, .Data2 = 58149, .Data3 = 4558, .Data4 = .{ 191, 193, 8, 0, 43, 225, 3, 24 } };
 pub const GUID_DEVCLASS_MEDIUM_CHANGER: GUID = .{ .Data1 = 3461953966, .Data2 = 60382, .Data3 = 4560, .Data4 = .{ 177, 129, 0, 0, 248, 117, 62, 196 } };
 pub const GUID_DEVCLASS_MEMORY: GUID = .{ .Data1 = 1352242250, .Data2 = 63161, .Data3 = 16471, .Data4 = .{ 160, 86, 140, 85, 2, 40, 84, 76 } };
+pub const GUID_DEVCLASS_MIDIENDPOINT: GUID = .{ .Data1 = 1982777493, .Data2 = 63940, .Data3 = 16647, .Data4 = .{ 168, 26, 8, 216, 228, 55, 195, 229 } };
 pub const GUID_DEVCLASS_MODEM: GUID = .{ .Data1 = 1295444333, .Data2 = 58149, .Data3 = 4558, .Data4 = .{ 191, 193, 8, 0, 43, 225, 3, 24 } };
 pub const GUID_DEVCLASS_MONITOR: GUID = .{ .Data1 = 1295444334, .Data2 = 58149, .Data3 = 4558, .Data4 = .{ 191, 193, 8, 0, 43, 225, 3, 24 } };
 pub const GUID_DEVCLASS_MOUSE: GUID = .{ .Data1 = 1295444335, .Data2 = 58149, .Data3 = 4558, .Data4 = .{ 191, 193, 8, 0, 43, 225, 3, 24 } };
@@ -675638,17 +678729,21 @@ pub const GUID_DEVCLASS_PRINTER: GUID = .{ .Data1 = 1295444345, .Data2 = 58149, 
 pub const GUID_DEVCLASS_PRINTERUPGRADE: GUID = .{ .Data1 = 1295444346, .Data2 = 58149, .Data3 = 4558, .Data4 = .{ 191, 193, 8, 0, 43, 225, 3, 24 } };
 pub const GUID_DEVCLASS_PRINTQUEUE: GUID = .{ .Data1 = 517127161, .Data2 = 4592, .Data3 = 16516, .Data4 = .{ 178, 31, 173, 131, 168, 230, 220, 220 } };
 pub const GUID_DEVCLASS_PROCESSOR: GUID = .{ .Data1 = 1343389123, .Data2 = 3894, .Data3 = 16734, .Data4 = .{ 166, 204, 76, 179, 190, 145, 11, 101 } };
+pub const GUID_DEVCLASS_PROXIMITY: GUID = .{ .Data1 = 1446019868, .Data2 = 1737, .Data3 = 18518, .Data4 = .{ 179, 39, 245, 211, 37, 134, 224, 96 } };
 pub const GUID_DEVCLASS_SBP2: GUID = .{ .Data1 = 3565255102, .Data2 = 60448, .Data3 = 4561, .Data4 = .{ 182, 184, 0, 192, 79, 163, 114, 167 } };
 pub const GUID_DEVCLASS_SCMDISK: GUID = .{ .Data1 = 1402367153, .Data2 = 19782, .Data3 = 16742, .Data4 = .{ 191, 35, 197, 34, 64, 60, 212, 149 } };
 pub const GUID_DEVCLASS_SCMVOLUME: GUID = .{ .Data1 = 1405923657, .Data2 = 58691, .Data3 = 19588, .Data4 = .{ 182, 224, 188, 228, 246, 183, 232, 6 } };
 pub const GUID_DEVCLASS_SCSIADAPTER: GUID = .{ .Data1 = 1295444347, .Data2 = 58149, .Data3 = 4558, .Data4 = .{ 191, 193, 8, 0, 43, 225, 3, 24 } };
+pub const GUID_DEVCLASS_SDHOST: GUID = .{ .Data1 = 2695202980, .Data2 = 50287, .Data3 = 19255, .Data4 = .{ 183, 234, 200, 47, 232, 152, 112, 198 } };
 pub const GUID_DEVCLASS_SECURITYACCELERATOR: GUID = .{ .Data1 = 646747553, .Data2 = 60926, .Data3 = 4563, .Data4 = .{ 149, 195, 0, 16, 220, 64, 80, 165 } };
+pub const GUID_DEVCLASS_SECURITYDEVICES: GUID = .{ .Data1 = 3645826520, .Data2 = 53641, .Data3 = 18836, .Data4 = .{ 131, 210, 246, 141, 125, 65, 176, 230 } };
 pub const GUID_DEVCLASS_SENSOR: GUID = .{ .Data1 = 1366676276, .Data2 = 50033, .Data3 = 18438, .Data4 = .{ 179, 186, 113, 253, 83, 201, 37, 141 } };
 pub const GUID_DEVCLASS_SIDESHOW: GUID = .{ .Data1 = 2574998925, .Data2 = 50242, .Data3 = 20270, .Data4 = .{ 186, 243, 156, 142, 103, 30, 158, 33 } };
 pub const GUID_DEVCLASS_SMARTCARDREADER: GUID = .{ .Data1 = 1356681776, .Data2 = 47754, .Data3 = 4561, .Data4 = .{ 191, 93, 0, 0, 248, 5, 245, 48 } };
 pub const GUID_DEVCLASS_SMRDISK: GUID = .{ .Data1 = 1397259299, .Data2 = 26639, .Data3 = 17797, .Data4 = .{ 172, 195, 31, 16, 214, 119, 126, 130 } };
 pub const GUID_DEVCLASS_SMRVOLUME: GUID = .{ .Data1 = 1404292867, .Data2 = 36698, .Data3 = 18312, .Data4 = .{ 145, 182, 209, 158, 217, 252, 204, 191 } };
 pub const GUID_DEVCLASS_SOFTWARECOMPONENT: GUID = .{ .Data1 = 1548497714, .Data2 = 13389, .Data3 = 18492, .Data4 = .{ 135, 57, 37, 158, 147, 76, 156, 200 } };
+pub const GUID_DEVCLASS_SOFTWAREDEVICE: GUID = .{ .Data1 = 1660536641, .Data2 = 45658, .Data3 = 18126, .Data4 = .{ 181, 76, 155, 204, 206, 8, 182, 242 } };
 pub const GUID_DEVCLASS_SOUND: GUID = .{ .Data1 = 1295444348, .Data2 = 58149, .Data3 = 4558, .Data4 = .{ 191, 193, 8, 0, 43, 225, 3, 24 } };
 pub const GUID_DEVCLASS_SYSTEM: GUID = .{ .Data1 = 1295444349, .Data2 = 58149, .Data3 = 4558, .Data4 = .{ 191, 193, 8, 0, 43, 225, 3, 24 } };
 pub const GUID_DEVCLASS_TAPEDRIVE: GUID = .{ .Data1 = 1837136004, .Data2 = 32033, .Data3 = 4559, .Data4 = .{ 128, 28, 8, 0, 43, 225, 3, 24 } };
@@ -675656,6 +678751,8 @@ pub const GUID_DEVCLASS_THERMAL: GUID = .{ .Data1 = 3392150753, .Data2 = 29948, 
 pub const GUID_DEVCLASS_UCM: GUID = .{ .Data1 = 3874597404, .Data2 = 32571, .Data3 = 17523, .Data4 = .{ 178, 232, 201, 125, 138, 199, 29, 83 } };
 pub const GUID_DEVCLASS_UNKNOWN: GUID = .{ .Data1 = 1295444350, .Data2 = 58149, .Data3 = 4558, .Data4 = .{ 191, 193, 8, 0, 43, 225, 3, 24 } };
 pub const GUID_DEVCLASS_USB: GUID = .{ .Data1 = 922525280, .Data2 = 50277, .Data3 = 4559, .Data4 = .{ 128, 86, 68, 69, 83, 84, 0, 0 } };
+pub const GUID_DEVCLASS_USBDEVICE: GUID = .{ .Data1 = 2293948466, .Data2 = 23169, .Data3 = 18928, .Data4 = .{ 188, 61, 164, 255, 19, 130, 22, 214 } };
+pub const GUID_DEVCLASS_USBFUNCTIONCONTROLLER: GUID = .{ .Data1 = 3149825844, .Data2 = 2298, .Data3 = 18790, .Data4 = .{ 182, 166, 78, 90, 208, 16, 205, 215 } };
 pub const GUID_DEVCLASS_VOLUME: GUID = .{ .Data1 = 1906474205, .Data2 = 33066, .Data3 = 4560, .Data4 = .{ 190, 199, 8, 0, 43, 226, 9, 47 } };
 pub const GUID_DEVCLASS_VOLUMESNAPSHOT: GUID = .{ .Data1 = 1396464516, .Data2 = 60528, .Data3 = 4562, .Data4 = .{ 149, 5, 0, 192, 79, 121, 222, 175 } };
 pub const GUID_DEVCLASS_WCEUSBS: GUID = .{ .Data1 = 635162193, .Data2 = 27791, .Data3 = 19058, .Data4 = .{ 138, 109, 181, 76, 43, 79, 200, 53 } };
@@ -676043,6 +679140,7 @@ pub const GUID_MONITOR_POWER_ON: GUID = .{ .Data1 = 41095189, .Data2 = 17680, .D
 pub const GUID_MotionCompCallbacks: GUID = .{ .Data1 = 2970757952, .Data2 = 23973, .Data3 = 4561, .Data4 = .{ 143, 207, 0, 192, 79, 194, 155, 78 } };
 pub const GUID_MouseClass: GUID = .{ .Data1 = 1295444335, .Data2 = 58149, .Data3 = 4558, .Data4 = .{ 191, 193, 8, 0, 43, 225, 3, 24 } };
 pub const GUID_MSIX_TABLE_CONFIG_INTERFACE: GUID = .{ .Data1 = 443172363, .Data2 = 6479, .Data3 = 17757, .Data4 = .{ 179, 75, 184, 76, 91, 5, 113, 43 } };
+pub const GUID_MTM_BUS_INTERFACE: GUID = .{ .Data1 = 163060969, .Data2 = 40551, .Data3 = 20023, .Data4 = .{ 146, 137, 198, 236, 195, 0, 25, 114 } };
 pub const GUID_NativeDeviceService: GUID = .{ .Data1 = 4017218876, .Data2 = 21236, .Data3 = 17349, .Data4 = .{ 184, 106, 173, 108, 178, 22, 166, 30 } };
 pub const GUID_NDIS_802_11_ADD_KEY: GUID = .{ .Data1 = 2878036578, .Data2 = 7505, .Data3 = 18904, .Data4 = .{ 186, 92, 250, 152, 11, 224, 58, 29 } };
 pub const GUID_NDIS_802_11_ADD_WEP: GUID = .{ .Data1 = 1124581360, .Data2 = 8489, .Data3 = 4564, .Data4 = .{ 151, 235, 0, 192, 79, 121, 196, 3 } };
@@ -676245,6 +679343,8 @@ pub const GUID_OCP_DEVICE_TCG_HISTORY: GUID = .{ .Data1 = 1883984190, .Data2 = 2
 pub const GUID_OCP_DEVICE_TCG_HISTORYGuid: GUID = .{ .Data1 = 1883984190, .Data2 = 2502, .Data3 = 38032, .Data4 = .{ 39, 78, 208, 150, 150, 144, 215, 136 } };
 pub const GUID_OCP_DEVICE_UNSUPPORTED_REQUIREMENTS: GUID = .{ .Data1 = 245133871, .Data2 = 9113, .Data3 = 47916, .Data4 = .{ 99, 72, 50, 208, 183, 152, 187, 199 } };
 pub const GUID_OCP_DEVICE_UNSUPPORTED_REQUIREMENTSGuid: GUID = .{ .Data1 = 245133871, .Data2 = 9113, .Data3 = 47916, .Data4 = .{ 99, 72, 50, 208, 183, 152, 187, 199 } };
+pub const GUID_OCP_DSSD_SPECIFIC_INFORMATION: GUID = .{ .Data1 = 1540723905, .Data2 = 38112, .Data3 = 37959, .Data4 = .{ 162, 29, 41, 153, 143, 86, 190, 111 } };
+pub const GUID_OCP_DSSD_SPECIFIC_INFORMATIONGuid: GUID = .{ .Data1 = 1540723905, .Data2 = 38112, .Data3 = 37959, .Data4 = .{ 162, 29, 41, 153, 143, 86, 190, 111 } };
 pub const GUID_OPTIONVALUEEXCLUSIVE: GUID = .{ .Data1 = 1716536075, .Data2 = 48655, .Data3 = 4122, .Data4 = .{ 139, 187, 0, 170, 0, 48, 12, 171 } };
 pub const GUID_OptSurfaceKmodeInfo: GUID = .{ .Data1 = 3764159602, .Data2 = 20948, .Data3 = 4561, .Data4 = .{ 140, 206, 0, 160, 201, 6, 41, 168 } };
 pub const GUID_OptSurfaceUmodeInfo: GUID = .{ .Data1 = 2641963012, .Data2 = 24488, .Data3 = 4561, .Data4 = .{ 140, 208, 0, 160, 201, 6, 41, 168 } };
@@ -676276,6 +679376,7 @@ pub const GUID_PCI_ATS_INTERFACE: GUID = .{ .Data1 = 17465320, .Data2 = 38645, .
 pub const GUID_PCI_BUS_INTERFACE_STANDARD: GUID = .{ .Data1 = 1231782529, .Data2 = 28453, .Data3 = 4560, .Data4 = .{ 190, 175, 8, 0, 43, 226, 9, 47 } };
 pub const GUID_PCI_BUS_INTERFACE_STANDARD2: GUID = .{ .Data1 = 3734301030, .Data2 = 65023, .Data3 = 19612, .Data4 = .{ 153, 152, 103, 71, 177, 80, 231, 76 } };
 pub const GUID_PCI_DEVICE_PRESENT_INTERFACE: GUID = .{ .Data1 = 3518508070, .Data2 = 48969, .Data3 = 17903, .Data4 = .{ 178, 22, 113, 203, 215, 136, 155, 87 } };
+pub const GUID_PCI_DOE_INTERFACE: GUID = .{ .Data1 = 1662517740, .Data2 = 16573, .Data3 = 18253, .Data4 = .{ 137, 210, 15, 217, 215, 179, 214, 169 } };
 pub const GUID_PCI_EXPRESS_LINK_QUIESCENT_INTERFACE: GUID = .{ .Data1 = 342676508, .Data2 = 56035, .Data3 = 17463, .Data4 = .{ 138, 255, 42, 243, 240, 56, 9, 155 } };
 pub const GUID_PCI_EXPRESS_ROOT_PORT_INTERFACE: GUID = .{ .Data1 = 2208789322, .Data2 = 33991, .Data3 = 16737, .Data4 = .{ 154, 152, 96, 0, 237, 12, 74, 51 } };
 pub const GUID_PCI_FPGA_CONTROL_INTERFACE: GUID = .{ .Data1 = 770963368, .Data2 = 47539, .Data3 = 16483, .Data4 = .{ 146, 21, 181, 209, 74, 11, 38, 110 } };
@@ -676343,6 +679444,9 @@ pub const GUID_PROCESSOR_DUTY_CYCLING: GUID = .{ .Data1 = 1313099955, .Data2 = 2
 pub const GUID_PROCESSOR_FREQUENCY_LIMIT: GUID = .{ .Data1 = 1974513215, .Data2 = 48352, .Data3 = 17831, .Data4 = .{ 140, 137, 201, 97, 28, 37, 225, 0 } };
 pub const GUID_PROCESSOR_FREQUENCY_LIMIT_1: GUID = .{ .Data1 = 1974513215, .Data2 = 48352, .Data3 = 17831, .Data4 = .{ 140, 137, 201, 97, 28, 37, 225, 1 } };
 pub const GUID_PROCESSOR_FREQUENCY_LIMIT_2: GUID = .{ .Data1 = 1974513215, .Data2 = 48352, .Data3 = 17831, .Data4 = .{ 140, 137, 201, 97, 28, 37, 225, 2 } };
+pub const GUID_PROCESSOR_FREQUENCY_MINIMUM: GUID = .{ .Data1 = 717827306, .Data2 = 24314, .Data3 = 18971, .Data4 = .{ 190, 213, 26, 43, 217, 170, 11, 148 } };
+pub const GUID_PROCESSOR_FREQUENCY_MINIMUM_1: GUID = .{ .Data1 = 717827306, .Data2 = 24314, .Data3 = 18971, .Data4 = .{ 190, 213, 26, 43, 217, 170, 11, 149 } };
+pub const GUID_PROCESSOR_FREQUENCY_MINIMUM_2: GUID = .{ .Data1 = 717827306, .Data2 = 24314, .Data3 = 18971, .Data4 = .{ 190, 213, 26, 43, 217, 170, 11, 150 } };
 pub const GUID_PROCESSOR_HETERO_CONTAINMENT_DECREASE_TIME: GUID = .{ .Data1 = 1878080235, .Data2 = 30871, .Data3 = 17238, .Data4 = .{ 153, 153, 221, 153, 48, 175, 6, 95 } };
 pub const GUID_PROCESSOR_HETERO_CONTAINMENT_EFFICIENCY_IMP_UTIL_THRESHOLD: GUID = .{ .Data1 = 1859034655, .Data2 = 46813, .Data3 = 17087, .Data4 = .{ 177, 183, 90, 81, 43, 16, 192, 146 } };
 pub const GUID_PROCESSOR_HETERO_CONTAINMENT_EFFICIENCY_THRESHOLD: GUID = .{ .Data1 = 1766038306, .Data2 = 8731, .Data3 = 18480, .Data4 = .{ 189, 52, 247, 188, 236, 226, 69, 131 } };
@@ -676369,6 +679473,7 @@ pub const GUID_PROCESSOR_LATENCY_HINT_MIN_UNPARK_1: GUID = .{ .Data1 = 163452381
 pub const GUID_PROCESSOR_LONG_THREAD_ARCH_CLASS_LOWER_THRESHOLD: GUID = .{ .Data1 = 1139964092, .Data2 = 3978, .Data3 = 18128, .Data4 = .{ 139, 49, 154, 35, 230, 21, 215, 19 } };
 pub const GUID_PROCESSOR_LONG_THREAD_ARCH_CLASS_UPPER_THRESHOLD: GUID = .{ .Data1 = 3213901107, .Data2 = 40228, .Data3 = 18899, .Data4 = .{ 164, 104, 230, 94, 3, 37, 4, 106 } };
 pub const GUID_PROCESSOR_MODULE_PARKING_POLICY: GUID = .{ .Data1 = 2967383915, .Data2 = 22976, .Data3 = 17699, .Data4 = .{ 138, 69, 202, 127, 64, 36, 65, 20 } };
+pub const GUID_PROCESSOR_PACKAGE_C6_POLICY: GUID = .{ .Data1 = 4229628252, .Data2 = 60277, .Data3 = 18794, .Data4 = .{ 171, 71, 2, 139, 4, 89, 200, 248 } };
 pub const GUID_PROCESSOR_PARKING_CONCURRENCY_THRESHOLD: GUID = .{ .Data1 = 607169391, .Data2 = 42272, .Data3 = 17570, .Data4 = .{ 150, 1, 247, 242, 59, 81, 52, 177 } };
 pub const GUID_PROCESSOR_PARKING_CORE_OVERRIDE: GUID = .{ .Data1 = 2773881514, .Data2 = 63012, .Data3 = 17094, .Data4 = .{ 164, 67, 115, 151, 208, 100, 192, 79 } };
 pub const GUID_PROCESSOR_PARKING_DISTRIBUTION_THRESHOLD: GUID = .{ .Data1 = 1272640745, .Data2 = 53507, .Data3 = 18135, .Data4 = .{ 165, 240, 98, 128, 18, 22, 22, 239 } };
@@ -676404,6 +679509,9 @@ pub const GUID_PROCESSOR_PERF_LATENCY_HINT: GUID = .{ .Data1 = 136503089, .Data2
 pub const GUID_PROCESSOR_PERF_LATENCY_HINT_EPP: GUID = .{ .Data1 = 1265694976, .Data2 = 52697, .Data3 = 20070, .Data4 = .{ 170, 38, 174, 132, 23, 249, 129, 115 } };
 pub const GUID_PROCESSOR_PERF_LATENCY_HINT_EPP_1: GUID = .{ .Data1 = 1265694976, .Data2 = 52697, .Data3 = 20070, .Data4 = .{ 170, 38, 174, 132, 23, 249, 129, 116 } };
 pub const GUID_PROCESSOR_PERF_LATENCY_HINT_EPP_2: GUID = .{ .Data1 = 1265694976, .Data2 = 52697, .Data3 = 20070, .Data4 = .{ 170, 38, 174, 132, 23, 249, 129, 117 } };
+pub const GUID_PROCESSOR_PERF_LATENCY_HINT_FREQ: GUID = .{ .Data1 = 2166368561, .Data2 = 44219, .Data3 = 16476, .Data4 = .{ 167, 238, 62, 43, 164, 134, 111, 111 } };
+pub const GUID_PROCESSOR_PERF_LATENCY_HINT_FREQ_1: GUID = .{ .Data1 = 2166368561, .Data2 = 44219, .Data3 = 16476, .Data4 = .{ 167, 238, 62, 43, 164, 134, 111, 112 } };
+pub const GUID_PROCESSOR_PERF_LATENCY_HINT_FREQ_2: GUID = .{ .Data1 = 2166368561, .Data2 = 44219, .Data3 = 16476, .Data4 = .{ 167, 238, 62, 43, 164, 134, 111, 113 } };
 pub const GUID_PROCESSOR_PERF_LATENCY_HINT_PERF: GUID = .{ .Data1 = 1637577989, .Data2 = 59, .Data3 = 20098, .Data4 = .{ 183, 166, 77, 210, 156, 48, 9, 113 } };
 pub const GUID_PROCESSOR_PERF_LATENCY_HINT_PERF_1: GUID = .{ .Data1 = 1637577989, .Data2 = 59, .Data3 = 20098, .Data4 = .{ 183, 166, 77, 210, 156, 48, 9, 114 } };
 pub const GUID_PROCESSOR_PERF_LATENCY_HINT_PERF_2: GUID = .{ .Data1 = 1637577989, .Data2 = 59, .Data3 = 20098, .Data4 = .{ 183, 166, 77, 210, 156, 48, 9, 115 } };
@@ -676549,6 +679657,7 @@ pub const GUID_STATUS_MEDIA_SPECIFIC_INDICATION_EX: GUID = .{ .Data1 = 286346359
 pub const GUID_STIUserDefined1: GUID = .{ .Data1 = 3222189973, .Data2 = 35950, .Data3 = 4562, .Data4 = .{ 151, 122, 0, 0, 248, 122, 146, 111 } };
 pub const GUID_STIUserDefined2: GUID = .{ .Data1 = 3346721221, .Data2 = 35950, .Data3 = 4562, .Data4 = .{ 151, 122, 0, 0, 248, 122, 146, 111 } };
 pub const GUID_STIUserDefined3: GUID = .{ .Data1 = 3346721222, .Data2 = 35950, .Data3 = 4562, .Data4 = .{ 151, 122, 0, 0, 248, 122, 146, 111 } };
+pub const GUID_STORPORT_PAGING_DEVICE_DUMP: GUID = .{ .Data1 = 3376006971, .Data2 = 6108, .Data3 = 19012, .Data4 = .{ 144, 76, 226, 217, 135, 245, 38, 73 } };
 pub const GUID_STRING_SIZE: u32 = 40;
 pub const GUID_SysKeyboard: GUID = .{ .Data1 = 1864182625, .Data2 = 54688, .Data3 = 4559, .Data4 = .{ 191, 199, 68, 69, 83, 84, 0, 0 } };
 pub const GUID_SysKeyboardEm: GUID = .{ .Data1 = 1864182658, .Data2 = 54688, .Data3 = 4559, .Data4 = .{ 191, 199, 68, 69, 83, 84, 0, 0 } };
@@ -677020,6 +680129,7 @@ pub const HCS_E_HYPERV_NOT_INSTALLED: HRESULT = -2143878910;
 pub const HCS_E_IMAGE_MISMATCH: HRESULT = -2143878911;
 pub const HCS_E_INVALID_JSON: HRESULT = -2143878899;
 pub const HCS_E_INVALID_LAYER: HRESULT = -2143878894;
+pub const HCS_E_INVALID_PROCESSOR_TOPOLOGY: HRESULT = -2143878878;
 pub const HCS_E_INVALID_STATE: HRESULT = -2143878907;
 pub const HCS_E_OPERATION_ALREADY_CANCELLED: HRESULT = -2143878879;
 pub const HCS_E_OPERATION_ALREADY_STARTED: HRESULT = -2143878890;
@@ -677113,6 +680223,7 @@ pub const HcsResourceTypeComObject: i32 = 3;
 pub const HcsResourceTypeFile: i32 = 1;
 pub const HcsResourceTypeJob: i32 = 2;
 pub const HcsResourceTypeNone: i32 = 0;
+pub const HcsResourceTypeSection: i32 = 5;
 pub const HcsResourceTypeSocket: i32 = 4;
 pub const HDATA_APPOWNED: u32 = 1;
 pub const hdBase: i32 = 0;
@@ -677306,6 +680417,7 @@ pub const HEAP_FREE_CHECKING_ENABLED: u32 = 64;
 pub const HEAP_GENERATE_EXCEPTIONS: u32 = 4;
 pub const HEAP_GROWABLE: u32 = 2;
 pub const HEAP_MAXIMUM_TAG: u32 = 4095;
+pub const HEAP_MEMORY_USAGE_INFO_CURRENT_VERSION: u32 = 1;
 pub const HEAP_NO_SERIALIZE: u32 = 1;
 pub const HEAP_NONE: u32 = 0;
 pub const HEAP_OPTIMIZE_RESOURCES_CURRENT_VERSION: u32 = 1;
@@ -677321,6 +680433,7 @@ pub const HeapEnableTerminationOnCorruption: i32 = 1;
 pub const HeapEnumerationEverything: i32 = 0;
 pub const HeapEnumerationStop: i32 = -1;
 pub const HeapFullPageHeap: i32 = 1073741824;
+pub const HeapMemoryUsageInformation: i32 = 8;
 pub const HeapMetadata: i32 = -2147483648;
 pub const HeapOptimizeResources: i32 = 3;
 pub const HeapStateMask: i32 = -65536;
@@ -677358,6 +680471,49 @@ pub const HEVC_TEMPORAL_VIDEO_SUBSET: i32 = 37;
 pub const HEVC_VIDEO_OR_TEMPORAL_VIDEO: i32 = 36;
 pub const HF32_DEFAULT: u32 = 1;
 pub const HF32_SHARED: u32 = 2;
+pub const HFP_AG_BRSF_SUPPORTED_FEATURE_CODEC_NEGOTIATION: u32 = 512;
+pub const HFP_AG_BRSF_SUPPORTED_FEATURE_ECHO_CANCELLATION: u32 = 2;
+pub const HFP_AG_BRSF_SUPPORTED_FEATURE_ENHANCED_CALL_CONTROL: u32 = 128;
+pub const HFP_AG_BRSF_SUPPORTED_FEATURE_ENHANCED_CALL_STATUS: u32 = 64;
+pub const HFP_AG_BRSF_SUPPORTED_FEATURE_ESCO_S4_SETTINGS: u32 = 2048;
+pub const HFP_AG_BRSF_SUPPORTED_FEATURE_EXTENDED_ERROR_CODES: u32 = 256;
+pub const HFP_AG_BRSF_SUPPORTED_FEATURE_HF_INDICATORS: u32 = 1024;
+pub const HFP_AG_BRSF_SUPPORTED_FEATURE_INBAND_RING_TONE: u32 = 8;
+pub const HFP_AG_BRSF_SUPPORTED_FEATURE_REJECT_CALL: u32 = 32;
+pub const HFP_AG_BRSF_SUPPORTED_FEATURE_THREE_WAY_CALLING: u32 = 1;
+pub const HFP_AG_BRSF_SUPPORTED_FEATURE_VOICE_RECOGNITION: u32 = 4;
+pub const HFP_AG_BRSF_SUPPORTED_FEATURE_VOICE_TAG: u32 = 16;
+pub const HFP_AG_SDP_SUPPORTED_FEATURE_ECHO_CANCELLATION: u32 = 2;
+pub const HFP_AG_SDP_SUPPORTED_FEATURE_ENHANCED_VOICE_RECOGNITION: u32 = 64;
+pub const HFP_AG_SDP_SUPPORTED_FEATURE_INBAND_RING_TONE: u32 = 8;
+pub const HFP_AG_SDP_SUPPORTED_FEATURE_SUPER_WIDE_BAND_SPEECH: u32 = 256;
+pub const HFP_AG_SDP_SUPPORTED_FEATURE_THREE_WAY_CALLING: u32 = 1;
+pub const HFP_AG_SDP_SUPPORTED_FEATURE_VOICE_RECOGNITION: u32 = 4;
+pub const HFP_AG_SDP_SUPPORTED_FEATURE_VOICE_RECOGNITION_TEXT: u32 = 128;
+pub const HFP_AG_SDP_SUPPORTED_FEATURE_VOICE_TAG: u32 = 16;
+pub const HFP_AG_SDP_SUPPORTED_FEATURE_WIDE_BAND_SPEECH: u32 = 32;
+pub const HFP_HF_BRSF_SUPPORTED_FEATURE_CLI_PRESENTATION: u32 = 4;
+pub const HFP_HF_BRSF_SUPPORTED_FEATURE_CODEC_NEGOTIATION: u32 = 128;
+pub const HFP_HF_BRSF_SUPPORTED_FEATURE_ECHO_CANCELLATION: u32 = 1;
+pub const HFP_HF_BRSF_SUPPORTED_FEATURE_ENHANCED_CALL_CONTROL: u32 = 64;
+pub const HFP_HF_BRSF_SUPPORTED_FEATURE_ENHANCED_CALL_STATUS: u32 = 32;
+pub const HFP_HF_BRSF_SUPPORTED_FEATURE_ENHANCED_VOICE_RECOGNITION: u32 = 1024;
+pub const HFP_HF_BRSF_SUPPORTED_FEATURE_ESCO_S4_SETTINGS: u32 = 512;
+pub const HFP_HF_BRSF_SUPPORTED_FEATURE_HF_INDICATORS: u32 = 256;
+pub const HFP_HF_BRSF_SUPPORTED_FEATURE_REMOTE_VOLUME_CONTROL: u32 = 16;
+pub const HFP_HF_BRSF_SUPPORTED_FEATURE_THREE_WAY_CALLING: u32 = 2;
+pub const HFP_HF_BRSF_SUPPORTED_FEATURE_VOICE_RECOGNITION: u32 = 8;
+pub const HFP_HF_BRSF_SUPPORTED_FEATURE_VOICE_RECOGNITION_TEXT: u32 = 2048;
+pub const HFP_HF_SDP_SUPPORTED_FEATURE_CLI_PRESENTATION: u32 = 4;
+pub const HFP_HF_SDP_SUPPORTED_FEATURE_ECHO_CANCELLATION: u32 = 1;
+pub const HFP_HF_SDP_SUPPORTED_FEATURE_ENHANCED_VOICE_RECOGNITION: u32 = 64;
+pub const HFP_HF_SDP_SUPPORTED_FEATURE_REMOTE_VOLUME_CONTROL: u32 = 16;
+pub const HFP_HF_SDP_SUPPORTED_FEATURE_SUPER_WIDE_BAND_SPEECH: u32 = 128;
+pub const HFP_HF_SDP_SUPPORTED_FEATURE_THREE_WAY_CALLING: u32 = 2;
+pub const HFP_HF_SDP_SUPPORTED_FEATURE_VOICE_RECOGNITION: u32 = 8;
+pub const HFP_HF_SDP_SUPPORTED_FEATURE_WIDE_BAND_SPEECH: u32 = 32;
+pub const HFP_NETWORK_ABILITY_TO_REJECT: u32 = 1;
+pub const HFP_NETWORK_NO_ABILITY_TO_REJECT: u32 = 0;
 pub const HGLPS_CLOSED: i32 = 1;
 pub const HGLPS_OPENED: i32 = 2;
 pub const HGSC_DOCUMENTSLIBRARY: i32 = 8;
@@ -678762,13 +681918,16 @@ pub const HID_USAGE_HAPTICS_MANUAL_TRIGGER: u16 = 33;
 pub const HID_USAGE_HAPTICS_REPEAT_COUNT: u16 = 36;
 pub const HID_USAGE_HAPTICS_RETRIGGER_PERIOD: u16 = 37;
 pub const HID_USAGE_HAPTICS_SIMPLE_CONTROLLER: u16 = 1;
+pub const HID_USAGE_HAPTICS_WAVEFORM_ALIGN: u16 = 4115;
 pub const HID_USAGE_HAPTICS_WAVEFORM_BRUSH_CONTINUOUS: u16 = 4111;
 pub const HID_USAGE_HAPTICS_WAVEFORM_BUZZ: u16 = 4100;
 pub const HID_USAGE_HAPTICS_WAVEFORM_CHISEL_MARKER_CONTINUOUS: u16 = 4110;
 pub const HID_USAGE_HAPTICS_WAVEFORM_CLICK: u16 = 4099;
+pub const HID_USAGE_HAPTICS_WAVEFORM_COLLIDE: u16 = 4114;
 pub const HID_USAGE_HAPTICS_WAVEFORM_CUTOFF_TIME: u16 = 40;
 pub const HID_USAGE_HAPTICS_WAVEFORM_ERASER_CONTINUOUS: u16 = 4112;
 pub const HID_USAGE_HAPTICS_WAVEFORM_ERROR: u16 = 4106;
+pub const HID_USAGE_HAPTICS_WAVEFORM_GROW: u16 = 4117;
 pub const HID_USAGE_HAPTICS_WAVEFORM_HOVER: u16 = 4104;
 pub const HID_USAGE_HAPTICS_WAVEFORM_INK_CONTINUOUS: u16 = 4107;
 pub const HID_USAGE_HAPTICS_WAVEFORM_LIST: u16 = 16;
@@ -678779,6 +681938,7 @@ pub const HID_USAGE_HAPTICS_WAVEFORM_PRESS: u16 = 4102;
 pub const HID_USAGE_HAPTICS_WAVEFORM_RELEASE: u16 = 4103;
 pub const HID_USAGE_HAPTICS_WAVEFORM_RUMBLE: u16 = 4101;
 pub const HID_USAGE_HAPTICS_WAVEFORM_SPARKLE_CONTINUOUS: u16 = 4113;
+pub const HID_USAGE_HAPTICS_WAVEFORM_STEP: u16 = 4116;
 pub const HID_USAGE_HAPTICS_WAVEFORM_STOP: u16 = 4098;
 pub const HID_USAGE_HAPTICS_WAVEFORM_SUCCESS: u16 = 4105;
 pub const HID_USAGE_HAPTICS_WAVEFORM_VENDOR_ID: u16 = 39;
@@ -680407,7 +683567,6 @@ pub const HIGHLY_DELAY_SENSITIVE: u32 = 4294967294;
 pub const HighMemoryResourceNotification: i32 = 1;
 pub const HighPassFilter: i32 = 2;
 pub const HighPassOnePoleFilter: i32 = 5;
-pub const HighPerformance: u32 = 2;
 pub const HighSpeed: u32 = 3;
 pub const HILS_HOT: i32 = 2;
 pub const HILS_NORMAL: i32 = 1;
@@ -684999,10 +688158,13 @@ pub const IMAGE_FILE_MACHINE_AM33: u16 = 467;
 pub const IMAGE_FILE_MACHINE_AMD64: u16 = 34404;
 pub const IMAGE_FILE_MACHINE_ARM: u16 = 448;
 pub const IMAGE_FILE_MACHINE_ARM64: u16 = 43620;
+pub const IMAGE_FILE_MACHINE_ARM64EC: u32 = 42561;
+pub const IMAGE_FILE_MACHINE_ARM64X: u32 = 42574;
 pub const IMAGE_FILE_MACHINE_ARMNT: u16 = 452;
 pub const IMAGE_FILE_MACHINE_AXP64: u16 = 644;
 pub const IMAGE_FILE_MACHINE_CEE: u16 = 49390;
 pub const IMAGE_FILE_MACHINE_CEF: u16 = 3311;
+pub const IMAGE_FILE_MACHINE_CHPE_X86: u32 = 14948;
 pub const IMAGE_FILE_MACHINE_EBC: u16 = 3772;
 pub const IMAGE_FILE_MACHINE_I386: u16 = 332;
 pub const IMAGE_FILE_MACHINE_IA64: u16 = 512;
@@ -685084,6 +688246,8 @@ pub const IMAGE_HOT_PATCH_INFO_FLAG_PATCHORDERCRITICAL: u32 = 1;
 pub const IMAGE_HOT_PATCH_NO_CALL_TARGET: u32 = 409600;
 pub const IMAGE_HOT_PATCH_NONE: u32 = 0;
 pub const IMAGE_HOT_PATCH_REL32: u32 = 245760;
+pub const IMAGE_HOTSWAP_ENDPOINT_INFO_V2: u32 = 2;
+pub const IMAGE_HOTSWAP_ENDPOINT_TABLE_SECTION = ".shsept";
 pub const IMAGE_ICON: u32 = 1;
 pub const IMAGE_NT_OPTIONAL_HDR_MAGIC: u16 = 523;
 pub const IMAGE_NT_OPTIONAL_HDR32_MAGIC: u16 = 267;
@@ -685525,6 +688689,7 @@ pub const IMAGEHLP_RMAP_FIXUP_IMAGEBASE: u32 = 2147483648;
 pub const IMAGEHLP_RMAP_IGNORE_MISCOMPARE: u32 = 4;
 pub const IMAGEHLP_RMAP_LOAD_RW_DATA_SECTIONS: u32 = 536870912;
 pub const IMAGEHLP_RMAP_MAPPED_FLAT: u32 = 1;
+pub const IMAGEHLP_RMAP_NOBASERELOCATIONS: u32 = 134217728;
 pub const IMAGEHLP_RMAP_OMIT_SHARED_RW_DATA_SECTIONS: u32 = 1073741824;
 pub const IMAGEHLP_SYMBOL_FUNCTION: u32 = 2048;
 pub const IMAGEHLP_SYMBOL_INFO_CONSTANT: u32 = 256;
@@ -687741,6 +690906,7 @@ pub const InterpolationModeLowQuality: i32 = 1;
 pub const InterpolationModeNearestNeighbor: i32 = 5;
 pub const INTERRUPT_EXCEPTION_NOT_HANDLED: u32 = 61;
 pub const INTERRUPT_UNWIND_ATTEMPTED: u32 = 60;
+pub const INTERRUPTS_STATE_MISMATCH: u32 = 522;
 pub const IntrinsicBool: i32 = 1;
 pub const IntrinsicChar: i32 = 2;
 pub const IntrinsicChar16: i32 = 10;
@@ -687755,6 +690921,7 @@ pub const IntrinsicVoid: i32 = 0;
 pub const IntrinsicWChar: i32 = 3;
 pub const INVALID_AFFINITY_SET: u32 = 3;
 pub const INVALID_ALTERNATE_SYSTEM_CALL_HANDLER_REGISTRATION: u32 = 480;
+pub const INVALID_CACHED_SYSTEM_TABLE: u32 = 516;
 pub const INVALID_CALLBACK_STACK_ADDRESS: u32 = 461;
 pub const INVALID_CANCEL_OF_FILE_OPEN: u32 = 232;
 pub const INVALID_CONNECTION_ID: u32 = 0;
@@ -688229,6 +691396,7 @@ pub const IOCTL_KS_READ_STREAM: u32 = 3096599;
 pub const IOCTL_KS_RESET_STATE: u32 = 3080219;
 pub const IOCTL_KS_WRITE_STREAM: u32 = 3112979;
 pub const IOCTL_MINIPORT_PROCESS_SERVICE_IRP: u32 = 315448;
+pub const IOCTL_MINIPORT_SIGNATURE_BOOT_PARTITION = "BOOTPINF";
 pub const IOCTL_MINIPORT_SIGNATURE_DSM_GENERAL = "MPDSMGEN";
 pub const IOCTL_MINIPORT_SIGNATURE_DSM_NOTIFICATION = "MPDSM   ";
 pub const IOCTL_MINIPORT_SIGNATURE_ENDURANCE_INFO = "ENDURINF";
@@ -688436,6 +691604,9 @@ pub const IOCTL_STORAGE_ALLOCATE_BC_STREAM: u32 = 3004420;
 pub const IOCTL_STORAGE_ATTRIBUTE_MANAGEMENT: u32 = 3005596;
 pub const IOCTL_STORAGE_BASE: u32 = 45;
 pub const IOCTL_STORAGE_BC_VERSION: u32 = 1;
+pub const IOCTL_STORAGE_BOOT_PARTITION_ACTIVATE: u32 = 3005456;
+pub const IOCTL_STORAGE_BOOT_PARTITION_DOWNLOAD: u32 = 3005452;
+pub const IOCTL_STORAGE_BOOT_PARTITION_GET_INFO: u32 = 2956308;
 pub const IOCTL_STORAGE_BREAK_RESERVATION: u32 = 2969620;
 pub const IOCTL_STORAGE_CHECK_PRIORITY_HINT_SUPPORT: u32 = 2955392;
 pub const IOCTL_STORAGE_CHECK_VERIFY: u32 = 2967552;
@@ -690414,9 +693585,9 @@ pub const JET_efvUsePersistedFormat: u32 = 1073741826;
 pub const JET_efvWindows10v2004: u32 = 9180;
 pub const JET_efvWindows11v21H2: u32 = 9400;
 pub const JET_efvWindows11v22H2: u32 = 9480;
-pub const JET_efvWindows11v23H2: u32 = 9600;
 pub const JET_efvWindows19H1Rtm: u32 = 8920;
 pub const JET_efvWindowsServer2022: u32 = 9360;
+pub const JET_efvWindowsServer2025: u32 = 9620;
 pub const JET_errAccessDenied: i32 = -1907;
 pub const JET_errAfterInitialization: i32 = -1850;
 pub const JET_errAlreadyInitialized: i32 = -1030;
@@ -690441,8 +693612,10 @@ pub const JET_errBadPageLink: i32 = -327;
 pub const JET_errBadParentPageLink: i32 = -338;
 pub const JET_errBadPatchPage: i32 = -535;
 pub const JET_errBadRestoreTargetInstance: i32 = -577;
+pub const JET_errBadRootPageLink: i32 = -366;
 pub const JET_errBBTBuffCorrupted: i32 = -365;
 pub const JET_errBBTNodeCorrupted: i32 = -364;
+pub const JET_errBlockedByCorruptionMark: i32 = -1233;
 pub const JET_errBufferTooSmall: i32 = -1038;
 pub const JET_errCallbackFailed: i32 = -2101;
 pub const JET_errCallbackNotResolved: i32 = -2102;
@@ -690501,6 +693674,7 @@ pub const JET_errCommittedLogFileCorrupt: i32 = -586;
 pub const JET_errCommittedLogFilesMissing: i32 = -582;
 pub const JET_errConsistentTimeMismatch: i32 = -551;
 pub const JET_errContainerNotEmpty: i32 = -1043;
+pub const JET_errCopySignatureMismatchCannotRestart: i32 = -8003;
 pub const JET_errDatabase200Format: i32 = -1210;
 pub const JET_errDatabase400Format: i32 = -1211;
 pub const JET_errDatabase500Format: i32 = -1212;
@@ -690724,6 +693898,8 @@ pub const JET_errOutOfSessions: i32 = -1101;
 pub const JET_errOutOfThreads: i32 = -103;
 pub const JET_errPageBoundary: i32 = -323;
 pub const JET_errPageInitializedMismatch: i32 = -596;
+pub const JET_errPageInitializedMismatchUninitLocal: i32 = -597;
+pub const JET_errPageInitializedMismatchUninitRemote: i32 = -596;
 pub const JET_errPageNotInitialized: i32 = -1019;
 pub const JET_errPageSizeMismatch: i32 = -1213;
 pub const JET_errPageTagCorrupted: i32 = -357;
@@ -690943,7 +694119,7 @@ pub const JET_paramMaxOpenTables: u32 = 6;
 pub const JET_paramMaxSessions: u32 = 5;
 pub const JET_paramMaxTemporaryTables: u32 = 10;
 pub const JET_paramMaxTransactionSize: u32 = 178;
-pub const JET_paramMaxValueInvalid: u32 = 232;
+pub const JET_paramMaxValueInvalid: u32 = 249;
 pub const JET_paramMaxVerPages: u32 = 9;
 pub const JET_paramMinDataForXpress: u32 = 183;
 pub const JET_paramNoInformationEvent: u32 = 50;
@@ -691042,6 +694218,7 @@ pub const JET_wrnColumnSkipped: u32 = 1531;
 pub const JET_wrnColumnTruncated: u32 = 1534;
 pub const JET_wrnCommittedLogFilesLost: u32 = 585;
 pub const JET_wrnCommittedLogFilesRemoved: u32 = 587;
+pub const JET_wrnCopyCompletedAlready: u32 = 8002;
 pub const JET_wrnCopyLongValue: u32 = 1520;
 pub const JET_wrnCorruptIndexDeleted: u32 = 1415;
 pub const JET_wrnDatabaseAttached: u32 = 1007;
@@ -691291,6 +694468,7 @@ pub const JobObjectBasicProcessIdList: i32 = 3;
 pub const JobObjectBasicUIRestrictions: i32 = 4;
 pub const JobObjectCompletionCounter: i32 = 17;
 pub const JobObjectCompletionFilter: i32 = 16;
+pub const JobObjectCpuPartition: i32 = 52;
 pub const JobObjectCpuRateControlInformation: i32 = 15;
 pub const JobObjectCreateSilo: i32 = 35;
 pub const JobObjectEndOfJobTimeInformation: i32 = 6;
@@ -691857,6 +695035,7 @@ pub const KCCR_COOKIE_KNOWLEDGE_CONTAINED: i32 = 1;
 pub const KCCR_COOKIE_KNOWLEDGE_CONTAINS: i32 = 2;
 pub const KCCR_COOKIE_KNOWLEDGE_EQUAL: i32 = 0;
 pub const KCCR_COOKIE_KNOWLEDGE_NOT_COMPARABLE: i32 = 3;
+pub const KCSAN_RACY_ACCESS: u32 = 517;
 pub const KD_SECONDARY_VERSION_AMD64_CONTEXT: u32 = 2;
 pub const KD_SECONDARY_VERSION_AMD64_OBSOLETE_CONTEXT_1: u32 = 0;
 pub const KD_SECONDARY_VERSION_AMD64_OBSOLETE_CONTEXT_2: u32 = 1;
@@ -695999,6 +699178,7 @@ pub const LSA_LOCAL_SECRET_PREFIX = L("L$");
 pub const LSA_LOCAL_SECRET_PREFIX_LENGTH: u32 = 2;
 pub const LSA_LOOKUP_DISALLOW_CONNECTED_ACCOUNT_INTERNET_SID: u32 = 2147483648;
 pub const LSA_LOOKUP_ISOLATED_AS_LOCAL: u32 = 2147483648;
+pub const LSA_LOOKUP_PREFER_EXTERNAL_SID: u32 = 1073741824;
 pub const LSA_LOOKUP_PREFER_INTERNET_NAMES: u32 = 1073741824;
 pub const LSA_MACHINE_SECRET_PREFIX = L("M$");
 pub const LSA_MAXIMUM_ENUMERATION_LENGTH: u32 = 32000;
@@ -696671,6 +699851,7 @@ pub const MANUALLY_INITIATED_BLACKSCREEN_HOTKEY_LIVE_DUMP: u32 = 8648;
 pub const MANUALLY_INITIATED_CRASH: u32 = 226;
 pub const MANUALLY_INITIATED_CRASH1: u32 = 3735936685;
 pub const MANUALLY_INITIATED_POWER_BUTTON_HOLD: u32 = 456;
+pub const MANUALLY_INITIATED_POWER_BUTTON_HOLD_KERNEL_LIVE_DUMP: u32 = 12744;
 pub const MANUALLY_INITIATED_POWER_BUTTON_HOLD_LIVE_DUMP: u32 = 4552;
 pub const MAP_COMPOSITE: u32 = 64;
 pub const MAP_EXPAND_LIGATURES: u32 = 8192;
@@ -696879,6 +700060,7 @@ pub const MAX_GUID_CHARS: u32 = 38;
 pub const MAX_GUID_STRING_LEN: u32 = 39;
 pub const MAX_HOSTNAME_LEN: u32 = 128;
 pub const MAX_HW_COUNTERS: u32 = 16;
+pub const MAX_HYBRID_KEY_EXCHANGE_BLOBS: u32 = 4;
 pub const MAX_IDD_DYNAWIZ_RESOURCE_ID: u32 = 11000;
 pub const MAX_IF_TYPE: u32 = 281;
 pub const MAX_INF_FLAG: u32 = 20;
@@ -697067,7 +700249,7 @@ pub const MAXDWORD: u32 = 4294967295;
 pub const MAXEAPCODE: u32 = 4;
 pub const maxEnforcerCount: u32 = 20;
 pub const MAXERRORLENGTH: u32 = 256;
-pub const MaxEventInfo: i32 = 4;
+pub const MaxEventInfo: i32 = 5;
 pub const MaxFarm_Len: u32 = 256;
 pub const MAXFILELEN: u32 = 13;
 pub const MaxFQDN_Len: u32 = 256;
@@ -697102,7 +700284,7 @@ pub const MaximumPeerDistClientInfoByHandlesClass: i32 = 1;
 pub const MAXINFOSIZE: u32 = 256;
 pub const MAXINTATOM: u32 = 49152;
 pub const MAXIPADRESSLEN: u32 = 64;
-pub const MaxJobObjectInfoClass: i32 = 52;
+pub const MaxJobObjectInfoClass: i32 = 53;
 pub const MAXLEN_IFDESCR: u32 = 256;
 pub const MAXLEN_PHYSADDR: u32 = 8;
 pub const MAXLENGTH_NAI: u32 = 72;
@@ -697124,7 +700306,7 @@ pub const MAXPNAMELEN: u32 = 32;
 pub const MaxPolicyAction: i32 = 10;
 pub const MaxPrivacySettings: u32 = 16384;
 pub const maxPrivateDataSize: u32 = 200;
-pub const MaxProcessMitigationPolicy: i32 = 19;
+pub const MaxProcessMitigationPolicy: i32 = 20;
 pub const MAXPROPPAGES: u32 = 100;
 pub const MaxServiceRegistryStateType: i32 = 2;
 pub const MAXSHORT: u32 = 32767;
@@ -697134,7 +700316,7 @@ pub const MAXSTRETCHBLTMODE: u32 = 4;
 pub const maxStringLength: u32 = 1024;
 pub const MaxSuiteType: i32 = 18;
 pub const maxSystemHealthEntityCount: u32 = 20;
-pub const MaxTokenInfoClass: i32 = 51;
+pub const MaxTokenInfoClass: i32 = 53;
 pub const MaxTraceSetInfoClass: i32 = 29;
 pub const MAXUCHAR: u32 = 255;
 pub const MAXUIDLEN: u32 = 64;
@@ -699924,7 +703106,9 @@ pub const MEM_EXTENDED_PARAMETER_GRAPHICS: u32 = 1;
 pub const MEM_EXTENDED_PARAMETER_NONPAGED: u32 = 2;
 pub const MEM_EXTENDED_PARAMETER_NONPAGED_HUGE: u32 = 16;
 pub const MEM_EXTENDED_PARAMETER_NONPAGED_LARGE: u32 = 8;
+pub const MEM_EXTENDED_PARAMETER_SECURE_PAGES: u32 = 128;
 pub const MEM_EXTENDED_PARAMETER_SOFT_FAULT_PAGES: u32 = 32;
+pub const MEM_EXTENDED_PARAMETER_TAGGED: u32 = 256;
 pub const MEM_EXTENDED_PARAMETER_TYPE_BITS: u32 = 8;
 pub const MEM_EXTENDED_PARAMETER_ZERO_PAGES_OPTIONAL: u32 = 4;
 pub const MEM_FREE: u32 = 65536;
@@ -699941,6 +703125,7 @@ pub const MEM_RESERVE_PLACEHOLDER: u32 = 262144;
 pub const MEM_RESET: u32 = 524288;
 pub const MEM_RESET_UNDO: u32 = 16777216;
 pub const MEM_ROTATE: u32 = 8388608;
+pub const MEM_SECTION_ATTRIBUTE_SECURE_PAGES: u32 = 1;
 pub const MEM_TOP_DOWN: u32 = 1048576;
 pub const MEM_UNMAP_NONE: u32 = 0;
 pub const MEM_UNMAP_WITH_TRANSIENT_BOOST: u32 = 1;
@@ -699985,8 +703170,9 @@ pub const MemoryListStream: i32 = 5;
 pub const MemoryPartitionDedicatedMemoryInfo: i32 = 1;
 pub const MemoryPartitionInfo: i32 = 0;
 pub const MemoryRegionInfo: i32 = 0;
+pub const MemSectionExtendedParameterAttributeFlags: i32 = 4;
 pub const MemSectionExtendedParameterInvalidType: i32 = 0;
-pub const MemSectionExtendedParameterMax: i32 = 4;
+pub const MemSectionExtendedParameterMax: i32 = 5;
 pub const MemSectionExtendedParameterNumaNode: i32 = 2;
 pub const MemSectionExtendedParameterSigningLevel: i32 = 3;
 pub const MemSectionExtendedParameterUserPhysicalFlags: i32 = 1;
@@ -701483,6 +704669,7 @@ pub const MF_READWRITE_MMCSS_CLASS: GUID = .{ .Data1 = 959988480, .Data2 = 53483
 pub const MF_READWRITE_MMCSS_CLASS_AUDIO: GUID = .{ .Data1 = 1124616154, .Data2 = 2192, .Data3 = 19214, .Data4 = .{ 147, 140, 5, 67, 50, 197, 71, 225 } };
 pub const MF_READWRITE_MMCSS_PRIORITY: GUID = .{ .Data1 = 1135417806, .Data2 = 62271, .Data3 = 19369, .Data4 = .{ 165, 128, 228, 205, 18, 242, 209, 68 } };
 pub const MF_READWRITE_MMCSS_PRIORITY_AUDIO: GUID = .{ .Data1 = 658356357, .Data2 = 11746, .Data3 = 19890, .Data4 = .{ 166, 167, 253, 182, 111, 180, 11, 97 } };
+pub const MF_READWRITE_USE_ONLY_HARDWARE_TRANSFORMS: GUID = .{ .Data1 = 4178002983, .Data2 = 49035, .Data3 = 20329, .Data4 = .{ 187, 175, 82, 73, 105, 5, 111, 182 } };
 pub const MF_REMOTE_PROXY: GUID = .{ .Data1 = 788580622, .Data2 = 53967, .Data3 = 17016, .Data4 = .{ 139, 106, 208, 119, 250, 195, 162, 95 } };
 pub const MF_REMOVE: u32 = 4096;
 pub const MF_RESOLUTION_BYTESTREAM: i32 = 2;
@@ -702281,6 +705468,7 @@ pub const MFSampleExtension_Timestamp: GUID = .{ .Data1 = 507734425, .Data2 = 27
 pub const MFSampleExtension_Token: GUID = .{ .Data1 = 2190793318, .Data2 = 62248, .Data3 = 18437, .Data4 = .{ 181, 81, 0, 222, 180, 197, 122, 97 } };
 pub const MFSampleExtension_VideoDSPMode: GUID = .{ .Data1 = 3240973771, .Data2 = 55257, .Data3 = 18285, .Data4 = .{ 129, 243, 105, 17, 127, 22, 62, 160 } };
 pub const MFSampleExtension_VideoEncodeBitsUsedMap: GUID = .{ .Data1 = 1754539581, .Data2 = 59106, .Data3 = 19404, .Data4 = .{ 132, 157, 133, 112, 54, 95, 81, 20 } };
+pub const MFSampleExtension_VideoEncodeD3D12ReconstructedPicture: GUID = .{ .Data1 = 1049238399, .Data2 = 23698, .Data3 = 19822, .Data4 = .{ 184, 52, 240, 167, 41, 230, 92, 72 } };
 pub const MFSampleExtension_VideoEncodeInputAbsoluteQPMap: GUID = .{ .Data1 = 1126854298, .Data2 = 61933, .Data3 = 17774, .Data4 = .{ 141, 195, 111, 137, 133, 100, 158, 185 } };
 pub const MFSampleExtension_VideoEncodeInputDeltaQPMap: GUID = .{ .Data1 = 3669236163, .Data2 = 48929, .Data3 = 19270, .Data4 = .{ 134, 146, 154, 123, 240, 167, 23, 105 } };
 pub const MFSampleExtension_VideoEncodePictureType: GUID = .{ .Data1 = 2536965350, .Data2 = 52500, .Data3 = 18492, .Data4 = .{ 143, 32, 201, 252, 9, 40, 186, 213 } };
@@ -703301,8 +706489,8 @@ pub const MiniDumpNoIgnoreInaccessibleMemory: i32 = 33554432;
 pub const MiniDumpNormal: i32 = 0;
 pub const MiniDumpScanInaccessiblePartialPages: i32 = 8388608;
 pub const MiniDumpScanMemory: i32 = 16;
-pub const MiniDumpValidTypeFlags: i32 = 33554431;
-pub const MiniDumpValidTypeFlagsEx: i32 = 67108863;
+pub const MiniDumpValidTypeFlags: i32 = 100663295;
+pub const MiniDumpValidTypeFlagsEx: i32 = 134217727;
 pub const MiniDumpWithAvxXStateContext: i32 = 2097152;
 pub const MiniDumpWithCodeSegs: i32 = 8192;
 pub const MiniDumpWithDataSegs: i32 = 1;
@@ -703312,6 +706500,7 @@ pub const MiniDumpWithFullMemoryInfo: i32 = 2048;
 pub const MiniDumpWithHandleData: i32 = 4;
 pub const MiniDumpWithIndirectlyReferencedMemory: i32 = 64;
 pub const MiniDumpWithIptTrace: i32 = 4194304;
+pub const MiniDumpWithMemoryCompressed: i32 = 67108864;
 pub const MiniDumpWithModuleHeaders: i32 = 524288;
 pub const MiniDumpWithoutAuxiliaryState: i32 = 16384;
 pub const MiniDumpWithoutOptionalData: i32 = 1024;
@@ -703329,7 +706518,6 @@ pub const MINIMUM_CDROM_READ_TOC_EX_SIZE: u32 = 2;
 pub const MINIMUM_NEVER_PREEMPT_PRIORITY = L("MinimumNeverPreemptPriority");
 pub const MINIMUM_PREEMPTOR_PRIORITY = L("MinimumPreemptorPriority");
 pub const MINIMUM_RESERVED_MANIFEST_RESOURCE_ID: u32 = 1;
-pub const MinimumPower: u32 = 1;
 pub const MiniMutantInformation1: i32 = 2;
 pub const MiniMutantInformation2: i32 = 3;
 pub const MINIPORT_DSM_NOTIFICATION_VERSION: u32 = 1;
@@ -705568,7 +708756,6 @@ pub const MONITORINFOF_PRIMARY: u32 = 1;
 pub const MonitorInvocation: i32 = 68;
 pub const MonitorRequestReasonAcDcDisplayBurst: i32 = 5;
 pub const MonitorRequestReasonAcDcDisplayBurstSuppressed: i32 = 28;
-pub const MonitorRequestReasonAusterityBatteryDrain: i32 = 55;
 pub const MonitorRequestReasonBatteryCountChange: i32 = 16;
 pub const MonitorRequestReasonBatteryCountChangeSuppressed: i32 = 49;
 pub const MonitorRequestReasonBatteryPreCritical: i32 = 53;
@@ -705596,6 +708783,7 @@ pub const MonitorRequestReasonPolicyChange: i32 = 13;
 pub const MonitorRequestReasonPoSetSystemState: i32 = 7;
 pub const MonitorRequestReasonPowerButton: i32 = 1;
 pub const MonitorRequestReasonRemoteConnection: i32 = 2;
+pub const MonitorRequestReasonRestrictedStandbyBatteryDrain: i32 = 55;
 pub const MonitorRequestReasonResumeModernStandby: i32 = 50;
 pub const MonitorRequestReasonResumePdc: i32 = 24;
 pub const MonitorRequestReasonResumeS4: i32 = 25;
@@ -707390,6 +710578,7 @@ pub const MultipleView_Pattern_GUID: GUID = .{ .Data1 = 1417308900, .Data2 = 441
 pub const MultipleView_SupportedViews_Property_GUID: GUID = .{ .Data1 = 2371729917, .Data2 = 52796, .Data3 = 19175, .Data4 = .{ 183, 136, 64, 10, 60, 100, 85, 71 } };
 pub const MULTIPROCESSOR_CONFIGURATION_NOT_SUPPORTED: u32 = 62;
 pub const MULTISZ_METADATA: i32 = 5;
+pub const MULTITIER_MEMORY_DRIVER_INTERNAL: u32 = 518;
 pub const MultiUserTS: i32 = 17;
 pub const MULTIVALUED: i32 = 1;
 pub const MUP_FILE_SYSTEM: u32 = 259;
@@ -708153,6 +711342,10 @@ pub const NCRYPT_CLAIM_VBS_KEY_ATTESTATION_STATEMENT: u32 = 4;
 pub const NCRYPT_CLAIM_VBS_ROOT: u32 = 5;
 pub const NCRYPT_CLAIM_WEB_AUTH_SUBJECT_ONLY: u32 = 258;
 pub const NCRYPT_CLAIM_WEB_AUTH_SUBJECT_ONLY_V2: u32 = 259;
+pub const NCRYPT_COMPOSITE_MLDSA_ALGORITHM = L("Composite-ML-DSA");
+pub const NCRYPT_COMPOSITE_MLDSA_ALGORITHM_GROUP = L("CompositeMLDSA");
+pub const NCRYPT_COMPOSITE_MLKEM_ALGORITHM = L("Composite-ML-KEM");
+pub const NCRYPT_COMPOSITE_MLKEM_ALGORITHM_GROUP = L("CompositeMLKEM");
 pub const NCRYPT_DES_ALGORITHM = L("DES");
 pub const NCRYPT_DES_ALGORITHM_GROUP = L("DES");
 pub const NCRYPT_DESCR_DELIMITER_AND = L("AND");
@@ -708246,6 +711439,7 @@ pub const NCRYPT_MD4_ALGORITHM = L("MD4");
 pub const NCRYPT_MD5_ALGORITHM = L("MD5");
 pub const NCRYPT_MLDSA_ALGORITHM = L("ML-DSA");
 pub const NCRYPT_MLDSA_ALGORITHM_GROUP = L("MLDSA");
+pub const NCRYPT_MLDSA_EXTERNAL_MU_FLAG: u32 = 128;
 pub const NCRYPT_MLKEM_ALGORITHM = L("ML-KEM");
 pub const NCRYPT_MLKEM_ALGORITHM_GROUP = L("MLKEM");
 pub const NCRYPT_NAME_PROPERTY = L("Name");
@@ -708262,6 +711456,7 @@ pub const NCRYPT_PAD_PQDSA_FLAG: u32 = 32;
 pub const NCRYPT_PAD_PSS_FLAG: u32 = 8;
 pub const NCRYPT_PARAMETER_SET_NAME_PROPERTY = L("ParameterSetName");
 pub const NCRYPT_PBKDF2_ALGORITHM = L("PBKDF2");
+pub const NCRYPT_PCP_AIKSTORE_PROPERTY = L("PCP_AIKSTORE");
 pub const NCRYPT_PCP_ALTERNATE_KEY_STORAGE_LOCATION_PROPERTY = L("PCP_ALTERNATE_KEY_STORAGE_LOCATION");
 pub const NCRYPT_PCP_CHANGEPASSWORD_PROPERTY = L("PCP_CHANGEPASSWORD");
 pub const NCRYPT_PCP_ECC_EKCERT_PROPERTY = L("PCP_ECC_EKCERT");
@@ -708270,6 +711465,7 @@ pub const NCRYPT_PCP_ECC_EKPUB_PROPERTY = L("PCP_ECC_EKPUB");
 pub const NCRYPT_PCP_EKCERT_PROPERTY = L("PCP_EKCERT");
 pub const NCRYPT_PCP_EKNVCERT_PROPERTY = L("PCP_EKNVCERT");
 pub const NCRYPT_PCP_EKPUB_PROPERTY = L("PCP_EKPUB");
+pub const NCRYPT_PCP_EKSTORE_PROPERTY = L("PCP_EKSTORE");
 pub const NCRYPT_PCP_ENCRYPTION_KEY: u32 = 2;
 pub const NCRYPT_PCP_EXPORT_ALLOWED_PROPERTY = L("PCP_EXPORT_ALLOWED");
 pub const NCRYPT_PCP_HMAC_AUTH_NONCE = L("PCP_HMAC_AUTH_NONCE");
@@ -708304,6 +711500,9 @@ pub const NCRYPT_PCP_RSA_EKNVCERT_PROPERTY = L("PCP_RSA_EKNVCERT");
 pub const NCRYPT_PCP_RSA_EKPUB_PROPERTY = L("PCP_RSA_EKPUB");
 pub const NCRYPT_PCP_RSA_SCHEME_HASH_ALG_PROPERTY = L("PCP_RSA_SCHEME_HASH_ALG");
 pub const NCRYPT_PCP_RSA_SCHEME_PROPERTY = L("PCP_RSA_SCHEME");
+pub const NCRYPT_PCP_SDDIDK_CONTEXT_PROPERTY = L("PCP_SDDIDK_CONTEXT");
+pub const NCRYPT_PCP_SDDIDK_KEY: u32 = 32;
+pub const NCRYPT_PCP_SDDIDK_OPERATION: u32 = 268435456;
 pub const NCRYPT_PCP_SESSIONID_PROPERTY = L("PCP_SESSIONID");
 pub const NCRYPT_PCP_SIGNATURE_KEY: u32 = 1;
 pub const NCRYPT_PCP_SRKPUB_PROPERTY = L("PCP_SRKPUB");
@@ -708434,6 +711633,7 @@ pub const NCRYPT_USE_COUNT_ENABLED_PROPERTY = L("Enabled Use Count");
 pub const NCRYPT_USE_COUNT_PROPERTY = L("Use Count");
 pub const NCRYPT_USE_PER_BOOT_KEY_FLAG: u32 = 262144;
 pub const NCRYPT_USE_PER_BOOT_KEY_PROPERTY = L("Per Boot Key");
+pub const NCRYPT_USE_RECOVERY_LDAP_PORT: u32 = 65536;
 pub const NCRYPT_USE_VBS_PER_BOOT_KEY_FLAG: u32 = 262144;
 pub const NCRYPT_USE_VIRTUAL_ISOLATION_FLAG: u32 = 131072;
 pub const NCRYPT_USE_VIRTUAL_ISOLATION_PROPERTY = L("Virtual Iso");
@@ -712472,6 +715672,7 @@ pub const NT10_MAJOR_VERSION: u32 = 9;
 pub const NT11_MAJOR_VERSION: u32 = 10;
 pub const NT12_MAJOR_VERSION: u32 = 11;
 pub const NT13_MAJOR_VERSION: u32 = 12;
+pub const NT14_MAJOR_VERSION: u32 = 14;
 pub const NT351_INTERFACE_SIZE: u32 = 64;
 pub const NT4_MAJOR_VERSION: u32 = 1;
 pub const NT4SP4_MAJOR_VERSION: u32 = 2;
@@ -712485,7 +715686,7 @@ pub const ntaReserved: i32 = 65534;
 pub const ntaSizeParamIndexSpecified: i32 = 1;
 pub const NTDDI_LONGHORN: u32 = 100663296;
 pub const NTDDI_MAXVER: u32 = 2560;
-pub const NTDDI_VERSION: u32 = 167772176;
+pub const NTDDI_VERSION: u32 = 167772178;
 pub const NTDDI_VISTA: u32 = 100663296;
 pub const NTDDI_VISTASP1: u32 = 100663552;
 pub const NTDDI_VISTASP2: u32 = 100663808;
@@ -712505,6 +715706,8 @@ pub const NTDDI_WIN10_RS4: u32 = 167772165;
 pub const NTDDI_WIN10_RS5: u32 = 167772166;
 pub const NTDDI_WIN10_TH2: u32 = 167772161;
 pub const NTDDI_WIN10_VB: u32 = 167772168;
+pub const NTDDI_WIN11_BR: u32 = 167772178;
+pub const NTDDI_WIN11_DT: u32 = 167772177;
 pub const NTDDI_WIN11_GA: u32 = 167772175;
 pub const NTDDI_WIN11_GE: u32 = 167772176;
 pub const NTDDI_WIN11_ZN: u32 = 167772174;
@@ -712615,6 +715818,7 @@ pub const NTE_DOUBLE_ENCRYPT: HRESULT = -2146893806;
 pub const NTE_ENCRYPTION_FAILURE: HRESULT = -2146893772;
 pub const NTE_EXISTS: HRESULT = -2146893809;
 pub const NTE_FAIL: HRESULT = -2146893792;
+pub const NTE_FIPS_FAILURE: HRESULT = -2146893765;
 pub const NTE_FIXEDPARAMETER: HRESULT = -2146893787;
 pub const NTE_HMAC_NOT_SUPPORTED: HRESULT = -2146893777;
 pub const NTE_INCORRECT_PASSWORD: HRESULT = -2146893773;
@@ -713058,6 +716262,8 @@ pub const NVME_CDW10_LSP_ACTION_ESTABLISH_CONTEXT_AND_READ_512_BYTES_OF_HEADER: 
 pub const NVME_CDW10_LSP_ACTION_ESTABLISH_CONTEXT_AND_READ_LOG_DATA: u32 = 1;
 pub const NVME_CDW10_LSP_ACTION_READ_LOG_DATA: u32 = 0;
 pub const NVME_CDW10_LSP_ACTION_RELEASE_CONTEXT: u32 = 2;
+pub const NVME_CDW10_LSP_BOOT_PARTITION_0: u32 = 0;
+pub const NVME_CDW10_LSP_BOOT_PARTITION_1: u32 = 1;
 pub const NVME_CMBSZ_SIZE_UNITS_16MB: i32 = 3;
 pub const NVME_CMBSZ_SIZE_UNITS_1MB: i32 = 2;
 pub const NVME_CMBSZ_SIZE_UNITS_256MB: i32 = 4;
@@ -713187,9 +716393,11 @@ pub const NVME_FEATURE_VALUE_SUPPORTED_CAPABILITIES: i32 = 3;
 pub const NVME_FEATURE_VOLATILE_WRITE_CACHE: i32 = 6;
 pub const NVME_FEATURE_WRITE_ATOMICITY: i32 = 10;
 pub const NVME_FIRMWARE_ACTIVATE_ACTION_ACTIVATE: i32 = 2;
+pub const NVME_FIRMWARE_ACTIVATE_ACTION_ACTIVATE_BOOT_PARTITION: i32 = 7;
 pub const NVME_FIRMWARE_ACTIVATE_ACTION_DOWNLOAD_TO_SLOT: i32 = 0;
 pub const NVME_FIRMWARE_ACTIVATE_ACTION_DOWNLOAD_TO_SLOT_AND_ACTIVATE: i32 = 1;
 pub const NVME_FIRMWARE_ACTIVATE_ACTION_DOWNLOAD_TO_SLOT_AND_ACTIVATE_IMMEDIATE: i32 = 3;
+pub const NVME_FIRMWARE_ACTIVATE_ACTION_REPLACE_BOOT_PARTITION: i32 = 6;
 pub const NVME_FUSED_OPERATION_FIRST_CMD: i32 = 1;
 pub const NVME_FUSED_OPERATION_NORMAL: i32 = 0;
 pub const NVME_FUSED_OPERATION_SECOND_CMD: i32 = 2;
@@ -713237,7 +716445,7 @@ pub const NVME_LBA_RANGE_TYPE_PAGE_SWAP_FILE: i32 = 4;
 pub const NVME_LBA_RANGE_TYPE_RAID: i32 = 2;
 pub const NVME_LBA_RANGE_TYPE_RESERVED: i32 = 0;
 pub const NVME_LOG_PAGE_ASYMMETRIC_NAMESPACE_ACCESS: i32 = 12;
-pub const NVME_LOG_PAGE_BOOT_PARTITON: i32 = 21;
+pub const NVME_LOG_PAGE_BOOT_PARTITION: i32 = 21;
 pub const NVME_LOG_PAGE_CHANGED_NAMESPACE_LIST: i32 = 4;
 pub const NVME_LOG_PAGE_CHANGED_ZONE_LIST: i32 = 191;
 pub const NVME_LOG_PAGE_COMMAND_AND_FEATURE_LOCKDOWN: i32 = 20;
@@ -716245,6 +719453,7 @@ pub const OPTION_BE_A_ROUTER: u32 = 19;
 pub const OPTION_BOOT_FILE_SIZE: u32 = 13;
 pub const OPTION_BOOTFILE_NAME: u32 = 67;
 pub const OPTION_BROADCAST_ADDRESS: u32 = 28;
+pub const OPTION_CAPTIVE_PORTAL: u32 = 114;
 pub const OPTION_CLIENT_CLASS_INFO: u32 = 60;
 pub const OPTION_CLIENT_ID: u32 = 61;
 pub const OPTION_COOKIE_SERVERS: u32 = 8;
@@ -716624,9 +719833,18 @@ pub const PackageOrigin_DeveloperSigned: i32 = 5;
 pub const PackageOrigin_DeveloperUnsigned: i32 = 4;
 pub const PackageOrigin_Inbox: i32 = 2;
 pub const PackageOrigin_LineOfBusiness: i32 = 6;
+pub const PackageOrigin_SignedSBOM: i32 = 7;
 pub const PackageOrigin_Store: i32 = 3;
 pub const PackageOrigin_Unknown: i32 = 0;
 pub const PackageOrigin_Unsigned: i32 = 1;
+pub const PackageOrigin2_DeveloperSigned: i32 = 5;
+pub const PackageOrigin2_DeveloperUnsigned: i32 = 4;
+pub const PackageOrigin2_Inbox: i32 = 2;
+pub const PackageOrigin2_LineOfBusiness: i32 = 6;
+pub const PackageOrigin2_SignedSBOM: i32 = 7;
+pub const PackageOrigin2_Store: i32 = 3;
+pub const PackageOrigin2_Unknown: i32 = 0;
+pub const PackageOrigin2_Unsigned: i32 = 1;
 pub const PackagePathType_Effective: i32 = 2;
 pub const PackagePathType_EffectiveExternal: i32 = 5;
 pub const PackagePathType_Install: i32 = 0;
@@ -716910,7 +720128,11 @@ pub const PARITY_ODD: u16 = 512;
 pub const PARITY_SPACE: u16 = 4096;
 pub const PARKING_TOPOLOGY_POLICY_DISABLED: u32 = 0;
 pub const PARKING_TOPOLOGY_POLICY_ROUNDROBIN: u32 = 1;
+pub const PARKING_TOPOLOGY_POLICY_ROUNDROBIN_P_ROUNDROBIN_E: u32 = 3;
+pub const PARKING_TOPOLOGY_POLICY_ROUNDROBIN_P_SEQUENTIAL_E: u32 = 5;
 pub const PARKING_TOPOLOGY_POLICY_SEQUENTIAL: u32 = 2;
+pub const PARKING_TOPOLOGY_POLICY_SEQUENTIAL_P_ROUNDROBIN_E: u32 = 6;
+pub const PARKING_TOPOLOGY_POLICY_SEQUENTIAL_P_SEQUENTIAL_E: u32 = 4;
 pub const PARM_ERROR_NONE: u32 = 0;
 pub const PARM_ERROR_UNKNOWN: u32 = 4294967295;
 pub const PARMNUM_ALL: u32 = 0;
@@ -718281,6 +721503,7 @@ pub const PF_SSSE3_INSTRUCTIONS_AVAILABLE: u32 = 36;
 pub const PF_TEMPORAL_LEVEL_1: u32 = 1;
 pub const PF_TEMPORAL_LEVEL_2: u32 = 2;
 pub const PF_TEMPORAL_LEVEL_3: u32 = 3;
+pub const PF_UMONITOR_INSTRUCTION_AVAILABLE: u32 = 89;
 pub const PF_UNIX: u16 = 1;
 pub const PF_UNKNOWN1: u16 = 20;
 pub const PF_VIRT_FIRMWARE_ENABLED: u32 = 21;
@@ -719201,6 +722424,7 @@ pub const PKEY_AudioEndpoint_JackSubType: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 
 pub const PKEY_AudioEndpoint_Max_VolumeInDb: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 497408003, .Data2 = 54418, .Data3 = 20189, .Data4 = .{ 140, 35, 224, 192, 255, 238, 127, 14 } }, .pid = 10 };
 pub const PKEY_AudioEndpoint_Min_VolumeInDb: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 497408003, .Data2 = 54418, .Data3 = 20189, .Data4 = .{ 140, 35, 224, 192, 255, 238, 127, 14 } }, .pid = 11 };
 pub const PKEY_AudioEndpoint_PhysicalSpeakers: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 497408003, .Data2 = 54418, .Data3 = 20189, .Data4 = .{ 140, 35, 224, 192, 255, 238, 127, 14 } }, .pid = 3 };
+pub const PKEY_AudioEndpoint_StableId: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 497408003, .Data2 = 54418, .Data3 = 20189, .Data4 = .{ 140, 35, 224, 192, 255, 238, 127, 14 } }, .pid = 12 };
 pub const PKEY_AudioEndpoint_Supports_EventDriven_Mode: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 497408003, .Data2 = 54418, .Data3 = 20189, .Data4 = .{ 140, 35, 224, 192, 255, 238, 127, 14 } }, .pid = 7 };
 pub const PKEY_AudioEndpointLogo_IconEffects: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 4054546445, .Data2 = 8208, .Data3 = 20179, .Data4 = .{ 163, 166, 139, 135, 240, 240, 196, 118 } }, .pid = 0 };
 pub const PKEY_AudioEndpointLogo_IconPath: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 4054546445, .Data2 = 8208, .Data3 = 20179, .Data4 = .{ 163, 166, 139, 135, 240, 240, 196, 118 } }, .pid = 1 };
@@ -719799,6 +723023,7 @@ pub const PKEY_Devices_TextMessages: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 12381
 pub const PKEY_Devices_Voicemail: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 1238179702, .Data2 = 22054, .Data3 = 19223, .Data4 = .{ 164, 232, 24, 180, 170, 26, 34, 19 } }, .pid = 6 };
 pub const PKEY_Devices_WiaDeviceType: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 1809653702, .Data2 = 33039, .Data3 = 4560, .Data4 = .{ 190, 199, 8, 0, 43, 226, 9, 47 } }, .pid = 2 };
 pub const PKEY_Devices_WiFi_InterfaceGuid: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 4010895339, .Data2 = 52220, .Data3 = 17217, .Data4 = .{ 165, 104, 167, 201, 26, 104, 152, 44 } }, .pid = 2 };
+pub const PKEY_Devices_WiFiAware_IsSupported: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 2637078119, .Data2 = 28884, .Data3 = 19738, .Data4 = .{ 174, 253, 17, 60, 246, 167, 223, 202 } }, .pid = 2 };
 pub const PKEY_Devices_WiFiDirect_DeviceAddress: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 352752477, .Data2 = 58343, .Data3 = 17679, .Data4 = .{ 134, 55, 130, 35, 62, 190, 95, 110 } }, .pid = 13 };
 pub const PKEY_Devices_WiFiDirect_GroupId: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 352752477, .Data2 = 58343, .Data3 = 17679, .Data4 = .{ 134, 55, 130, 35, 62, 190, 95, 110 } }, .pid = 4 };
 pub const PKEY_Devices_WiFiDirect_InformationElements: PROPERTYKEY = .{ .fmtid = .{ .Data1 = 352752477, .Data2 = 58343, .Data3 = 17679, .Data4 = .{ 134, 55, 130, 35, 62, 190, 95, 110 } }, .pid = 12 };
@@ -721445,11 +724670,20 @@ pub const PPCF_ADDQUOTES: u32 = 1;
 pub const PPCF_FORCEQUALIFY: u32 = 64;
 pub const PPCF_LONGESTPOSSIBLE: u32 = 128;
 pub const PPCF_NODIRECTORIES: u32 = 16;
+pub const PPF_E_JSONTX_EMPTY_RULE: HRESULT = -920125428;
+pub const PPF_E_JSONTX_EVENT_TYPE_ERROR: HRESULT = -920125427;
+pub const PPF_E_JSONTX_INSERT_NO_MATCH_EVENTS: HRESULT = -920125434;
+pub const PPF_E_JSONTX_MULTIPLE_MATCHES_FOR_UNIQUE: HRESULT = -920125433;
+pub const PPF_E_JSONTX_NO_MATCH_EVENTS: HRESULT = -920125430;
+pub const PPF_E_JSONTX_NO_NEW_EVENTS_TO_INSERT: HRESULT = -920125429;
 pub const PPF_E_TRANSFORM_CLEANED_UP_NA: HRESULT = -920125438;
 pub const PPF_E_TRANSFORM_CLEANED_UP_STATE_CHANGE: HRESULT = -920125437;
 pub const PPF_E_TRANSFORM_CONFLICT: HRESULT = -920125439;
 pub const PPF_E_TRANSFORM_DIGEST_ALGO_NOT_PRESENT: HRESULT = -920125436;
 pub const PPF_E_TRANSFORM_DIGEST_ALGO_NOT_SUPPORTED: HRESULT = -920125440;
+pub const PPF_E_TRANSFORM_NOT_APPLICABLE: HRESULT = -920125431;
+pub const PPF_E_TRANSFORM_UNKNOWN_FORMAT: HRESULT = -920125435;
+pub const PPF_E_TXGENBM_NO_EVENTS_GENERATED: HRESULT = -920125432;
 pub const PPG_DEFAULT: u32 = 0;
 pub const PPG_SRGB: u32 = 1;
 pub const PPM_FIRMWARE_ACPI1C2: u32 = 1;
@@ -722252,6 +725486,7 @@ pub const PROCESS_VM_WRITE: u32 = 32;
 pub const PROCESS_WRITE_DAC: u32 = 262144;
 pub const PROCESS_WRITE_OWNER: u32 = 524288;
 pub const PROCESS1_INITIALIZATION_FAILED: u32 = 107;
+pub const ProcessActivationContextTrustPolicy: i32 = 19;
 pub const ProcessAppMemoryInfo: i32 = 2;
 pub const ProcessASLRPolicy: i32 = 1;
 pub const ProcessChildProcessPolicy: i32 = 13;
@@ -722413,6 +725648,7 @@ pub const PROCFLG_NONE: u32 = 0;
 pub const ProcThreadAttributeAllApplicationPackagesPolicy: u32 = 15;
 pub const ProcThreadAttributeChildProcessPolicy: u32 = 14;
 pub const ProcThreadAttributeComponentFilter: u32 = 26;
+pub const ProcThreadAttributeContainmentConfiguration: u32 = 33;
 pub const ProcThreadAttributeDesktopAppPolicy: u32 = 18;
 pub const ProcThreadAttributeEnableOptionalXStateFeatures: u32 = 27;
 pub const ProcThreadAttributeGroupAffinity: u32 = 3;
@@ -722428,6 +725664,7 @@ pub const ProcThreadAttributeProtectionLevel: u32 = 11;
 pub const ProcThreadAttributePseudoConsole: u32 = 22;
 pub const ProcThreadAttributeSafeOpenPromptOriginClaim: u32 = 17;
 pub const ProcThreadAttributeSecurityCapabilities: u32 = 9;
+pub const ProcThreadAttributeSmeVectorLength: u32 = 31;
 pub const ProcThreadAttributeSveVectorLength: u32 = 30;
 pub const ProcThreadAttributeTrustedApp: u32 = 29;
 pub const ProcThreadAttributeUmsThread: u32 = 6;
@@ -725452,6 +728689,7 @@ pub const RDCGENTYPE_FilterMax: i32 = 1;
 pub const RDCGENTYPE_Unused: i32 = 0;
 pub const RDCI_ScopeItem: u32 = 2147483648;
 pub const RDCLIENT_BITMAP_RENDER_SERVICE: GUID = .{ .Data1 = 3838576843, .Data2 = 37934, .Data3 = 19225, .Data4 = .{ 133, 4, 189, 90, 137, 167, 71, 245 } };
+pub const RDCLIENT_WINDOW_INFO_SERVICE: GUID = .{ .Data1 = 2845932139, .Data2 = 52659, .Data3 = 20097, .Data4 = .{ 181, 200, 189, 99, 130, 42, 141, 108 } };
 pub const RDCMAPPING_ReadOnly: i32 = 1;
 pub const RDCMAPPING_ReadWrite: i32 = 2;
 pub const RDCMAPPING_Undefined: i32 = 0;
@@ -726706,6 +729944,7 @@ pub const RelationProcessorCore: i32 = 0;
 pub const RelationProcessorDie: i32 = 5;
 pub const RelationProcessorModule: i32 = 7;
 pub const RelationProcessorPackage: i32 = 3;
+pub const RelationProcessorSharedComputeUnit: i32 = 8;
 pub const RELATIVE: u32 = 2;
 pub const ReleaseModes_Process: i32 = 1;
 pub const REMFILTERF_LEAVECONNECTED: i32 = 1;
@@ -726720,6 +729959,7 @@ pub const RemoteActionAppSwitch: i32 = 4;
 pub const RemoteActionCharms: i32 = 0;
 pub const RemoteActionSnap: i32 = 2;
 pub const RemoteActionStartScreen: i32 = 3;
+pub const RemoteApp: i32 = 1;
 pub const remoteConfigTypeConfigBlob: i32 = 2;
 pub const remoteConfigTypeMachine: i32 = 1;
 pub const REMOTECONTROL_KBDALT_HOTKEY: u32 = 4;
@@ -726831,8 +730071,12 @@ pub const REQUEST_OPLOCK_CURRENT_VERSION: u32 = 1;
 pub const REQUEST_OPLOCK_INPUT_FLAG_ACK: u32 = 2;
 pub const REQUEST_OPLOCK_INPUT_FLAG_COMPLETE_ACK_ON_CLOSE: u32 = 4;
 pub const REQUEST_OPLOCK_INPUT_FLAG_REQUEST: u32 = 1;
+pub const REQUEST_OPLOCK_INPUT_FLAG_RH_ALWAYS_BLOCK_UNTIL_ACK: u32 = 8;
+pub const REQUEST_OPLOCK_INPUT_FLAG_RH_IGNORE_WRITES: u32 = 16;
+pub const REQUEST_OPLOCK_INPUT_FLAG_RH_NO_NON_CACHED_IO: u32 = 32;
 pub const REQUEST_OPLOCK_OUTPUT_FLAG_ACK_REQUIRED: u32 = 1;
 pub const REQUEST_OPLOCK_OUTPUT_FLAG_MODES_PROVIDED: u32 = 2;
+pub const REQUEST_OPLOCK_OUTPUT_FLAG_NON_CACHED_IO_PRESENT: u32 = 8;
 pub const REQUEST_OPLOCK_OUTPUT_FLAG_WRITABLE_SECTION_PRESENT: u32 = 4;
 pub const RequestLocation: i32 = 1;
 pub const RequestSize: i32 = 0;
@@ -728978,8 +732222,9 @@ pub const RUNTIME_REPORT_SIGNATURE_SCHEME_SHA512_RSA_PSS_SHA512: u32 = 1;
 pub const RUNTIMECOMPATIBILITY_TYPE = "System.Runtime.CompilerServices.RuntimeCompatibilityAttribute";
 pub const RUNTIMECOMPATIBILITY_TYPE_W = L("System.Runtime.CompilerServices.RuntimeCompatibilityAttribute");
 pub const RuntimeId_Property_GUID: GUID = .{ .Data1 = 2745101306, .Data2 = 32698, .Data3 = 19593, .Data4 = .{ 180, 212, 185, 158, 45, 231, 209, 96 } };
+pub const RuntimeReportTypeCodeIntegrity: i32 = 1;
 pub const RuntimeReportTypeDriver: i32 = 0;
-pub const RuntimeReportTypeMax: i32 = 1;
+pub const RuntimeReportTypeMax: i32 = 2;
 pub const RUSSIAN_CHARSET: u8 = 204;
 pub const RVTI_HTML_OPTIONS_NOLISTVIEW: u32 = 1;
 pub const RVTI_HTML_OPTIONS_NONE: u32 = 0;
@@ -729720,6 +732965,7 @@ pub const SCEPFailUnknown: i32 = -1;
 pub const SCEPMessageCertResponse: i32 = 3;
 pub const SCEPMessageClaimChallengeAnswer: i32 = 41;
 pub const SCEPMessageGetCert: i32 = 21;
+pub const SCEPMessageGetCertifier: i32 = 198;
 pub const SCEPMessageGetCertInitial: i32 = 20;
 pub const SCEPMessageGetCRL: i32 = 22;
 pub const SCEPMessagePKCSRequest: i32 = 19;
@@ -730340,6 +733586,9 @@ pub const SDC_USE_SUPPLIED_DISPLAY_CONFIG: u32 = 32;
 pub const SDC_VALIDATE: u32 = 64;
 pub const SDC_VIRTUAL_MODE_AWARE: u32 = 32768;
 pub const SDC_VIRTUAL_REFRESH_RATE_AWARE: u32 = 131072;
+pub const SDCO_NONE: i32 = 0;
+pub const SDCO_PHYSICAL_SIZE: i32 = 1;
+pub const SDCO_TOUCHPAD_GESTURE_ONLY: i32 = 2;
 pub const SDDL_ACCESS_ALLOWED = L("A");
 pub const SDDL_ACCESS_CONTROL_ASSISTANCE_OPS = L("AA");
 pub const SDDL_ACCESS_DENIED = L("D");
@@ -730388,6 +733637,7 @@ pub const SDDL_CREATOR_GROUP = L("CG");
 pub const SDDL_CREATOR_OWNER = L("CO");
 pub const SDDL_CRITICAL = L("CR");
 pub const SDDL_CRYPTO_OPERATORS = L("CY");
+pub const SDDL_CUA_USERS = L("CU");
 pub const SDDL_DACL = L("D");
 pub const SDDL_DELETE_CHILD = L("DC");
 pub const SDDL_DELETE_TREE = L("DT");
@@ -730660,6 +733910,7 @@ pub const SE_APP_SILO_ACCESS_TO_PUBLISHER_DIRECTORY_CAPABILITY = L("isolatedWin3
 pub const SE_APP_SILO_PRINT_CAPABILITY = L("isolatedWin32-print");
 pub const SE_APP_SILO_PROFILES_ROOT_MINIMAL_CAPABILITY = L("isolatedWin32-profilesRootMinimal");
 pub const SE_APP_SILO_PROMPT_FOR_ACCESS_CAPABILITY = L("isolatedWin32-promptForAccess");
+pub const SE_APP_SILO_SCANNER_CAPABILITY = L("isolatedWin32-scanner");
 pub const SE_APP_SILO_USER_PROFILE_MINIMAL_CAPABILITY = L("isolatedWin32-userProfileMinimal");
 pub const SE_APP_SILO_VOLUME_ROOT_MINIMAL_CAPABILITY = L("isolatedWin32-volumeRootMinimal");
 pub const SE_ASSIGNPRIMARYTOKEN_NAME = L("SeAssignPrimaryTokenPrivilege");
@@ -730788,6 +734039,7 @@ pub const SE_TRUSTED_CREDMAN_ACCESS_NAME = L("SeTrustedCredManAccessPrivilege");
 pub const SE_UNDOCK_NAME = L("SeUndockPrivilege");
 pub const SE_UNKNOWN_OBJECT_TYPE: i32 = 0;
 pub const SE_UNSOLICITED_INPUT_NAME = L("SeUnsolicitedInputPrivilege");
+pub const SE_UPGRADE_VERSION: u32 = 2;
 pub const SE_WINDOW_OBJECT: i32 = 7;
 pub const SE_WMIGUID_OBJECT: i32 = 11;
 pub const SeAdtParmTypeAccessMask: i32 = 7;
@@ -731173,6 +734425,7 @@ pub const SECPKG_ATTR_UNIQUE_BINDINGS: u32 = 25;
 pub const SECPKG_ATTR_USE_NCRYPT: u32 = 98;
 pub const SECPKG_ATTR_USE_VALIDATED: u32 = 15;
 pub const SECPKG_ATTR_USER_FLAGS: u32 = 11;
+pub const SECPKG_CALL_AGENT_LOGON: u32 = 524288;
 pub const SECPKG_CALL_ANSI: u32 = 2;
 pub const SECPKG_CALL_ASYNC_UPDATE: u32 = 4096;
 pub const SECPKG_CALL_BUFFER_MARSHAL: u32 = 65536;
@@ -731310,6 +734563,7 @@ pub const SecpkgExtraOids: i32 = 5;
 pub const SecpkgFailureReason_CloudAccount: i32 = 4;
 pub const SecpkgFailureReason_DomainAccount: i32 = 3;
 pub const SecpkgFailureReason_DupTarget: i32 = 8;
+pub const SecpkgFailureReason_GlobalSPN: i32 = 12;
 pub const SecpkgFailureReason_IpAddress: i32 = 7;
 pub const SecpkgFailureReason_LocalAccount: i32 = 2;
 pub const SecpkgFailureReason_Loopback: i32 = 10;
@@ -731377,6 +734631,7 @@ pub const SecureProtocol_TLS1: i32 = 128;
 pub const SecureProtocol_TLS1_1: i32 = 512;
 pub const SecureProtocol_TLS1_2: i32 = 2048;
 pub const SECUREURLHOSTVALIDATE_FLAGS_Max: i32 = 2147483647;
+pub const SECURITY_AGENTIC_PLATFORM_BASE_RID: i32 = 101;
 pub const SECURITY_ANONYMOUS: u32 = 0;
 pub const SECURITY_ANONYMOUS_LOGON_RID: i32 = 7;
 pub const SECURITY_APP_PACKAGE_AUTHORITY: SID_IDENTIFIER_AUTHORITY = .{ .Value = .{ 0, 0, 0, 0, 0, 15 } };
@@ -731558,6 +734813,7 @@ pub const SECURITY_SERVER_LOGON_RID: i32 = 9;
 pub const SECURITY_SERVICE_ID_BASE_RID: i32 = 80;
 pub const SECURITY_SERVICE_ID_RID_COUNT: i32 = 6;
 pub const SECURITY_SERVICE_RID: i32 = 6;
+pub const SECURITY_SHADOWADMINACCOUNT_RID: i32 = 100;
 pub const SECURITY_SQOS_PRESENT: u32 = 1048576;
 pub const SECURITY_STATIC_TRACKING: BOOLEAN = 0;
 pub const SECURITY_SUPPORT_PROVIDER_INTERFACE_VERSION: u32 = 1;
@@ -732962,6 +736218,7 @@ pub const SHARE_SERVER_PARMNUM: u32 = 503;
 pub const SHARE_TYPE_PARMNUM: u32 = 3;
 pub const Shared: u32 = 1;
 pub const SHARED_RESOURCE_CONV_ERROR: u32 = 31;
+pub const SharedComputeUnitArm64SMCU: i32 = 0;
 pub const SharedEnumeration: i32 = 1;
 pub const SHAREDSECRET: u32 = 64;
 pub const SharedSystemMemory: u32 = 9;
@@ -733167,6 +736424,7 @@ pub const SHI1005_FLAGS_COMPRESS_DATA: u32 = 1048576;
 pub const SHI1005_FLAGS_DFS: u32 = 1;
 pub const SHI1005_FLAGS_DFS_ROOT: u32 = 2;
 pub const SHI1005_FLAGS_DISABLE_CLIENT_BUFFERING: u32 = 131072;
+pub const SHI1005_FLAGS_DISABLE_CLIENT_METADATA_CACHING: u32 = 8388608;
 pub const SHI1005_FLAGS_DISABLE_DIRECTORY_HANDLE_LEASING: u32 = 4194304;
 pub const SHI1005_FLAGS_ENABLE_CA: u32 = 16384;
 pub const SHI1005_FLAGS_ENABLE_HASH: u32 = 8192;
@@ -733718,6 +736976,7 @@ pub const SIMULATED_FONTTYPE: u16 = 32768;
 pub const SINGLE_CHANNEL_AEC: i32 = 0;
 pub const SINGLE_CHANNEL_NSAGC: i32 = 5;
 pub const SINGLE_SESSION: u32 = 1;
+pub const SingleAdapterHybridMode: u32 = 11;
 pub const SingleItem: i32 = 0;
 pub const SingleUserTS: i32 = 8;
 pub const SINoise: i32 = 1;
@@ -733874,26 +737133,70 @@ pub const SIPAEV_AMD_ABL_9: u32 = 33298;
 pub const SIPAEV_AMD_ABL_TOC: u32 = 33355;
 pub const SIPAEV_AMD_AGESA_DRV: u32 = 33538;
 pub const SIPAEV_AMD_BASE_2: u32 = 33280;
+pub const SIPAEV_AMD_DMCU_ERAM: u32 = 33414;
+pub const SIPAEV_AMD_DMCU_ISR: u32 = 33415;
+pub const SIPAEV_AMD_DMUB_ERAM: u32 = 33416;
+pub const SIPAEV_AMD_DMUB_ISR: u32 = 33417;
 pub const SIPAEV_AMD_DRTM_DRV: u32 = 33537;
+pub const SIPAEV_AMD_DRV_ASD: u32 = 33546;
+pub const SIPAEV_AMD_DRV_FHP: u32 = 33548;
+pub const SIPAEV_AMD_DRV_IPKEYMGR: u32 = 33551;
+pub const SIPAEV_AMD_DRV_MFD: u32 = 33547;
+pub const SIPAEV_AMD_DRV_PLAT: u32 = 33550;
+pub const SIPAEV_AMD_DRV_RAS: u32 = 33545;
+pub const SIPAEV_AMD_DRV_SEV: u32 = 33544;
+pub const SIPAEV_AMD_DRV_SPDM: u32 = 33549;
 pub const SIPAEV_AMD_FTPM_DRV: u32 = 33536;
 pub const SIPAEV_AMD_GMI3: u32 = 33363;
 pub const SIPAEV_AMD_IP_DISCOVERY: u32 = 33351;
 pub const SIPAEV_AMD_MID_SMU: u32 = 33338;
+pub const SIPAEV_AMD_MINIZSC_MSMU: u32 = 33413;
+pub const SIPAEV_AMD_MINIZSC_MSMU_1: u32 = 33419;
 pub const SIPAEV_AMD_MP2_CONFIG: u32 = 33288;
 pub const SIPAEV_AMD_MP2_FW: u32 = 33289;
 pub const SIPAEV_AMD_MP5: u32 = 33361;
 pub const SIPAEV_AMD_MPCCX: u32 = 33362;
+pub const SIPAEV_AMD_MPIO_C20_PHY_FW: u32 = 33386;
+pub const SIPAEV_AMD_MPIO_E32_PHY_FW: u32 = 33385;
 pub const SIPAEV_AMD_MPIO_FW: u32 = 33360;
 pub const SIPAEV_AMD_NO_ACTION: u32 = 3;
 pub const SIPAEV_AMD_PM_FW1: u32 = 33339;
 pub const SIPAEV_AMD_PMFW0: u32 = 33287;
 pub const SIPAEV_AMD_PMU1: u32 = 33358;
 pub const SIPAEV_AMD_PMU1_DATA: u32 = 33356;
+pub const SIPAEV_AMD_PMU10: u32 = 33407;
+pub const SIPAEV_AMD_PMU10_DATA: u32 = 33394;
+pub const SIPAEV_AMD_PMU11: u32 = 33408;
+pub const SIPAEV_AMD_PMU11_DATA: u32 = 33395;
+pub const SIPAEV_AMD_PMU12: u32 = 33409;
+pub const SIPAEV_AMD_PMU12_DATA: u32 = 33396;
+pub const SIPAEV_AMD_PMU13: u32 = 33410;
+pub const SIPAEV_AMD_PMU13_DATA: u32 = 33397;
+pub const SIPAEV_AMD_PMU14: u32 = 33411;
+pub const SIPAEV_AMD_PMU14_DATA: u32 = 33398;
+pub const SIPAEV_AMD_PMU15: u32 = 33412;
+pub const SIPAEV_AMD_PMU15_DATA: u32 = 33399;
 pub const SIPAEV_AMD_PMU2: u32 = 33359;
 pub const SIPAEV_AMD_PMU2_DATA: u32 = 33357;
+pub const SIPAEV_AMD_PMU3: u32 = 33400;
+pub const SIPAEV_AMD_PMU3_DATA: u32 = 33387;
+pub const SIPAEV_AMD_PMU4: u32 = 33401;
+pub const SIPAEV_AMD_PMU4_DATA: u32 = 33388;
+pub const SIPAEV_AMD_PMU5: u32 = 33402;
+pub const SIPAEV_AMD_PMU5_DATA: u32 = 33389;
+pub const SIPAEV_AMD_PMU6: u32 = 33403;
+pub const SIPAEV_AMD_PMU6_DATA: u32 = 33390;
+pub const SIPAEV_AMD_PMU7: u32 = 33404;
+pub const SIPAEV_AMD_PMU7_DATA: u32 = 33391;
+pub const SIPAEV_AMD_PMU8: u32 = 33405;
+pub const SIPAEV_AMD_PMU8_DATA: u32 = 33392;
+pub const SIPAEV_AMD_PMU9: u32 = 33406;
+pub const SIPAEV_AMD_PMU9_DATA: u32 = 33393;
+pub const SIPAEV_AMD_PROMONTORY_21: u32 = 33384;
 pub const SIPAEV_AMD_PSP_BL_END: u32 = 33535;
 pub const SIPAEV_AMD_PSP_BL_STAGE_1: u32 = 33282;
 pub const SIPAEV_AMD_PSP_BL_STAGE_2: u32 = 33285;
+pub const SIPAEV_AMD_PSP_BOOT_DRIVER: u32 = 33541;
 pub const SIPAEV_AMD_PSP_DF_RIB_TOC: u32 = 33366;
 pub const SIPAEV_AMD_PSP_DF_RIB0: u32 = 33367;
 pub const SIPAEV_AMD_PSP_DF_RIB1: u32 = 33368;
@@ -733912,11 +737215,16 @@ pub const SIPAEV_AMD_PSP_DF_RIB7: u32 = 33374;
 pub const SIPAEV_AMD_PSP_DF_RIB8: u32 = 33375;
 pub const SIPAEV_AMD_PSP_DF_RIB9: u32 = 33376;
 pub const SIPAEV_AMD_PSP_END: u32 = 33791;
+pub const SIPAEV_AMD_PSP_HAD_DRIVER: u32 = 33540;
+pub const SIPAEV_AMD_PSP_INTERFACE_DRIVER: u32 = 33542;
 pub const SIPAEV_AMD_PSP_KEYDB: u32 = 33283;
 pub const SIPAEV_AMD_PSP_L0_SEC_POL: u32 = 33286;
 pub const SIPAEV_AMD_PSP_L1_SEC_POL: u32 = 33350;
+pub const SIPAEV_AMD_PSP_SFDR_DRIVER: u32 = 33543;
+pub const SIPAEV_AMD_PSP_SOC_DRIVER: u32 = 33539;
 pub const SIPAEV_AMD_PSP_SPIROM_CONFIG: u32 = 33365;
 pub const SIPAEV_AMD_PSP_TOS_KEYDB: u32 = 33354;
+pub const SIPAEV_AMD_S3_IMAGE: u32 = 33420;
 pub const SIPAEV_AMD_SECURE_DEBUG_UNLOCK: u32 = 33383;
 pub const SIPAEV_AMD_SL_EVENT_BASE: u32 = 32768;
 pub const SIPAEV_AMD_SL_LOAD: u32 = 32769;
@@ -733931,6 +737239,7 @@ pub const SIPAEV_AMD_SPL_TABLE_ROM: u32 = 33281;
 pub const SIPAEV_AMD_SYS_DRV: u32 = 33352;
 pub const SIPAEV_AMD_TOS: u32 = 33353;
 pub const SIPAEV_AMD_TPMLITE: u32 = 33364;
+pub const SIPAEV_AMD_UZSC_MSMU: u32 = 33418;
 pub const SIPAEV_AMD_VBL_1: u32 = 33340;
 pub const SIPAEV_AMD_VBL_10: u32 = 33349;
 pub const SIPAEV_AMD_VBL_2: u32 = 33341;
@@ -734074,6 +737383,13 @@ pub const SIPAEVENT_OSKERNELDEBUG: u32 = 327681;
 pub const SIPAEVENT_PAGEFILE_ENCRYPTION_ENABLED: u32 = 327714;
 pub const SIPAEVENT_PHYSICALADDRESSEXTENSION: u32 = 327687;
 pub const SIPAEVENT_PUBLISHER_OEMNAME: u32 = 458767;
+pub const SIPAEVENT_REFS_ATTESTATION_ATTESTED_TYPE_CERTIFICATE: i32 = 1;
+pub const SIPAEVENT_REFS_ATTESTATION_ATTESTED_TYPE_KEY_RING: i32 = 4;
+pub const SIPAEVENT_REFS_ATTESTATION_ATTESTED_TYPE_NONE: i32 = 0;
+pub const SIPAEVENT_REFS_ATTESTATION_ATTESTED_TYPE_TPM: i32 = 2;
+pub const SIPAEVENT_REFS_ATTESTATION_CERTIFICATE_HEADER_VERSION: u32 = 1;
+pub const SIPAEVENT_REFS_ATTESTATION_SUMMARY: u32 = 327742;
+pub const SIPAEVENT_REFS_ATTESTATION_SUMMARY_HEADER_VERSION: u32 = 1;
 pub const SIPAEVENT_REFS_ROLLBACK_PROTECTION_FROZEN_VOLUME_CHECKSUM: u32 = 327732;
 pub const SIPAEVENT_REFS_ROLLBACK_PROTECTION_USER_PAYLOAD_HASH: u32 = 327733;
 pub const SIPAEVENT_REFS_ROLLBACK_PROTECTION_VERIFICATION_SUCCEEDED: u32 = 327734;
@@ -734083,6 +737399,8 @@ pub const SIPAEVENT_SAFEMODE: u32 = 327685;
 pub const SIPAEVENT_SBCP_INFO: u32 = 327721;
 pub const SIPAEVENT_SI_POLICY: u32 = 327695;
 pub const SIPAEVENT_SI_POLICY_SIGNER: u32 = 327729;
+pub const SIPAEVENT_SI_POLICY_SUPPLEMENTAL_POLICY: u32 = 327737;
+pub const SIPAEVENT_SI_POLICY_SUPPLEMENTAL_SIGNER: u32 = 327736;
 pub const SIPAEVENT_SI_POLICY_UPDATE_SIGNER: u32 = 327730;
 pub const SIPAEVENT_SMT_STATUS: u32 = 327700;
 pub const SIPAEVENT_SVN_CHAIN_STATUS: u32 = 131082;
@@ -734207,7 +737525,7 @@ pub const SL_E_CHPA_BINDING_MAPPING_NOT_FOUND: HRESULT = -1073430522;
 pub const SL_E_CHPA_BINDING_NOT_FOUND: HRESULT = -1073430523;
 pub const SL_E_CHPA_BUSINESS_RULE_INPUT_NOT_FOUND: HRESULT = -1073428736;
 pub const SL_E_CHPA_DATABASE_ERROR: HRESULT = -1073430509;
-pub const SL_E_CHPA_DIGITALMARKER_BINDING_NOT_CONFIGURED: HRESULT = -1073430446;
+pub const SL_E_CHPA_DIGITALMARKER_BINDING_NOT_CONFIGURED: HRESULT = -1072381870;
 pub const SL_E_CHPA_DIGITALMARKER_INVALID_BINDING: HRESULT = -1073430447;
 pub const SL_E_CHPA_DMAK_EXTENSION_LIMIT_EXCEEDED: HRESULT = -1073430495;
 pub const SL_E_CHPA_DMAK_LIMIT_EXCEEDED: HRESULT = -1073430496;
@@ -734890,6 +738208,7 @@ pub const SMB_CLIENT_REQUEST_VALIDATION_FAILURE: u32 = 510;
 pub const SMB_REDIRECTOR_LIVEDUMP: u32 = 423;
 pub const SMB_SERVER_LIVEDUMP: u32 = 405;
 pub const SMB_SRV_REQUEST_VALIDATION_FAILURE: u32 = 506;
+pub const SMBD_BUGCHECK_CODE: u32 = 1397572164;
 pub const SMC_AUTOEXPANDCHANGE: u32 = 66;
 pub const SMC_CHEVRONEXPAND: u32 = 25;
 pub const SMC_CHEVRONGETTIP: u32 = 47;
@@ -735307,6 +738626,7 @@ pub const SocketPriorityHintLow: i32 = 1;
 pub const SocketPriorityHintNormal: i32 = 2;
 pub const SocketPriorityHintVeryLow: i32 = 0;
 pub const SOFT_RESTART_FATAL_ERROR: u32 = 112;
+pub const SOFT_RESTART_LIVE_DUMP: u32 = 113;
 pub const SOFTDIST_ADSTATE_AVAILABLE: u32 = 1;
 pub const SOFTDIST_ADSTATE_DOWNLOADED: u32 = 2;
 pub const SOFTDIST_ADSTATE_INSTALLED: u32 = 3;
@@ -739081,6 +742401,7 @@ pub const SSRVACTION_CHECKSUMSTATUS: u32 = 8;
 pub const SSRVACTION_EVENT: u32 = 3;
 pub const SSRVACTION_EVENTW: u32 = 4;
 pub const SSRVACTION_HTTPSTATUS: u32 = 6;
+pub const SSRVACTION_QUERY_IF_DOWNLOAD_DISALLOWED: u32 = 9;
 pub const SSRVACTION_QUERYCANCEL: u32 = 2;
 pub const SSRVACTION_SIZE: u32 = 5;
 pub const SSRVACTION_TRACE: u32 = 1;
@@ -739125,11 +742446,13 @@ pub const SSRVURI_FILEPTR: u32 = 4;
 pub const SSRVURI_HTTP_COMPRESSED: u32 = 2;
 pub const SSRVURI_HTTP_FILEPTR: u32 = 4;
 pub const SSRVURI_HTTP_MASK: u32 = 15;
+pub const SSRVURI_HTTP_MSFZ0: u32 = 8;
 pub const SSRVURI_HTTP_NORMAL: u32 = 1;
 pub const SSRVURI_NORMAL: u32 = 1;
 pub const SSRVURI_UNC_COMPRESSED: u32 = 32;
 pub const SSRVURI_UNC_FILEPTR: u32 = 64;
 pub const SSRVURI_UNC_MASK: u32 = 240;
+pub const SSRVURI_UNC_MSFZ0: u32 = 128;
 pub const SSRVURI_UNC_NORMAL: u32 = 16;
 pub const SSSPTRelativeToCurrentPosition: u32 = 1;
 pub const SSSPTRelativeToEnd: u32 = 2;
@@ -739390,7 +742713,6 @@ pub const STATUS_ADDRESS_ALREADY_ASSOCIATED: NTSTATUS = -1073741256;
 pub const STATUS_ADDRESS_ALREADY_EXISTS: NTSTATUS = -1073741302;
 pub const STATUS_ADDRESS_CLOSED: NTSTATUS = -1073741301;
 pub const STATUS_ADDRESS_NOT_ASSOCIATED: NTSTATUS = -1073741255;
-pub const STATUS_ADMINLESS_ACCESS_DENIED: NTSTATUS = -1073700348;
 pub const STATUS_ADVANCED_INSTALLER_FAILED: NTSTATUS = -1072365536;
 pub const STATUS_AGENTS_EXHAUSTED: NTSTATUS = -1073741691;
 pub const STATUS_ALERTED: NTSTATUS = 257;
@@ -739560,6 +742882,7 @@ pub const STATUS_CHILD_MUST_BE_VOLATILE: NTSTATUS = -1073741439;
 pub const STATUS_CHILD_PROCESS_BLOCKED: NTSTATUS = -1073740643;
 pub const STATUS_CIMFS_IMAGE_CORRUPT: NTSTATUS = -1073692671;
 pub const STATUS_CIMFS_IMAGE_VERSION_NOT_SUPPORTED: NTSTATUS = -1073692670;
+pub const STATUS_CIMFS_VERIFICATION_FAILED: NTSTATUS = -1073692669;
 pub const STATUS_CLEANER_CARTRIDGE_INSTALLED: NTSTATUS = -2147483609;
 pub const STATUS_CLIENT_SERVER_PARAMETERS_INVALID: NTSTATUS = -1073741277;
 pub const STATUS_CLIP_DEVICE_LICENSE_MISSING: NTSTATUS = -1058406397;
@@ -739775,6 +743098,7 @@ pub const STATUS_DEVICE_HINT_NAME_BUFFER_TOO_SMALL: NTSTATUS = -1073740650;
 pub const STATUS_DEVICE_HUNG: NTSTATUS = -1073740537;
 pub const STATUS_DEVICE_IN_MAINTENANCE: NTSTATUS = -1073740647;
 pub const STATUS_DEVICE_INSUFFICIENT_RESOURCES: NTSTATUS = -1073740696;
+pub const STATUS_DEVICE_NACKED: NTSTATUS = -1073740571;
 pub const STATUS_DEVICE_NOT_CONNECTED: NTSTATUS = -1073741667;
 pub const STATUS_DEVICE_NOT_PARTITIONED: NTSTATUS = -1073741452;
 pub const STATUS_DEVICE_NOT_READY: NTSTATUS = -1073741661;
@@ -739949,6 +743273,7 @@ pub const STATUS_FAIL_CHECK: NTSTATUS = -1073741271;
 pub const STATUS_FAIL_FAST_EXCEPTION: NTSTATUS = -1073740286;
 pub const STATUS_FAILED_DRIVER_ENTRY: NTSTATUS = -1073740955;
 pub const STATUS_FAILED_STACK_SWITCH: NTSTATUS = -1073740941;
+pub const STATUS_FAILED_SUBMITTED_DEVICE_COMMAND: NTSTATUS = -2147483594;
 pub const STATUS_FASTPATH_REJECTED: NTSTATUS = -1073700844;
 pub const STATUS_FATAL_APP_EXIT: NTSTATUS = 1073741845;
 pub const STATUS_FATAL_MEMORY_EXHAUSTION: NTSTATUS = -1073741395;
@@ -739988,6 +743313,7 @@ pub const STATUS_FILE_SYSTEM_VIRTUALIZATION_UNAVAILABLE: NTSTATUS = -1073689087;
 pub const STATUS_FILE_TOO_LARGE: NTSTATUS = -1073739516;
 pub const STATUS_FILEMARK_DETECTED: NTSTATUS = -2147483621;
 pub const STATUS_FILES_OPEN: NTSTATUS = -1073741561;
+pub const STATUS_FIPS_FAILURE: NTSTATUS = -1073700855;
 pub const STATUS_FIRMWARE_IMAGE_INVALID: NTSTATUS = -1073740667;
 pub const STATUS_FIRMWARE_SLOT_INVALID: NTSTATUS = -1073740668;
 pub const STATUS_FIRMWARE_UPDATED: NTSTATUS = 1073741868;
@@ -740066,6 +743392,7 @@ pub const STATUS_FVE_BAD_INFORMATION: NTSTATUS = -1071579134;
 pub const STATUS_FVE_BAD_METADATA_POINTER: NTSTATUS = -1071579105;
 pub const STATUS_FVE_BAD_PARTITION_SIZE: NTSTATUS = -1071579131;
 pub const STATUS_FVE_BAD_TPM_DATUM_ASSOCIATION: NTSTATUS = -1071579061;
+pub const STATUS_FVE_BOOT_CRIT_DEVICE_UNEXPECTED_BEHAVIOR: NTSTATUS = -1071579045;
 pub const STATUS_FVE_CONV_READ_ERROR: NTSTATUS = -1071579123;
 pub const STATUS_FVE_CONV_RECOVERY_FAILED: NTSTATUS = -1071579096;
 pub const STATUS_FVE_CONV_WRITE_ERROR: NTSTATUS = -1071579122;
@@ -740101,6 +743428,7 @@ pub const STATUS_FVE_KEYFILE_NOT_FOUND: NTSTATUS = -1071579117;
 pub const STATUS_FVE_LOCKED_VOLUME: NTSTATUS = -1071579136;
 pub const STATUS_FVE_MATCHING_PCRS_TPM_FAILURE: NTSTATUS = -1071579059;
 pub const STATUS_FVE_METADATA_FULL: NTSTATUS = -1071579068;
+pub const STATUS_FVE_MISSING_PROTECTORS: NTSTATUS = -1071579036;
 pub const STATUS_FVE_MOR_FAILED: NTSTATUS = -1071579099;
 pub const STATUS_FVE_NO_AUTOUNLOCK_MASTER_KEY: NTSTATUS = -1071579100;
 pub const STATUS_FVE_NO_FEATURE_LICENSE: NTSTATUS = -1071579098;
@@ -740110,6 +743438,7 @@ pub const STATUS_FVE_NO_PCR_BOOT_LOCK_BOUNDARY: NTSTATUS = -1071579056;
 pub const STATUS_FVE_NO_TPM_BINDINGS: NTSTATUS = -1071579046;
 pub const STATUS_FVE_NOT_ALLOWED_ON_CLUSTER: NTSTATUS = -1071579083;
 pub const STATUS_FVE_NOT_ALLOWED_ON_CSV_STACK: NTSTATUS = -1071579084;
+pub const STATUS_FVE_NOT_ALLOWED_ON_EPHEMERAL_VOLUME: NTSTATUS = -1071579039;
 pub const STATUS_FVE_NOT_ALLOWED_TO_UPGRADE_WHILE_CONVERTING: NTSTATUS = -1071579082;
 pub const STATUS_FVE_NOT_DATA_VOLUME: NTSTATUS = -1071579124;
 pub const STATUS_FVE_NOT_DE_VOLUME: NTSTATUS = -1071579075;
@@ -740142,12 +743471,14 @@ pub const STATUS_FVE_TPM_DISABLED: NTSTATUS = -1071579114;
 pub const STATUS_FVE_TPM_INVALID_PCR: NTSTATUS = -1071579112;
 pub const STATUS_FVE_TPM_NO_VMK: NTSTATUS = -1071579111;
 pub const STATUS_FVE_TPM_NONEXISTENT: NTSTATUS = -1071579057;
-pub const STATUS_FVE_TPM_PCRS_DO_NOT_MATCH_LOG: NTSTATUS = -1071579039;
+pub const STATUS_FVE_TPM_PCRS_DO_NOT_MATCH_LOG: NTSTATUS = -1071579037;
 pub const STATUS_FVE_TPM_SRK_AUTH_NOT_ZERO: NTSTATUS = -1071579113;
 pub const STATUS_FVE_TPMPV2_USED_FAILURE: NTSTATUS = -1071579047;
 pub const STATUS_FVE_TRANSIENT_STATE: NTSTATUS = -2145320958;
+pub const STATUS_FVE_UNTRUSTED_OFFLOAD_STORAGE: NTSTATUS = -1071579038;
 pub const STATUS_FVE_VIRTUALIZED_SPACE_TOO_BIG: NTSTATUS = -1071579095;
 pub const STATUS_FVE_VOLUME_EXTEND_PREVENTS_EOW_DECRYPT: NTSTATUS = -1071579076;
+pub const STATUS_FVE_VOLUME_HANDLE_OPEN: NTSTATUS = -1071579035;
 pub const STATUS_FVE_VOLUME_NOT_BOUND: NTSTATUS = -1071579125;
 pub const STATUS_FVE_VOLUME_TOO_SMALL: NTSTATUS = -1071579088;
 pub const STATUS_FVE_WIPE_CANCEL_NOT_APPLICABLE: NTSTATUS = -1071579081;
@@ -740465,6 +743796,7 @@ pub const STATUS_HV_ACKNOWLEDGED: NTSTATUS = -1070268394;
 pub const STATUS_HV_CALL_PENDING: NTSTATUS = -1070268295;
 pub const STATUS_HV_CPUID_FEATURE_VALIDATION_ERROR: NTSTATUS = -1070268356;
 pub const STATUS_HV_CPUID_XSAVE_FEATURE_VALIDATION_ERROR: NTSTATUS = -1070268355;
+pub const STATUS_HV_DEVICE_ALREADY_IN_DOMAIN: NTSTATUS = -1070268314;
 pub const STATUS_HV_DEVICE_NOT_IN_DOMAIN: NTSTATUS = -1070268298;
 pub const STATUS_HV_EVENT_BUFFER_ALREADY_FREED: NTSTATUS = -1070268300;
 pub const STATUS_HV_FEATURE_UNAVAILABLE: NTSTATUS = -1070268386;
@@ -740624,6 +743956,7 @@ pub const STATUS_INVALID_MESSAGE: NTSTATUS = -1073740030;
 pub const STATUS_INVALID_NETWORK_RESPONSE: NTSTATUS = -1073741629;
 pub const STATUS_INVALID_OFFSET_ALIGNMENT: NTSTATUS = -1073740684;
 pub const STATUS_INVALID_OPLOCK_PROTOCOL: NTSTATUS = -1073741597;
+pub const STATUS_INVALID_OPLOCK_REQUEST: NTSTATUS = -1073740519;
 pub const STATUS_INVALID_OWNER: NTSTATUS = -1073741734;
 pub const STATUS_INVALID_PACKAGE_SID_LENGTH: NTSTATUS = -1073700350;
 pub const STATUS_INVALID_PAGE_PROTECTION: NTSTATUS = -1073741755;
@@ -741436,6 +744769,7 @@ pub const STATUS_SMARTCARD_NO_KEYSET: NTSTATUS = -1073740922;
 pub const STATUS_SMARTCARD_SILENT_CONTEXT: NTSTATUS = -1073740913;
 pub const STATUS_SMARTCARD_SUBSYSTEM_FAILURE: NTSTATUS = -1073741023;
 pub const STATUS_SMARTCARD_WRONG_PIN: NTSTATUS = -1073740928;
+pub const STATUS_SMB_ALTERNATIVE_PORT_CONFLICT: NTSTATUS = -1067646963;
 pub const STATUS_SMB_BAD_CLUSTER_DIALECT: NTSTATUS = -1067646975;
 pub const STATUS_SMB_ENCRYPTION_NOT_SUPPORTED_BY_PEER: NTSTATUS = -1067646968;
 pub const STATUS_SMB_GUEST_ENCRYPTION_NOT_SUPPORTED: NTSTATUS = -1067646969;
@@ -741874,6 +745208,7 @@ pub const STATUS_UNEXPECTED_MM_MAP_ERROR: NTSTATUS = -1073741589;
 pub const STATUS_UNEXPECTED_NETWORK_ERROR: NTSTATUS = -1073741628;
 pub const STATUS_UNFINISHED_CONTEXT_DELETED: NTSTATUS = -1073741074;
 pub const STATUS_UNHANDLED_EXCEPTION: NTSTATUS = -1073741500;
+pub const STATUS_UNIONFS_BOOT_LAYER_NOT_ATTACHED: NTSTATUS = -1058209779;
 pub const STATUS_UNIONFS_CANNOT_CROSS_UNION: NTSTATUS = -1058209791;
 pub const STATUS_UNIONFS_CANNOT_EXIT_UNION: NTSTATUS = -1058209790;
 pub const STATUS_UNIONFS_CANNOT_PRESERVE_LINK: NTSTATUS = -1058209789;
@@ -741954,6 +745289,9 @@ pub const STATUS_VID_CHILD_GPA_PAGE_SET_CORRUPTED: NTSTATUS = -1070137330;
 pub const STATUS_VID_DUPLICATE_HANDLER: NTSTATUS = -1070137343;
 pub const STATUS_VID_EXCEEDED_KM_CONTEXT_COUNT_LIMIT: NTSTATUS = -1070137314;
 pub const STATUS_VID_EXCEEDED_MBP_ENTRY_MAP_LIMIT: NTSTATUS = -1070137332;
+pub const STATUS_VID_GPA_RANGE_INVALID_FLAGS: NTSTATUS = -1070137280;
+pub const STATUS_VID_GPA_RANGE_INVARIANTS_MISMATCH: NTSTATUS = -1070137270;
+pub const STATUS_VID_GPA_RANGE_OVERLAP_PROHIBITED: NTSTATUS = -1070137272;
 pub const STATUS_VID_HANDLER_NOT_PRESENT: NTSTATUS = -1070137340;
 pub const STATUS_VID_INSUFFICIENT_RESOURCES_HV_DEPOSIT: NTSTATUS = -1070137299;
 pub const STATUS_VID_INSUFFICIENT_RESOURCES_PHYSICAL_BUFFER: NTSTATUS = -1070137300;
@@ -741969,12 +745307,34 @@ pub const STATUS_VID_INVALID_OBJECT_NAME: NTSTATUS = -1070137339;
 pub const STATUS_VID_INVALID_PPM_HANDLE: NTSTATUS = -1070137320;
 pub const STATUS_VID_INVALID_PROCESSOR_STATE: NTSTATUS = -1070137315;
 pub const STATUS_VID_KM_INTERFACE_ALREADY_INITIALIZED: NTSTATUS = -1070137313;
+pub const STATUS_VID_KSR_ALREADY_PERSISTED: NTSTATUS = -1070137278;
+pub const STATUS_VID_KSR_ALREADY_UNPERSISTED: NTSTATUS = -1070137277;
+pub const STATUS_VID_KSR_CLIENT_TYPE_MISMATCH: NTSTATUS = -1070137275;
+pub const STATUS_VID_KSR_INVALID_PERSIST_ID: NTSTATUS = -1070137282;
+pub const STATUS_VID_KSR_INVALID_PERSISTENCE_OPTIONS: NTSTATUS = -1070137281;
+pub const STATUS_VID_KSR_INVALID_STATE: NTSTATUS = -1070137274;
+pub const STATUS_VID_KSR_IOHANDLER_PROPERTY_MISMATCH: NTSTATUS = -1070137288;
+pub const STATUS_VID_KSR_MEMORY_PARTITION_STATE_SIZE_MISMATCH: NTSTATUS = -1070137286;
+pub const STATUS_VID_KSR_METADATA_MISMATCH: NTSTATUS = -1070137285;
+pub const STATUS_VID_KSR_MSR_HANDLER_PROPERTY_MISMATCH: NTSTATUS = -1070137287;
+pub const STATUS_VID_KSR_NOT_READY: NTSTATUS = -1070137273;
+pub const STATUS_VID_KSR_PERSISTED_ITEMS_STILL_REGISTERED: NTSTATUS = -1070137292;
+pub const STATUS_VID_KSR_PERSISTENCE_DISALLOWED: NTSTATUS = -1070137276;
+pub const STATUS_VID_KSR_PSCI_HANDLER_PROPERTY_MISMATCH: NTSTATUS = -1070137269;
+pub const STATUS_VID_KSR_TOTAL_PAGE_COUNT_MISMATCH: NTSTATUS = -1070137284;
 pub const STATUS_VID_MB_PROPERTY_ALREADY_SET_RESET: NTSTATUS = -1070137312;
 pub const STATUS_VID_MB_STILL_REFERENCED: NTSTATUS = -1070137331;
 pub const STATUS_VID_MBP_ALREADY_LOCKED_USING_RESERVED_PAGE: NTSTATUS = -1070137307;
+pub const STATUS_VID_MBP_ARRAY_NOT_PERSISTED: NTSTATUS = -1070137283;
 pub const STATUS_VID_MBP_COUNT_EXCEEDED_LIMIT: NTSTATUS = -1070137306;
 pub const STATUS_VID_MBPS_ARE_LOCKED: NTSTATUS = -1070137319;
+pub const STATUS_VID_MEMORY_BLOCK_INVALID_FLAGS: NTSTATUS = -1070137279;
+pub const STATUS_VID_MEMORY_BLOCK_INVARIANTS_MISMATCH: NTSTATUS = -1070137294;
 pub const STATUS_VID_MEMORY_BLOCK_LOCK_COUNT_EXCEEDED: NTSTATUS = -1070137321;
+pub const STATUS_VID_MEMORY_BLOCK_PAGECOUNT_MISMATCH: NTSTATUS = -1070137289;
+pub const STATUS_VID_MEMORY_BLOCK_RESTORE_STATE_MISMATCH: NTSTATUS = -1070137293;
+pub const STATUS_VID_MEMORY_PARTITION_SETUP_FAILED: NTSTATUS = -1070137291;
+pub const STATUS_VID_MEMORY_RESERVE_NOT_ENABLED: NTSTATUS = -1070137290;
 pub const STATUS_VID_MEMORY_TYPE_NOT_SUPPORTED: NTSTATUS = -1070137298;
 pub const STATUS_VID_MESSAGE_QUEUE_ALREADY_EXISTS: NTSTATUS = -1070137333;
 pub const STATUS_VID_MESSAGE_QUEUE_CLOSED: NTSTATUS = -1070137318;
@@ -741985,8 +745345,10 @@ pub const STATUS_VID_NOTIFICATION_QUEUE_ALREADY_ASSOCIATED: NTSTATUS = -10701373
 pub const STATUS_VID_PAGE_RANGE_OVERFLOW: NTSTATUS = -1070137325;
 pub const STATUS_VID_PARTITION_ALREADY_EXISTS: NTSTATUS = -1070137336;
 pub const STATUS_VID_PARTITION_DOES_NOT_EXIST: NTSTATUS = -1070137335;
+pub const STATUS_VID_PARTITION_INVARIANTS_MISMATCH: NTSTATUS = -1070137295;
 pub const STATUS_VID_PARTITION_NAME_NOT_FOUND: NTSTATUS = -1070137334;
 pub const STATUS_VID_PARTITION_NAME_TOO_LONG: NTSTATUS = -1070137338;
+pub const STATUS_VID_PARTITION_NOT_HIERARCHICAL_HOST: NTSTATUS = -1070137271;
 pub const STATUS_VID_PROCESS_ALREADY_SET: NTSTATUS = -1070137296;
 pub const STATUS_VID_QUEUE_FULL: NTSTATUS = -1070137341;
 pub const STATUS_VID_REMOTE_NODE_PARENT_GPA_PAGES_USED: NTSTATUS = -2143879167;
@@ -742131,6 +745493,7 @@ pub const STATUS_VRF_VOLATILE_PROTECTED_DRIVER: NTSTATUS = -1073738739;
 pub const STATUS_VRF_VOLATILE_SAFE_MODE: NTSTATUS = -1073738742;
 pub const STATUS_VRF_VOLATILE_SETTINGS_CONFLICT: NTSTATUS = -1073738737;
 pub const STATUS_VSM_DMA_PROTECTION_NOT_IN_USE: NTSTATUS = -1069219839;
+pub const STATUS_VSM_FW_MEASUREMENTS_SEAL_FAILURE: NTSTATUS = -1069219834;
 pub const STATUS_VSM_KEY_CI_POLICY_ROLLBACK_DETECTED: NTSTATUS = -1069219838;
 pub const STATUS_VSM_NOT_INITIALIZED: NTSTATUS = -1069219840;
 pub const STATUS_VSMIDK_EXPORT_FAILURE: NTSTATUS = -1069219836;
@@ -742585,6 +745948,10 @@ pub const STOPBITS_10: u16 = 1;
 pub const STOPBITS_15: u16 = 2;
 pub const STOPBITS_20: u16 = 4;
 pub const STOR: u32 = 2048;
+pub const STOR_MAX_PAGING_DEVICES: u32 = 16;
+pub const STOR_PAGING_DEVICE_FW_REVISION_LENGTH: u32 = 16;
+pub const STOR_PAGING_DEVICE_MINIPORT_NAME_LENGTH: u32 = 32;
+pub const STOR_PAGING_DEVICE_MODEL_NAME_LENGTH: u32 = 64;
 pub const STORAGE_ADAPTER_SERIAL_NUMBER_V1_MAX_LENGTH: u32 = 128;
 pub const STORAGE_ADDRESS_TYPE_BTL8: u32 = 0;
 pub const STORAGE_ATTRIBUTE_ASYNC_EVENT_NOTIFICATION: u32 = 16;
@@ -742593,6 +745960,9 @@ pub const STORAGE_ATTRIBUTE_BYTE_ADDRESSABLE_IO: u32 = 1;
 pub const STORAGE_ATTRIBUTE_DYNAMIC_PERSISTENCE: u32 = 4;
 pub const STORAGE_ATTRIBUTE_PERF_SIZE_INDEPENDENT: u32 = 32;
 pub const STORAGE_ATTRIBUTE_VOLATILE: u32 = 8;
+pub const STORAGE_BOOT_PARTITION_ACTIVATE_STRUCTURE_VERSION: u32 = 1;
+pub const STORAGE_BOOT_PARTITION_DOWNLOAD_STRUCTURE_VERSION: u32 = 1;
+pub const STORAGE_BOOT_PARTITION_GET_INFO_STRUCTURE_VERSION_V1: u32 = 1;
 pub const STORAGE_COMPONENT_ROLE_CACHE: u32 = 1;
 pub const STORAGE_COMPONENT_ROLE_DATA: u32 = 4;
 pub const STORAGE_COMPONENT_ROLE_TIERING: u32 = 2;
@@ -742620,7 +745990,7 @@ pub const STORAGE_DIAGNOSTIC_STATUS_INVALID_TARGET_TYPE: u32 = 5;
 pub const STORAGE_DIAGNOSTIC_STATUS_MORE_DATA: u32 = 6;
 pub const STORAGE_DIAGNOSTIC_STATUS_SUCCESS: u32 = 0;
 pub const STORAGE_DIAGNOSTIC_STATUS_UNSUPPORTED_VERSION: u32 = 2;
-pub const STORAGE_DRIVER_LIVEDUMP: u32 = 519;
+pub const STORAGE_DRIVER_LIVEDUMP: u32 = 520;
 pub const STORAGE_EVENT_DEVICE_OPERATION: u64 = 4;
 pub const STORAGE_EVENT_DEVICE_STATUS: u64 = 2;
 pub const STORAGE_EVENT_MEDIA_STATUS: u64 = 1;
@@ -742635,6 +746005,12 @@ pub const STORAGE_FIRMWARE_INFO_STRUCTURE_VERSION: u32 = 1;
 pub const STORAGE_FIRMWARE_INFO_STRUCTURE_VERSION_V2: u32 = 2;
 pub const STORAGE_FIRMWARE_SLOT_INFO_V2_REVISION_LENGTH: u32 = 16;
 pub const STORAGE_FULL: u32 = 256;
+pub const STORAGE_HW_BOOT_PARTITION_ACTIVATE_STRUCTURE_VERSION: u32 = 1;
+pub const STORAGE_HW_BOOT_PARTITION_DOWNLOAD_STRUCTURE_VERSION: u32 = 1;
+pub const STORAGE_HW_BOOT_PARTITION_INFO_STRUCTURE_VERSION_V1: u32 = 1;
+pub const STORAGE_HW_BOOT_PARTITION_REQUEST_ACTIVATE_EXISTING_BOOT_PARTITION: u32 = 2147483648;
+pub const STORAGE_HW_BOOT_PARTITION_REQUEST_FLAG_CONTROLLER: u32 = 1;
+pub const STORAGE_HW_BOOT_PARTITION_REQUEST_REPLACE_EXISTING_BOOT_PARTITION: u32 = 1073741824;
 pub const STORAGE_HW_CRYPTO_CAPABILITY_VERSION_1: u32 = 1;
 pub const STORAGE_HW_CRYPTO_DESCRIPTOR_VERSION_1: u32 = 1;
 pub const STORAGE_HW_FIRMWARE_INVALID_SLOT: u32 = 255;
@@ -742892,6 +746268,7 @@ pub const StorRpmbAuthenticatedWrite: i32 = 3;
 pub const StorRpmbProgramAuthKey: i32 = 1;
 pub const StorRpmbQueryWriteCounter: i32 = 2;
 pub const StorRpmbReadResultRequest: i32 = 5;
+pub const STORVSP_LIVEDUMP: u32 = 1073742345;
 pub const STPF_NONE: i32 = 0;
 pub const STPF_USEAPPPEEKALWAYS: i32 = 4;
 pub const STPF_USEAPPPEEKWHENACTIVE: i32 = 8;
@@ -745028,8 +748405,9 @@ pub const SYMOPT_DISABLE_SRVSTAR_ON_STARTUP: u32 = 1073741824;
 pub const SYMOPT_DISABLE_SYMSRV_AUTODETECT: u32 = 33554432;
 pub const SYMOPT_DISABLE_SYMSRV_TIMEOUT: u32 = 536870912;
 pub const SYMOPT_EX_DISABLEACCESSTIMEUPDATE: i32 = 0;
+pub const SYMOPT_EX_DISALLOW_NETWORK_PATHS: i32 = 4;
 pub const SYMOPT_EX_LASTVALIDDEBUGDIRECTORY: i32 = 1;
-pub const SYMOPT_EX_MAX: i32 = 4;
+pub const SYMOPT_EX_MAX: i32 = 5;
 pub const SYMOPT_EX_NEVERLOADSYMBOLS: i32 = 3;
 pub const SYMOPT_EX_NOIMPLICITPATTERNSEARCH: i32 = 2;
 pub const SYMOPT_EXACT_SYMBOLS: u32 = 1024;
@@ -745774,6 +749152,7 @@ pub const szOID_CERTIFICATE_TEMPLATE = "1.3.6.1.4.1.311.21.7";
 pub const szOID_CERTSRV_CA_VERSION = "1.3.6.1.4.1.311.21.1";
 pub const szOID_CERTSRV_CROSSCA_VERSION = "1.3.6.1.4.1.311.21.22";
 pub const szOID_CERTSRV_PREVIOUS_CERT_HASH = "1.3.6.1.4.1.311.21.2";
+pub const szOID_CERTSRV_V2_ATTESTATION_VERIFIED = "1.3.6.1.4.1.311.21.49";
 pub const szOID_CMC = "1.3.6.1.5.5.7.7";
 pub const szOID_CMC_ADD_ATTRIBUTES = "1.3.6.1.4.1.311.10.10.1";
 pub const szOID_CMC_ADD_EXTENSIONS = "1.3.6.1.5.5.7.7.8";
@@ -745909,6 +749288,11 @@ pub const szOID_ENROLL_SCEP_SERVER_MESSAGE = "1.3.6.1.4.1.311.21.38";
 pub const szOID_ENROLL_SCEP_SERVER_SECRET = "1.3.6.1.4.1.311.21.40";
 pub const szOID_ENROLL_SCEP_SERVER_STATE = "1.3.6.1.4.1.311.21.34";
 pub const szOID_ENROLL_SCEP_SIGNER_HASH = "1.3.6.1.4.1.311.21.42";
+pub const szOID_ENROLL_V2_AIK_INFO = "1.3.6.1.4.1.311.21.47";
+pub const szOID_ENROLL_V2_ATTESTATION_STATEMENT = "1.3.6.1.4.1.311.21.48";
+pub const szOID_ENROLL_V2_CONTAINER_NAME = "1.3.6.1.4.1.311.21.44";
+pub const szOID_ENROLL_V2_EK_ALGORITHM = "1.3.6.1.4.1.311.21.45";
+pub const szOID_ENROLL_V2_EK_PARAMETER = "1.3.6.1.4.1.311.21.46";
 pub const szOID_ENROLLMENT_AGENT = "1.3.6.1.4.1.311.20.2.1";
 pub const szOID_ENROLLMENT_CSP_PROVIDER = "1.3.6.1.4.1.311.13.2.2";
 pub const szOID_ENROLLMENT_NAME_VALUE_PAIR = "1.3.6.1.4.1.311.13.2.1";
@@ -746335,9 +749719,20 @@ pub const szUSER_SIGNATURE_CERT_PREFIX = "ksc";
 pub const szUSER_SIGNATURE_PRIVATE_KEY_PREFIX = "kss";
 pub const szUSER_SIGNATURE_PUBLIC_KEY_PREFIX = "ksp";
 pub const SZVISIBLE = "VisibleBands";
+pub const TA_3FINGER_PRESS: i32 = 1;
+pub const TA_3FINGER_RELEASE: i32 = 2;
+pub const TA_3FINGER_TAP: i32 = 0;
+pub const TA_4FINGER_PRESS: i32 = 4;
+pub const TA_4FINGER_RELEASE: i32 = 5;
+pub const TA_4FINGER_TAP: i32 = 3;
+pub const TA_5FINGER_PRESS: i32 = 7;
+pub const TA_5FINGER_RELEASE: i32 = 8;
+pub const TA_5FINGER_TAP: i32 = 6;
 pub const TA_BASELINE: u32 = 24;
 pub const TA_BOTTOM: u32 = 8;
 pub const TA_CENTER: u32 = 6;
+pub const TA_INERTIA_END: i32 = 10;
+pub const TA_INERTIA_STOP: i32 = 9;
 pub const TA_LEFT: u32 = 0;
 pub const TA_MASK: u32 = 287;
 pub const TA_NOUPDATECP: u32 = 0;
@@ -747974,6 +751369,7 @@ pub const Tensor: u32 = 1;
 pub const TenthsSecondsMode: i32 = 1;
 pub const TERMINAL_SERVER_DRIVER_MADE_INCORRECT_MEMORY_REFERENCE: u32 = 207;
 pub const TerminalServer: i32 = 4;
+pub const TEST_INITIATED_CRASH: u32 = 523;
 pub const TestControlForceBilinear: i32 = 0;
 pub const TestControlGetBuildNumber: i32 = 2;
 pub const TestControlNoICM: i32 = 1;
@@ -748773,6 +752169,10 @@ pub const TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256: u32 = 49199;
 pub const TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA: u32 = 49172;
 pub const TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384: u32 = 49192;
 pub const TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384: u32 = 49200;
+pub const TLS_HYBRID_KEYEXCHANGE = L("TLS_HYBRID_KEYEXCHANGE");
+pub const TLS_HYBRID_KEYEXCHANGE_MAGIC: u32 = 1213418580;
+pub const TLS_KEM_CIPHERTEXT = L("TLS_KEM_CIPHER_TEXT");
+pub const TLS_KEM_CIPHERTEXT_MAGIC: u32 = 1129008205;
 pub const TLS_MINIMUM_AVAILABLE: u32 = 64;
 pub const TLS_OUT_OF_INDEXES: u32 = 4294967295;
 pub const TLS_PARAMS_OPTIONAL: u32 = 1;
@@ -749227,9 +752627,11 @@ pub const TokenImpersonationLevel: i32 = 9;
 pub const TokenIntegrityLevel: i32 = 25;
 pub const TokenIsAppContainer: i32 = 29;
 pub const TokenIsAppSilo: i32 = 48;
+pub const TokenIsInstaller: i32 = 52;
 pub const TokenIsLessPrivilegedAppContainer: i32 = 46;
 pub const TokenIsRestricted: i32 = 40;
 pub const TokenIsSandboxed: i32 = 47;
+pub const TokenIsSystemManagedAdmin: i32 = 51;
 pub const TokenLearningMode: i32 = 50;
 pub const TokenLinkedToken: i32 = 19;
 pub const TokenLoggingInformation: i32 = 49;
@@ -750792,6 +754194,7 @@ pub const TS_SB_SORT_BY_NAME: i32 = 1;
 pub const TS_SB_SORT_BY_NONE: i32 = 0;
 pub const TS_SB_SORT_BY_PROP: i32 = 2;
 pub const TS_SD_BACKWARD: i32 = 0;
+pub const TS_SD_DISABLEWRITINGSUGGESTIONS: u32 = 512;
 pub const TS_SD_EMBEDDEDHANDWRITINGVIEW_ENABLED: u32 = 128;
 pub const TS_SD_EMBEDDEDHANDWRITINGVIEW_VISIBLE: u32 = 256;
 pub const TS_SD_FORWARD: i32 = 1;
@@ -750807,6 +754210,7 @@ pub const TS_SHIFT_COUNT_ONLY: u32 = 8;
 pub const TS_SHIFT_HALT_HIDDEN: u32 = 2;
 pub const TS_SHIFT_HALT_VISIBLE: u32 = 4;
 pub const TS_SS_DISJOINTSEL: u32 = 1;
+pub const TS_SS_MULTILINE: u32 = 128;
 pub const TS_SS_NOHIDDENTEXT: u32 = 8;
 pub const TS_SS_REGIONS: u32 = 2;
 pub const TS_SS_TKBAUTOCORRECTENABLE: u32 = 16;
@@ -754351,6 +757755,7 @@ pub const UNIFIEDBUILDREVISION_KEY = L("\\Registry\\Machine\\Software\\Microsoft
 pub const UNIFIEDBUILDREVISION_MIN: u32 = 0;
 pub const UNIFIEDBUILDREVISION_VALUE = L("UBR");
 pub const UNIFM_VERSION_1_0: u32 = 65536;
+pub const UNIONFS_E_BOOT_LAYER_NOT_ATTACHED: HRESULT = -1994063859;
 pub const UNIONFS_E_CANNOT_CROSS_UNION: HRESULT = -1994063871;
 pub const UNIONFS_E_CANNOT_EXIT_UNION: HRESULT = -1994063870;
 pub const UNIONFS_E_CANNOT_PRESERVE_LINK: HRESULT = -1994063869;
@@ -754421,6 +757826,7 @@ pub const UNPROTECTED_SACL_SECURITY_INFORMATION: u32 = 268435456;
 pub const UNRECOVERED_READS_VALID: u32 = 8;
 pub const UNRECOVERED_WRITES_VALID: u32 = 2;
 pub const Unrelated: i32 = 0;
+pub const Unspecified: u32 = 0;
 pub const UNSPECIFIED_COMPARTMENT_ID: i32 = 0;
 pub const UNSPECIFIED_NETWORK_GUID: GUID = .{ .Data1 = 314203102, .Data2 = 5182, .Data3 = 19469, .Data4 = .{ 182, 109, 35, 121, 187, 20, 25, 19 } };
 pub const UNSUPPORTED_INSTRUCTION_MODE: u32 = 337;
@@ -755887,6 +759293,7 @@ pub const USER_MARSHAL_FC_ULONG: u32 = 9;
 pub const USER_MARSHAL_FC_USHORT: u32 = 7;
 pub const USER_MARSHAL_FC_USMALL: u32 = 4;
 pub const USER_MARSHAL_FC_WCHAR: u32 = 5;
+pub const USER_MARSHALUNMARSHAL_DONT_CLEANUP_UNMARSHALLED_OBJECT: u32 = 32768;
 pub const USER_MAX_STORAGE_PARMNUM: u32 = 18;
 pub const USER_MD_ID_BASE_RESERVED: u32 = 65535;
 pub const USER_MNS_LOGON_ACCOUNT: u32 = 32;
@@ -756127,6 +759534,8 @@ pub const UTC_E_TTTRACER_RETURNED_ERROR: HRESULT = -2017128364;
 pub const UTC_E_TTTRACER_STORAGE_FULL: HRESULT = -2017128360;
 pub const UTC_E_UNABLE_TO_RESOLVE_SESSION: HRESULT = -2017128393;
 pub const UTC_E_UNAPPROVED_SCRIPT: HRESULT = -2017128391;
+pub const UTC_E_WINRE_COMPLIANCE_CAPTURE_FAILED: HRESULT = -2017128354;
+pub const UTC_E_WINRE_ETM_ENABLED: HRESULT = -2017128353;
 pub const UTC_E_WINRT_INIT_FAILED: HRESULT = -2017128425;
 pub const utDriver: i32 = 2;
 pub const UTEXT_MAGIC: i32 = 878368812;
@@ -756399,6 +759808,7 @@ pub const VBS_ENCLAVE_REPORT_SIGNATURE_SCHEME_SHA256_RSA_PSS_SHA256: u32 = 1;
 pub const VBS_ENCLAVE_REPORT_VERSION_CURRENT: u32 = 1;
 pub const VBS_ENCLAVE_VARDATA_INVALID: u32 = 0;
 pub const VBS_ENCLAVE_VARDATA_MODULE: u32 = 1;
+pub const VBS_ENCLAVE_VARDATA_PACKAGE: u32 = 2;
 pub const VBS_IDENTITY_ATTESTATION_HEADER_MAGIC: u32 = 1212369238;
 pub const VBS_KEY_ATTESTATION_STATEMENT_MAGIC: u32 = 1396788054;
 pub const VBS_ROOT_ATTESTATION_HEADER_MAGIC: u32 = 1212371542;
@@ -760561,7 +763971,7 @@ pub const WDIAG_IHV_WLAN_ID_FLAG_SECURITY_ENABLED: u32 = 1;
 pub const WDIGEST_SP_NAME = L("WDigest");
 pub const WDIGEST_SP_NAME_A = "WDigest";
 pub const WDIGEST_SP_NAME_W = L("WDigest");
-pub const WDK_NTDDI_VERSION: u32 = 167772176;
+pub const WDK_NTDDI_VERSION: u32 = 167772178;
 pub const WdmUsbPowerDeviceD0: i32 = 201;
 pub const WdmUsbPowerDeviceD1: i32 = 202;
 pub const WdmUsbPowerDeviceD2: i32 = 203;
@@ -761258,9 +764668,11 @@ pub const WHEA_ERROR_SOURCE_FLAG_DEFAULTSOURCE: u32 = 2147483648;
 pub const WHEA_ERROR_SOURCE_FLAG_FIRMWAREFIRST: u32 = 1;
 pub const WHEA_ERROR_SOURCE_FLAG_GHES_ASSIST: u32 = 4;
 pub const WHEA_ERROR_SOURCE_FLAG_GLOBAL: u32 = 2;
+pub const WHEA_ERROR_SOURCE_FLAG_V2_DESCRIPTOR: u32 = 8;
 pub const WHEA_ERROR_SOURCE_INVALID_RELATED_SOURCE: u32 = 65535;
 pub const WHEA_INTERNAL_ERROR: u32 = 290;
 pub const WHEA_MAX_MC_BANKS: u32 = 32;
+pub const WHEA_MAX_MC_BANKS64: u32 = 64;
 pub const WHEA_MEM_PERSISTOFFLINE: u32 = 1;
 pub const WHEA_MEM_PFA_DISABLE: u32 = 2;
 pub const WHEA_MEM_PFA_PAGECOUNT: u32 = 3;
@@ -761331,6 +764743,8 @@ pub const WHITENESS: u32 = 16711778;
 pub const WHITEONBLACK: i32 = 2;
 pub const WHServer: i32 = 15;
 pub const WHV_ANY_VP: u32 = 4294967295;
+pub const WHV_ARM64_GLOBAL_INTERRUPT_CONTROLLER_STATE_VERSION_CURRENT: u32 = 1;
+pub const WHV_ARM64_INTERRUPT_CONTROLLER_STATE_VERSION_CURRENT: u32 = 1;
 pub const WHV_E_GPA_RANGE_NOT_FOUND: HRESULT = -2143878395;
 pub const WHV_E_INSUFFICIENT_BUFFER: HRESULT = -2143878399;
 pub const WHV_E_INVALID_PARTITION_CONFIG: HRESULT = -2143878396;
@@ -761342,429 +764756,3694 @@ pub const WHV_E_UNSUPPORTED_HYPERVISOR_CONFIG: HRESULT = -2143878397;
 pub const WHV_E_UNSUPPORTED_PROCESSOR_CONFIG: HRESULT = -2143878384;
 pub const WHV_E_VP_ALREADY_EXISTS: HRESULT = -2143878394;
 pub const WHV_E_VP_DOES_NOT_EXIST: HRESULT = -2143878393;
+pub const WHV_EXTENDED_VM_EXITS_RESERVED_BITFIELD_COUNT: u32 = 49;
 pub const WHV_HYPERCALL_CONTEXT_MAX_XMM_REGISTERS: u32 = 6;
 pub const WHV_MAX_DEVICE_ID_SIZE_IN_CHARS: u32 = 200;
 pub const WHV_PROCESSOR_FEATURES_BANKS_COUNT: u32 = 2;
 pub const WHV_READ_WRITE_GPA_RANGE_MAX_SIZE: u32 = 16;
 pub const WHV_SYNIC_MESSAGE_SIZE: u32 = 256;
 pub const WHV_SYNTHETIC_PROCESSOR_FEATURES_BANKS_COUNT: u32 = 1;
+pub const WHV_SYNTHETIC_PROCESSOR_FEATURES_RESERVED_BITFIELD_COUNT: u32 = 17;
 pub const WHV_VPCI_TYPE0_BAR_COUNT: u32 = 6;
-pub const WHvAdviseGpaRangeCodePin: i32 = 1;
-pub const WHvAdviseGpaRangeCodePopulate: i32 = 0;
-pub const WHvAdviseGpaRangeCodeUnpin: i32 = 2;
-pub const WHvAllocateVpciResourceFlagAllowDirectP2P: i32 = 1;
-pub const WHvAllocateVpciResourceFlagNone: i32 = 0;
-pub const WHvCacheTypeUncached: i32 = 0;
-pub const WHvCacheTypeWriteBack: i32 = 6;
-pub const WHvCacheTypeWriteCombining: i32 = 1;
-pub const WHvCacheTypeWriteThrough: i32 = 4;
-pub const WHvCapabilityCodeExceptionExitBitmap: i32 = 3;
-pub const WHvCapabilityCodeExtendedVmExits: i32 = 2;
-pub const WHvCapabilityCodeFeatures: i32 = 1;
-pub const WHvCapabilityCodeGpaRangePopulateFlags: i32 = 5;
-pub const WHvCapabilityCodeHypervisorPresent: i32 = 0;
-pub const WHvCapabilityCodeInterruptClockFrequency: i32 = 4101;
-pub const WHvCapabilityCodeProcessorClFlushSize: i32 = 4098;
-pub const WHvCapabilityCodeProcessorClockFrequency: i32 = 4100;
-pub const WHvCapabilityCodeProcessorFeatures: i32 = 4097;
-pub const WHvCapabilityCodeProcessorFeaturesBanks: i32 = 4102;
-pub const WHvCapabilityCodeProcessorFrequencyCap: i32 = 4103;
-pub const WHvCapabilityCodeProcessorPerfmonFeatures: i32 = 4105;
-pub const WHvCapabilityCodeProcessorVendor: i32 = 4096;
-pub const WHvCapabilityCodeProcessorXsaveFeatures: i32 = 4099;
-pub const WHvCapabilityCodeSchedulerFeatures: i32 = 6;
-pub const WHvCapabilityCodeSyntheticProcessorFeaturesBanks: i32 = 4104;
-pub const WHvCapabilityCodeX64MsrExitBitmap: i32 = 4;
-pub const WHvCreateVpciDeviceFlagNone: i32 = 0;
-pub const WHvCreateVpciDeviceFlagPhysicallyBacked: i32 = 1;
-pub const WHvCreateVpciDeviceFlagUseLogicalInterrupts: i32 = 2;
-pub const WHvMapGpaRangeFlagExecute: i32 = 4;
-pub const WHvMapGpaRangeFlagNone: i32 = 0;
-pub const WHvMapGpaRangeFlagRead: i32 = 1;
-pub const WHvMapGpaRangeFlagTrackDirtyPages: i32 = 8;
-pub const WHvMapGpaRangeFlagWrite: i32 = 2;
-pub const WHvMemoryAccessExecute: i32 = 2;
-pub const WHvMemoryAccessRead: i32 = 0;
-pub const WHvMemoryAccessWrite: i32 = 1;
-pub const WHvMsrActionArchitectureDefault: i32 = 0;
-pub const WHvMsrActionExit: i32 = 2;
-pub const WHvMsrActionIgnoreWriteReadZero: i32 = 1;
-pub const WHvNotificationPortPropertyPreferredTargetDuration: i32 = 5;
-pub const WHvNotificationPortPropertyPreferredTargetVp: i32 = 1;
-pub const WHvNotificationPortTypeDoorbell: i32 = 4;
-pub const WHvNotificationPortTypeEvent: i32 = 2;
-pub const WHvPartitionCounterSetMemory: i32 = 0;
-pub const WHvPartitionPropertyCodeAllowDeviceAssignment: i32 = 12;
-pub const WHvPartitionPropertyCodeApicRemoteReadSupport: i32 = 4105;
-pub const WHvPartitionPropertyCodeCpuCap: i32 = 8;
-pub const WHvPartitionPropertyCodeCpuGroupId: i32 = 10;
-pub const WHvPartitionPropertyCodeCpuidExitList: i32 = 4099;
-pub const WHvPartitionPropertyCodeCpuidResultList: i32 = 4100;
-pub const WHvPartitionPropertyCodeCpuidResultList2: i32 = 4109;
-pub const WHvPartitionPropertyCodeCpuReserve: i32 = 7;
-pub const WHvPartitionPropertyCodeCpuWeight: i32 = 9;
-pub const WHvPartitionPropertyCodeDisableSmt: i32 = 13;
-pub const WHvPartitionPropertyCodeExceptionExitBitmap: i32 = 2;
-pub const WHvPartitionPropertyCodeExtendedVmExits: i32 = 1;
-pub const WHvPartitionPropertyCodeInterruptClockFrequency: i32 = 4104;
-pub const WHvPartitionPropertyCodeLocalApicEmulationMode: i32 = 4101;
-pub const WHvPartitionPropertyCodeMsrActionList: i32 = 4111;
-pub const WHvPartitionPropertyCodeNestedVirtualization: i32 = 4;
-pub const WHvPartitionPropertyCodePrimaryNumaNode: i32 = 6;
-pub const WHvPartitionPropertyCodeProcessorClFlushSize: i32 = 4098;
-pub const WHvPartitionPropertyCodeProcessorClockFrequency: i32 = 4103;
-pub const WHvPartitionPropertyCodeProcessorCount: i32 = 8191;
-pub const WHvPartitionPropertyCodeProcessorFeatures: i32 = 4097;
-pub const WHvPartitionPropertyCodeProcessorFeaturesBanks: i32 = 4106;
-pub const WHvPartitionPropertyCodeProcessorFrequencyCap: i32 = 11;
-pub const WHvPartitionPropertyCodeProcessorPerfmonFeatures: i32 = 4110;
-pub const WHvPartitionPropertyCodeProcessorXsaveFeatures: i32 = 4102;
-pub const WHvPartitionPropertyCodeReferenceTime: i32 = 4107;
-pub const WHvPartitionPropertyCodeSeparateSecurityDomain: i32 = 3;
-pub const WHvPartitionPropertyCodeSyntheticProcessorFeaturesBanks: i32 = 4108;
-pub const WHvPartitionPropertyCodeUnimplementedMsrAction: i32 = 4112;
-pub const WHvPartitionPropertyCodeX64MsrExitBitmap: i32 = 5;
-pub const WHvProcessorCounterSetApic: i32 = 3;
-pub const WHvProcessorCounterSetEvents: i32 = 2;
-pub const WHvProcessorCounterSetIntercepts: i32 = 1;
-pub const WHvProcessorCounterSetRuntime: i32 = 0;
-pub const WHvProcessorCounterSetSyntheticFeatures: i32 = 4;
-pub const WHvProcessorVendorAmd: i32 = 0;
-pub const WHvProcessorVendorHygon: i32 = 2;
-pub const WHvProcessorVendorIntel: i32 = 1;
-pub const WHvRegisterEom: i32 = 16404;
-pub const WHvRegisterGuestOsId: i32 = 20482;
-pub const WHvRegisterInternalActivityState: i32 = -2147483643;
-pub const WHvRegisterInterruptState: i32 = -2147483647;
-pub const WHvRegisterPendingEvent: i32 = -2147483646;
-pub const WHvRegisterPendingInterruption: i32 = -2147483648;
-pub const WHvRegisterReferenceTsc: i32 = 20503;
-pub const WHvRegisterReferenceTscSequence: i32 = 20506;
-pub const WHvRegisterScontrol: i32 = 16400;
-pub const WHvRegisterSiefp: i32 = 16402;
-pub const WHvRegisterSimp: i32 = 16403;
-pub const WHvRegisterSint0: i32 = 16384;
-pub const WHvRegisterSint1: i32 = 16385;
-pub const WHvRegisterSint10: i32 = 16394;
-pub const WHvRegisterSint11: i32 = 16395;
-pub const WHvRegisterSint12: i32 = 16396;
-pub const WHvRegisterSint13: i32 = 16397;
-pub const WHvRegisterSint14: i32 = 16398;
-pub const WHvRegisterSint15: i32 = 16399;
-pub const WHvRegisterSint2: i32 = 16386;
-pub const WHvRegisterSint3: i32 = 16387;
-pub const WHvRegisterSint4: i32 = 16388;
-pub const WHvRegisterSint5: i32 = 16389;
-pub const WHvRegisterSint6: i32 = 16390;
-pub const WHvRegisterSint7: i32 = 16391;
-pub const WHvRegisterSint8: i32 = 16392;
-pub const WHvRegisterSint9: i32 = 16393;
-pub const WHvRegisterSversion: i32 = 16401;
-pub const WHvRegisterVpAssistPage: i32 = 20499;
-pub const WHvRegisterVpRuntime: i32 = 20480;
-pub const WHvRunVpCancelReasonUser: i32 = 0;
-pub const WHvRunVpExitReasonCanceled: i32 = 8193;
-pub const WHvRunVpExitReasonException: i32 = 4098;
-pub const WHvRunVpExitReasonHypercall: i32 = 4101;
-pub const WHvRunVpExitReasonInvalidVpRegisterValue: i32 = 5;
-pub const WHvRunVpExitReasonMemoryAccess: i32 = 1;
-pub const WHvRunVpExitReasonNone: i32 = 0;
-pub const WHvRunVpExitReasonSynicSintDeliverable: i32 = 10;
-pub const WHvRunVpExitReasonUnrecoverableException: i32 = 4;
-pub const WHvRunVpExitReasonUnsupportedFeature: i32 = 6;
-pub const WHvRunVpExitReasonX64ApicEoi: i32 = 9;
-pub const WHvRunVpExitReasonX64ApicInitSipiTrap: i32 = 4102;
-pub const WHvRunVpExitReasonX64ApicSmiTrap: i32 = 4100;
-pub const WHvRunVpExitReasonX64ApicWriteTrap: i32 = 4103;
-pub const WHvRunVpExitReasonX64Cpuid: i32 = 4097;
-pub const WHvRunVpExitReasonX64Halt: i32 = 8;
-pub const WHvRunVpExitReasonX64InterruptWindow: i32 = 7;
-pub const WHvRunVpExitReasonX64IoPortAccess: i32 = 2;
-pub const WHvRunVpExitReasonX64MsrAccess: i32 = 4096;
-pub const WHvRunVpExitReasonX64Rdtsc: i32 = 4099;
-pub const WHvTranslateGvaFlagEnforceSmap: i32 = 256;
-pub const WHvTranslateGvaFlagNone: i32 = 0;
-pub const WHvTranslateGvaFlagOverrideSmap: i32 = 512;
-pub const WHvTranslateGvaFlagPrivilegeExempt: i32 = 8;
-pub const WHvTranslateGvaFlagSetPageTableBits: i32 = 16;
-pub const WHvTranslateGvaFlagValidateExecute: i32 = 4;
-pub const WHvTranslateGvaFlagValidateRead: i32 = 1;
-pub const WHvTranslateGvaFlagValidateWrite: i32 = 2;
-pub const WHvTranslateGvaResultGpaIllegalOverlayAccess: i32 = 7;
-pub const WHvTranslateGvaResultGpaNoReadAccess: i32 = 5;
-pub const WHvTranslateGvaResultGpaNoWriteAccess: i32 = 6;
-pub const WHvTranslateGvaResultGpaUnmapped: i32 = 4;
-pub const WHvTranslateGvaResultIntercept: i32 = 8;
-pub const WHvTranslateGvaResultInvalidPageTableFlags: i32 = 3;
-pub const WHvTranslateGvaResultPageNotPresent: i32 = 1;
-pub const WHvTranslateGvaResultPrivilegeViolation: i32 = 2;
-pub const WHvTranslateGvaResultSuccess: i32 = 0;
-pub const WHvTriggerTypeDeviceInterrupt: i32 = 2;
-pub const WHvTriggerTypeInterrupt: i32 = 0;
-pub const WHvTriggerTypeSynicEvent: i32 = 1;
-pub const WHvUnsupportedFeatureIntercept: i32 = 1;
-pub const WHvUnsupportedFeatureTaskSwitchTss: i32 = 2;
-pub const WHvVirtualProcessorPropertyCodeNumaNode: i32 = 0;
-pub const WHvVirtualProcessorStateTypeInterruptControllerState2: i32 = 4096;
-pub const WHvVirtualProcessorStateTypeSynicEventFlagPage: i32 = 1;
-pub const WHvVirtualProcessorStateTypeSynicMessagePage: i32 = 0;
-pub const WHvVirtualProcessorStateTypeSynicTimerState: i32 = 2;
-pub const WHvVirtualProcessorStateTypeXsaveState: i32 = 4097;
-pub const WHvVpciBar0: i32 = 0;
-pub const WHvVpciBar1: i32 = 1;
-pub const WHvVpciBar2: i32 = 2;
-pub const WHvVpciBar3: i32 = 3;
-pub const WHvVpciBar4: i32 = 4;
-pub const WHvVpciBar5: i32 = 5;
-pub const WHvVpciConfigSpace: i32 = -1;
-pub const WHvVpciDeviceNotificationMmioRemapping: i32 = 1;
-pub const WHvVpciDeviceNotificationSurpriseRemoval: i32 = 2;
-pub const WHvVpciDeviceNotificationUndefined: i32 = 0;
-pub const WHvVpciDevicePropertyCodeHardwareIDs: i32 = 1;
-pub const WHvVpciDevicePropertyCodeProbedBARs: i32 = 2;
-pub const WHvVpciDevicePropertyCodeUndefined: i32 = 0;
-pub const WHvVpciInterruptTargetFlagMulticast: i32 = 1;
-pub const WHvVpciInterruptTargetFlagNone: i32 = 0;
-pub const WHvVpciMmioRangeFlagReadAccess: i32 = 1;
-pub const WHvVpciMmioRangeFlagWriteAccess: i32 = 2;
-pub const WHvX64ApicWriteTypeDfr: i32 = 224;
-pub const WHvX64ApicWriteTypeLdr: i32 = 208;
-pub const WHvX64ApicWriteTypeLint0: i32 = 848;
-pub const WHvX64ApicWriteTypeLint1: i32 = 864;
-pub const WHvX64ApicWriteTypeSvr: i32 = 240;
-pub const WHvX64CpuidResult2FlagSubleafSpecific: i32 = 1;
-pub const WHvX64CpuidResult2FlagVpSpecific: i32 = 2;
-pub const WHvX64ExceptionTypeAlignmentCheckFault: i32 = 17;
-pub const WHvX64ExceptionTypeBoundRangeFault: i32 = 5;
-pub const WHvX64ExceptionTypeBreakpointTrap: i32 = 3;
-pub const WHvX64ExceptionTypeDebugTrapOrFault: i32 = 1;
-pub const WHvX64ExceptionTypeDeviceNotAvailableFault: i32 = 7;
-pub const WHvX64ExceptionTypeDivideErrorFault: i32 = 0;
-pub const WHvX64ExceptionTypeDoubleFaultAbort: i32 = 8;
-pub const WHvX64ExceptionTypeFloatingPointErrorFault: i32 = 16;
-pub const WHvX64ExceptionTypeGeneralProtectionFault: i32 = 13;
-pub const WHvX64ExceptionTypeInvalidOpcodeFault: i32 = 6;
-pub const WHvX64ExceptionTypeInvalidTaskStateSegmentFault: i32 = 10;
-pub const WHvX64ExceptionTypeMachineCheckAbort: i32 = 18;
-pub const WHvX64ExceptionTypeOverflowTrap: i32 = 4;
-pub const WHvX64ExceptionTypePageFault: i32 = 14;
-pub const WHvX64ExceptionTypeSegmentNotPresentFault: i32 = 11;
-pub const WHvX64ExceptionTypeSimdFloatingPointFault: i32 = 19;
-pub const WHvX64ExceptionTypeStackFault: i32 = 12;
-pub const WHvX64InterruptDestinationModeLogical: i32 = 1;
-pub const WHvX64InterruptDestinationModePhysical: i32 = 0;
-pub const WHvX64InterruptTriggerModeEdge: i32 = 0;
-pub const WHvX64InterruptTriggerModeLevel: i32 = 1;
-pub const WHvX64InterruptTypeFixed: i32 = 0;
-pub const WHvX64InterruptTypeInit: i32 = 5;
-pub const WHvX64InterruptTypeLocalInt1: i32 = 9;
-pub const WHvX64InterruptTypeLowestPriority: i32 = 1;
-pub const WHvX64InterruptTypeNmi: i32 = 4;
-pub const WHvX64InterruptTypeSipi: i32 = 6;
-pub const WHvX64LocalApicEmulationModeNone: i32 = 0;
-pub const WHvX64LocalApicEmulationModeX2Apic: i32 = 2;
-pub const WHvX64LocalApicEmulationModeXApic: i32 = 1;
-pub const WHvX64PendingEventException: i32 = 0;
-pub const WHvX64PendingEventExtInt: i32 = 5;
-pub const WHvX64PendingException: i32 = 3;
-pub const WHvX64PendingInterrupt: i32 = 0;
-pub const WHvX64PendingNmi: i32 = 2;
-pub const WHvX64RegisterACount: i32 = 8319;
-pub const WHvX64RegisterApicBase: i32 = 8195;
-pub const WHvX64RegisterApicCurrentCount: i32 = 12345;
-pub const WHvX64RegisterApicDivide: i32 = 12350;
-pub const WHvX64RegisterApicEoi: i32 = 12299;
-pub const WHvX64RegisterApicEse: i32 = 12328;
-pub const WHvX64RegisterApicIcr: i32 = 12336;
-pub const WHvX64RegisterApicId: i32 = 12290;
-pub const WHvX64RegisterApicInitCount: i32 = 12344;
-pub const WHvX64RegisterApicIrr0: i32 = 12320;
-pub const WHvX64RegisterApicIrr1: i32 = 12321;
-pub const WHvX64RegisterApicIrr2: i32 = 12322;
-pub const WHvX64RegisterApicIrr3: i32 = 12323;
-pub const WHvX64RegisterApicIrr4: i32 = 12324;
-pub const WHvX64RegisterApicIrr5: i32 = 12325;
-pub const WHvX64RegisterApicIrr6: i32 = 12326;
-pub const WHvX64RegisterApicIrr7: i32 = 12327;
-pub const WHvX64RegisterApicIsr0: i32 = 12304;
-pub const WHvX64RegisterApicIsr1: i32 = 12305;
-pub const WHvX64RegisterApicIsr2: i32 = 12306;
-pub const WHvX64RegisterApicIsr3: i32 = 12307;
-pub const WHvX64RegisterApicIsr4: i32 = 12308;
-pub const WHvX64RegisterApicIsr5: i32 = 12309;
-pub const WHvX64RegisterApicIsr6: i32 = 12310;
-pub const WHvX64RegisterApicIsr7: i32 = 12311;
-pub const WHvX64RegisterApicLdr: i32 = 12301;
-pub const WHvX64RegisterApicLvtError: i32 = 12343;
-pub const WHvX64RegisterApicLvtLint0: i32 = 12341;
-pub const WHvX64RegisterApicLvtLint1: i32 = 12342;
-pub const WHvX64RegisterApicLvtPerfmon: i32 = 12340;
-pub const WHvX64RegisterApicLvtThermal: i32 = 12339;
-pub const WHvX64RegisterApicLvtTimer: i32 = 12338;
-pub const WHvX64RegisterApicPpr: i32 = 12298;
-pub const WHvX64RegisterApicSelfIpi: i32 = 12351;
-pub const WHvX64RegisterApicSpurious: i32 = 12303;
-pub const WHvX64RegisterApicTmr0: i32 = 12312;
-pub const WHvX64RegisterApicTmr1: i32 = 12313;
-pub const WHvX64RegisterApicTmr2: i32 = 12314;
-pub const WHvX64RegisterApicTmr3: i32 = 12315;
-pub const WHvX64RegisterApicTmr4: i32 = 12316;
-pub const WHvX64RegisterApicTmr5: i32 = 12317;
-pub const WHvX64RegisterApicTmr6: i32 = 12318;
-pub const WHvX64RegisterApicTmr7: i32 = 12319;
-pub const WHvX64RegisterApicTpr: i32 = 12296;
-pub const WHvX64RegisterApicVersion: i32 = 12291;
-pub const WHvX64RegisterBndcfgs: i32 = 8316;
-pub const WHvX64RegisterCr0: i32 = 28;
-pub const WHvX64RegisterCr2: i32 = 29;
-pub const WHvX64RegisterCr3: i32 = 30;
-pub const WHvX64RegisterCr4: i32 = 31;
-pub const WHvX64RegisterCr8: i32 = 32;
-pub const WHvX64RegisterCs: i32 = 19;
-pub const WHvX64RegisterCstar: i32 = 8202;
-pub const WHvX64RegisterDeliverabilityNotifications: i32 = -2147483644;
-pub const WHvX64RegisterDr0: i32 = 33;
-pub const WHvX64RegisterDr1: i32 = 34;
-pub const WHvX64RegisterDr2: i32 = 35;
-pub const WHvX64RegisterDr3: i32 = 36;
-pub const WHvX64RegisterDr6: i32 = 37;
-pub const WHvX64RegisterDr7: i32 = 38;
-pub const WHvX64RegisterDs: i32 = 21;
-pub const WHvX64RegisterEfer: i32 = 8193;
-pub const WHvX64RegisterEs: i32 = 18;
-pub const WHvX64RegisterFpControlStatus: i32 = 4120;
-pub const WHvX64RegisterFpMmx0: i32 = 4112;
-pub const WHvX64RegisterFpMmx1: i32 = 4113;
-pub const WHvX64RegisterFpMmx2: i32 = 4114;
-pub const WHvX64RegisterFpMmx3: i32 = 4115;
-pub const WHvX64RegisterFpMmx4: i32 = 4116;
-pub const WHvX64RegisterFpMmx5: i32 = 4117;
-pub const WHvX64RegisterFpMmx6: i32 = 4118;
-pub const WHvX64RegisterFpMmx7: i32 = 4119;
-pub const WHvX64RegisterFs: i32 = 22;
-pub const WHvX64RegisterGdtr: i32 = 27;
-pub const WHvX64RegisterGs: i32 = 23;
-pub const WHvX64RegisterHypercall: i32 = 20481;
-pub const WHvX64RegisterIdtr: i32 = 26;
-pub const WHvX64RegisterInitialApicId: i32 = 8204;
-pub const WHvX64RegisterInterruptSspTableAddr: i32 = 8339;
-pub const WHvX64RegisterKernelGsBase: i32 = 8194;
-pub const WHvX64RegisterLdtr: i32 = 24;
-pub const WHvX64RegisterLstar: i32 = 8201;
-pub const WHvX64RegisterMCount: i32 = 8318;
-pub const WHvX64RegisterMsrMtrrCap: i32 = 8205;
-pub const WHvX64RegisterMsrMtrrDefType: i32 = 8206;
-pub const WHvX64RegisterMsrMtrrFix16k80000: i32 = 8305;
-pub const WHvX64RegisterMsrMtrrFix16kA0000: i32 = 8306;
-pub const WHvX64RegisterMsrMtrrFix4kC0000: i32 = 8307;
-pub const WHvX64RegisterMsrMtrrFix4kC8000: i32 = 8308;
-pub const WHvX64RegisterMsrMtrrFix4kD0000: i32 = 8309;
-pub const WHvX64RegisterMsrMtrrFix4kD8000: i32 = 8310;
-pub const WHvX64RegisterMsrMtrrFix4kE0000: i32 = 8311;
-pub const WHvX64RegisterMsrMtrrFix4kE8000: i32 = 8312;
-pub const WHvX64RegisterMsrMtrrFix4kF0000: i32 = 8313;
-pub const WHvX64RegisterMsrMtrrFix4kF8000: i32 = 8314;
-pub const WHvX64RegisterMsrMtrrFix64k00000: i32 = 8304;
-pub const WHvX64RegisterMsrMtrrPhysBase0: i32 = 8208;
-pub const WHvX64RegisterMsrMtrrPhysBase1: i32 = 8209;
-pub const WHvX64RegisterMsrMtrrPhysBase2: i32 = 8210;
-pub const WHvX64RegisterMsrMtrrPhysBase3: i32 = 8211;
-pub const WHvX64RegisterMsrMtrrPhysBase4: i32 = 8212;
-pub const WHvX64RegisterMsrMtrrPhysBase5: i32 = 8213;
-pub const WHvX64RegisterMsrMtrrPhysBase6: i32 = 8214;
-pub const WHvX64RegisterMsrMtrrPhysBase7: i32 = 8215;
-pub const WHvX64RegisterMsrMtrrPhysBase8: i32 = 8216;
-pub const WHvX64RegisterMsrMtrrPhysBase9: i32 = 8217;
-pub const WHvX64RegisterMsrMtrrPhysBaseA: i32 = 8218;
-pub const WHvX64RegisterMsrMtrrPhysBaseB: i32 = 8219;
-pub const WHvX64RegisterMsrMtrrPhysBaseC: i32 = 8220;
-pub const WHvX64RegisterMsrMtrrPhysBaseD: i32 = 8221;
-pub const WHvX64RegisterMsrMtrrPhysBaseE: i32 = 8222;
-pub const WHvX64RegisterMsrMtrrPhysBaseF: i32 = 8223;
-pub const WHvX64RegisterMsrMtrrPhysMask0: i32 = 8256;
-pub const WHvX64RegisterMsrMtrrPhysMask1: i32 = 8257;
-pub const WHvX64RegisterMsrMtrrPhysMask2: i32 = 8258;
-pub const WHvX64RegisterMsrMtrrPhysMask3: i32 = 8259;
-pub const WHvX64RegisterMsrMtrrPhysMask4: i32 = 8260;
-pub const WHvX64RegisterMsrMtrrPhysMask5: i32 = 8261;
-pub const WHvX64RegisterMsrMtrrPhysMask6: i32 = 8262;
-pub const WHvX64RegisterMsrMtrrPhysMask7: i32 = 8263;
-pub const WHvX64RegisterMsrMtrrPhysMask8: i32 = 8264;
-pub const WHvX64RegisterMsrMtrrPhysMask9: i32 = 8265;
-pub const WHvX64RegisterMsrMtrrPhysMaskA: i32 = 8266;
-pub const WHvX64RegisterMsrMtrrPhysMaskB: i32 = 8267;
-pub const WHvX64RegisterMsrMtrrPhysMaskC: i32 = 8268;
-pub const WHvX64RegisterMsrMtrrPhysMaskD: i32 = 8269;
-pub const WHvX64RegisterMsrMtrrPhysMaskE: i32 = 8270;
-pub const WHvX64RegisterMsrMtrrPhysMaskF: i32 = 8271;
-pub const WHvX64RegisterPat: i32 = 8196;
-pub const WHvX64RegisterPendingDebugException: i32 = -2147483642;
-pub const WHvX64RegisterPl0Ssp: i32 = 8335;
-pub const WHvX64RegisterPl1Ssp: i32 = 8336;
-pub const WHvX64RegisterPl2Ssp: i32 = 8337;
-pub const WHvX64RegisterPl3Ssp: i32 = 8338;
-pub const WHvX64RegisterPredCmd: i32 = 8325;
-pub const WHvX64RegisterR10: i32 = 10;
-pub const WHvX64RegisterR11: i32 = 11;
-pub const WHvX64RegisterR12: i32 = 12;
-pub const WHvX64RegisterR13: i32 = 13;
-pub const WHvX64RegisterR14: i32 = 14;
-pub const WHvX64RegisterR15: i32 = 15;
-pub const WHvX64RegisterR8: i32 = 8;
-pub const WHvX64RegisterR9: i32 = 9;
-pub const WHvX64RegisterRax: i32 = 0;
-pub const WHvX64RegisterRbp: i32 = 5;
-pub const WHvX64RegisterRbx: i32 = 3;
-pub const WHvX64RegisterRcx: i32 = 1;
-pub const WHvX64RegisterRdi: i32 = 7;
-pub const WHvX64RegisterRdx: i32 = 2;
-pub const WHvX64RegisterRflags: i32 = 17;
-pub const WHvX64RegisterRip: i32 = 16;
-pub const WHvX64RegisterRsi: i32 = 6;
-pub const WHvX64RegisterRsp: i32 = 4;
-pub const WHvX64RegisterSCet: i32 = 8333;
-pub const WHvX64RegisterSfmask: i32 = 8203;
-pub const WHvX64RegisterSpecCtrl: i32 = 8324;
-pub const WHvX64RegisterSs: i32 = 20;
-pub const WHvX64RegisterSsp: i32 = 8334;
-pub const WHvX64RegisterStar: i32 = 8200;
-pub const WHvX64RegisterSysenterCs: i32 = 8197;
-pub const WHvX64RegisterSysenterEip: i32 = 8198;
-pub const WHvX64RegisterSysenterEsp: i32 = 8199;
-pub const WHvX64RegisterTr: i32 = 25;
-pub const WHvX64RegisterTsc: i32 = 8192;
-pub const WHvX64RegisterTscAdjust: i32 = 8342;
-pub const WHvX64RegisterTscAux: i32 = 8315;
-pub const WHvX64RegisterTscDeadline: i32 = 8341;
-pub const WHvX64RegisterTscVirtualOffset: i32 = 8327;
-pub const WHvX64RegisterTsxCtrl: i32 = 8328;
-pub const WHvX64RegisterUCet: i32 = 8332;
-pub const WHvX64RegisterUmwaitControl: i32 = 8344;
-pub const WHvX64RegisterVirtualCr0: i32 = 40;
-pub const WHvX64RegisterVirtualCr3: i32 = 41;
-pub const WHvX64RegisterVirtualCr4: i32 = 42;
-pub const WHvX64RegisterVirtualCr8: i32 = 43;
-pub const WHvX64RegisterXCr0: i32 = 39;
-pub const WHvX64RegisterXfd: i32 = 8345;
-pub const WHvX64RegisterXfdErr: i32 = 8346;
-pub const WHvX64RegisterXmm0: i32 = 4096;
-pub const WHvX64RegisterXmm1: i32 = 4097;
-pub const WHvX64RegisterXmm10: i32 = 4106;
-pub const WHvX64RegisterXmm11: i32 = 4107;
-pub const WHvX64RegisterXmm12: i32 = 4108;
-pub const WHvX64RegisterXmm13: i32 = 4109;
-pub const WHvX64RegisterXmm14: i32 = 4110;
-pub const WHvX64RegisterXmm15: i32 = 4111;
-pub const WHvX64RegisterXmm2: i32 = 4098;
-pub const WHvX64RegisterXmm3: i32 = 4099;
-pub const WHvX64RegisterXmm4: i32 = 4100;
-pub const WHvX64RegisterXmm5: i32 = 4101;
-pub const WHvX64RegisterXmm6: i32 = 4102;
-pub const WHvX64RegisterXmm7: i32 = 4103;
-pub const WHvX64RegisterXmm8: i32 = 4104;
-pub const WHvX64RegisterXmm9: i32 = 4105;
-pub const WHvX64RegisterXmmControlStatus: i32 = 4121;
-pub const WHvX64RegisterXss: i32 = 8331;
+pub const WHV_VTL_ALL: u32 = 15;
+pub const WHvAdviseGpaRangeCodePin = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 1),
+    else => @compileError("WHvAdviseGpaRangeCodePin unsupported for target architecture"),
+};
+pub const WHvAdviseGpaRangeCodePopulate = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 0),
+    else => @compileError("WHvAdviseGpaRangeCodePopulate unsupported for target architecture"),
+};
+pub const WHvAdviseGpaRangeCodeUnpin = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 2),
+    else => @compileError("WHvAdviseGpaRangeCodeUnpin unsupported for target architecture"),
+};
+pub const WHvAllocateVpciResourceFlagAllowDirectP2P = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 1),
+    else => @compileError("WHvAllocateVpciResourceFlagAllowDirectP2P unsupported for target architecture"),
+};
+pub const WHvAllocateVpciResourceFlagNone = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 0),
+    else => @compileError("WHvAllocateVpciResourceFlagNone unsupported for target architecture"),
+};
+pub const WHvArm64IcEmulationModeGicV3 = switch (arch) {
+    .aarch64 => @as(i32, 1),
+    else => @compileError("WHvArm64IcEmulationModeGicV3 unsupported for target architecture"),
+};
+pub const WHvArm64IcEmulationModeNone = switch (arch) {
+    .aarch64 => @as(i32, 0),
+    else => @compileError("WHvArm64IcEmulationModeNone unsupported for target architecture"),
+};
+pub const WHvArm64InterruptTypeFixed = switch (arch) {
+    .aarch64 => @as(i32, 0),
+    else => @compileError("WHvArm64InterruptTypeFixed unsupported for target architecture"),
+};
+pub const WHvArm64InterruptTypeMaximum = switch (arch) {
+    .aarch64 => @as(i32, 8),
+    else => @compileError("WHvArm64InterruptTypeMaximum unsupported for target architecture"),
+};
+pub const WHvArm64PendingEventException = switch (arch) {
+    .aarch64 => @as(i32, 0),
+    else => @compileError("WHvArm64PendingEventException unsupported for target architecture"),
+};
+pub const WHvArm64PendingEventSyntheticException = switch (arch) {
+    .aarch64 => @as(i32, 1),
+    else => @compileError("WHvArm64PendingEventSyntheticException unsupported for target architecture"),
+};
+pub const WHvArm64RegisterActlrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262147),
+    else => @compileError("WHvArm64RegisterActlrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterApdAKeyHiEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262182),
+    else => @compileError("WHvArm64RegisterApdAKeyHiEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterApdAKeyLoEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262183),
+    else => @compileError("WHvArm64RegisterApdAKeyLoEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterApdBKeyHiEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262184),
+    else => @compileError("WHvArm64RegisterApdBKeyHiEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterApdBKeyLoEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262185),
+    else => @compileError("WHvArm64RegisterApdBKeyLoEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterApgAKeyHiEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262186),
+    else => @compileError("WHvArm64RegisterApgAKeyHiEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterApgAKeyLoEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262187),
+    else => @compileError("WHvArm64RegisterApgAKeyLoEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterApiAKeyHiEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262188),
+    else => @compileError("WHvArm64RegisterApiAKeyHiEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterApiAKeyLoEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262189),
+    else => @compileError("WHvArm64RegisterApiAKeyLoEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterApiBKeyHiEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262190),
+    else => @compileError("WHvArm64RegisterApiBKeyHiEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterApiBKeyLoEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262191),
+    else => @compileError("WHvArm64RegisterApiBKeyLoEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterCntkctlEl1 = switch (arch) {
+    .aarch64 => @as(i32, 360456),
+    else => @compileError("WHvArm64RegisterCntkctlEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterCntvctEl0 = switch (arch) {
+    .aarch64 => @as(i32, 360465),
+    else => @compileError("WHvArm64RegisterCntvctEl0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterCntvCtlEl0 = switch (arch) {
+    .aarch64 => @as(i32, 360462),
+    else => @compileError("WHvArm64RegisterCntvCtlEl0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterCntvCvalEl0 = switch (arch) {
+    .aarch64 => @as(i32, 360463),
+    else => @compileError("WHvArm64RegisterCntvCvalEl0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterContextidrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262157),
+    else => @compileError("WHvArm64RegisterContextidrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterCpacrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262148),
+    else => @compileError("WHvArm64RegisterCpacrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterCsselrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262197),
+    else => @compileError("WHvArm64RegisterCsselrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr0El1 = switch (arch) {
+    .aarch64 => @as(i32, 327680),
+    else => @compileError("WHvArm64RegisterDbgbcr0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr10El1 = switch (arch) {
+    .aarch64 => @as(i32, 327690),
+    else => @compileError("WHvArm64RegisterDbgbcr10El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr11El1 = switch (arch) {
+    .aarch64 => @as(i32, 327691),
+    else => @compileError("WHvArm64RegisterDbgbcr11El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr12El1 = switch (arch) {
+    .aarch64 => @as(i32, 327692),
+    else => @compileError("WHvArm64RegisterDbgbcr12El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr13El1 = switch (arch) {
+    .aarch64 => @as(i32, 327693),
+    else => @compileError("WHvArm64RegisterDbgbcr13El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr14El1 = switch (arch) {
+    .aarch64 => @as(i32, 327694),
+    else => @compileError("WHvArm64RegisterDbgbcr14El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr15El1 = switch (arch) {
+    .aarch64 => @as(i32, 327695),
+    else => @compileError("WHvArm64RegisterDbgbcr15El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr1El1 = switch (arch) {
+    .aarch64 => @as(i32, 327681),
+    else => @compileError("WHvArm64RegisterDbgbcr1El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr2El1 = switch (arch) {
+    .aarch64 => @as(i32, 327682),
+    else => @compileError("WHvArm64RegisterDbgbcr2El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr3El1 = switch (arch) {
+    .aarch64 => @as(i32, 327683),
+    else => @compileError("WHvArm64RegisterDbgbcr3El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr4El1 = switch (arch) {
+    .aarch64 => @as(i32, 327684),
+    else => @compileError("WHvArm64RegisterDbgbcr4El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr5El1 = switch (arch) {
+    .aarch64 => @as(i32, 327685),
+    else => @compileError("WHvArm64RegisterDbgbcr5El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr6El1 = switch (arch) {
+    .aarch64 => @as(i32, 327686),
+    else => @compileError("WHvArm64RegisterDbgbcr6El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr7El1 = switch (arch) {
+    .aarch64 => @as(i32, 327687),
+    else => @compileError("WHvArm64RegisterDbgbcr7El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr8El1 = switch (arch) {
+    .aarch64 => @as(i32, 327688),
+    else => @compileError("WHvArm64RegisterDbgbcr8El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbcr9El1 = switch (arch) {
+    .aarch64 => @as(i32, 327689),
+    else => @compileError("WHvArm64RegisterDbgbcr9El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr0El1 = switch (arch) {
+    .aarch64 => @as(i32, 327712),
+    else => @compileError("WHvArm64RegisterDbgbvr0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr10El1 = switch (arch) {
+    .aarch64 => @as(i32, 327722),
+    else => @compileError("WHvArm64RegisterDbgbvr10El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr11El1 = switch (arch) {
+    .aarch64 => @as(i32, 327723),
+    else => @compileError("WHvArm64RegisterDbgbvr11El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr12El1 = switch (arch) {
+    .aarch64 => @as(i32, 327724),
+    else => @compileError("WHvArm64RegisterDbgbvr12El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr13El1 = switch (arch) {
+    .aarch64 => @as(i32, 327725),
+    else => @compileError("WHvArm64RegisterDbgbvr13El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr14El1 = switch (arch) {
+    .aarch64 => @as(i32, 327726),
+    else => @compileError("WHvArm64RegisterDbgbvr14El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr15El1 = switch (arch) {
+    .aarch64 => @as(i32, 327727),
+    else => @compileError("WHvArm64RegisterDbgbvr15El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr1El1 = switch (arch) {
+    .aarch64 => @as(i32, 327713),
+    else => @compileError("WHvArm64RegisterDbgbvr1El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr2El1 = switch (arch) {
+    .aarch64 => @as(i32, 327714),
+    else => @compileError("WHvArm64RegisterDbgbvr2El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr3El1 = switch (arch) {
+    .aarch64 => @as(i32, 327715),
+    else => @compileError("WHvArm64RegisterDbgbvr3El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr4El1 = switch (arch) {
+    .aarch64 => @as(i32, 327716),
+    else => @compileError("WHvArm64RegisterDbgbvr4El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr5El1 = switch (arch) {
+    .aarch64 => @as(i32, 327717),
+    else => @compileError("WHvArm64RegisterDbgbvr5El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr6El1 = switch (arch) {
+    .aarch64 => @as(i32, 327718),
+    else => @compileError("WHvArm64RegisterDbgbvr6El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr7El1 = switch (arch) {
+    .aarch64 => @as(i32, 327719),
+    else => @compileError("WHvArm64RegisterDbgbvr7El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr8El1 = switch (arch) {
+    .aarch64 => @as(i32, 327720),
+    else => @compileError("WHvArm64RegisterDbgbvr8El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgbvr9El1 = switch (arch) {
+    .aarch64 => @as(i32, 327721),
+    else => @compileError("WHvArm64RegisterDbgbvr9El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgprcrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 327749),
+    else => @compileError("WHvArm64RegisterDbgprcrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr0El1 = switch (arch) {
+    .aarch64 => @as(i32, 327696),
+    else => @compileError("WHvArm64RegisterDbgwcr0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr10El1 = switch (arch) {
+    .aarch64 => @as(i32, 327706),
+    else => @compileError("WHvArm64RegisterDbgwcr10El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr11El1 = switch (arch) {
+    .aarch64 => @as(i32, 327707),
+    else => @compileError("WHvArm64RegisterDbgwcr11El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr12El1 = switch (arch) {
+    .aarch64 => @as(i32, 327708),
+    else => @compileError("WHvArm64RegisterDbgwcr12El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr13El1 = switch (arch) {
+    .aarch64 => @as(i32, 327709),
+    else => @compileError("WHvArm64RegisterDbgwcr13El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr14El1 = switch (arch) {
+    .aarch64 => @as(i32, 327710),
+    else => @compileError("WHvArm64RegisterDbgwcr14El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr15El1 = switch (arch) {
+    .aarch64 => @as(i32, 327711),
+    else => @compileError("WHvArm64RegisterDbgwcr15El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr1El1 = switch (arch) {
+    .aarch64 => @as(i32, 327697),
+    else => @compileError("WHvArm64RegisterDbgwcr1El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr2El1 = switch (arch) {
+    .aarch64 => @as(i32, 327698),
+    else => @compileError("WHvArm64RegisterDbgwcr2El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr3El1 = switch (arch) {
+    .aarch64 => @as(i32, 327699),
+    else => @compileError("WHvArm64RegisterDbgwcr3El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr4El1 = switch (arch) {
+    .aarch64 => @as(i32, 327700),
+    else => @compileError("WHvArm64RegisterDbgwcr4El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr5El1 = switch (arch) {
+    .aarch64 => @as(i32, 327701),
+    else => @compileError("WHvArm64RegisterDbgwcr5El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr6El1 = switch (arch) {
+    .aarch64 => @as(i32, 327702),
+    else => @compileError("WHvArm64RegisterDbgwcr6El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr7El1 = switch (arch) {
+    .aarch64 => @as(i32, 327703),
+    else => @compileError("WHvArm64RegisterDbgwcr7El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr8El1 = switch (arch) {
+    .aarch64 => @as(i32, 327704),
+    else => @compileError("WHvArm64RegisterDbgwcr8El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwcr9El1 = switch (arch) {
+    .aarch64 => @as(i32, 327705),
+    else => @compileError("WHvArm64RegisterDbgwcr9El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr0El1 = switch (arch) {
+    .aarch64 => @as(i32, 327728),
+    else => @compileError("WHvArm64RegisterDbgwvr0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr10El1 = switch (arch) {
+    .aarch64 => @as(i32, 327738),
+    else => @compileError("WHvArm64RegisterDbgwvr10El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr11El1 = switch (arch) {
+    .aarch64 => @as(i32, 327739),
+    else => @compileError("WHvArm64RegisterDbgwvr11El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr12El1 = switch (arch) {
+    .aarch64 => @as(i32, 327740),
+    else => @compileError("WHvArm64RegisterDbgwvr12El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr13El1 = switch (arch) {
+    .aarch64 => @as(i32, 327741),
+    else => @compileError("WHvArm64RegisterDbgwvr13El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr14El1 = switch (arch) {
+    .aarch64 => @as(i32, 327742),
+    else => @compileError("WHvArm64RegisterDbgwvr14El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr15El1 = switch (arch) {
+    .aarch64 => @as(i32, 327743),
+    else => @compileError("WHvArm64RegisterDbgwvr15El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr1El1 = switch (arch) {
+    .aarch64 => @as(i32, 327729),
+    else => @compileError("WHvArm64RegisterDbgwvr1El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr2El1 = switch (arch) {
+    .aarch64 => @as(i32, 327730),
+    else => @compileError("WHvArm64RegisterDbgwvr2El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr3El1 = switch (arch) {
+    .aarch64 => @as(i32, 327731),
+    else => @compileError("WHvArm64RegisterDbgwvr3El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr4El1 = switch (arch) {
+    .aarch64 => @as(i32, 327732),
+    else => @compileError("WHvArm64RegisterDbgwvr4El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr5El1 = switch (arch) {
+    .aarch64 => @as(i32, 327733),
+    else => @compileError("WHvArm64RegisterDbgwvr5El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr6El1 = switch (arch) {
+    .aarch64 => @as(i32, 327734),
+    else => @compileError("WHvArm64RegisterDbgwvr6El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr7El1 = switch (arch) {
+    .aarch64 => @as(i32, 327735),
+    else => @compileError("WHvArm64RegisterDbgwvr7El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr8El1 = switch (arch) {
+    .aarch64 => @as(i32, 327736),
+    else => @compileError("WHvArm64RegisterDbgwvr8El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterDbgwvr9El1 = switch (arch) {
+    .aarch64 => @as(i32, 327737),
+    else => @compileError("WHvArm64RegisterDbgwvr9El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterElrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262165),
+    else => @compileError("WHvArm64RegisterElrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterEsrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262152),
+    else => @compileError("WHvArm64RegisterEsrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterFarEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262153),
+    else => @compileError("WHvArm64RegisterFarEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterFp = switch (arch) {
+    .aarch64 => @as(i32, 131101),
+    else => @compileError("WHvArm64RegisterFp unsupported for target architecture"),
+};
+pub const WHvArm64RegisterFpcr = switch (arch) {
+    .aarch64 => @as(i32, 262162),
+    else => @compileError("WHvArm64RegisterFpcr unsupported for target architecture"),
+};
+pub const WHvArm64RegisterFpsr = switch (arch) {
+    .aarch64 => @as(i32, 262163),
+    else => @compileError("WHvArm64RegisterFpsr unsupported for target architecture"),
+};
+pub const WHvArm64RegisterGicrBaseGpa = switch (arch) {
+    .aarch64 => @as(i32, 405504),
+    else => @compileError("WHvArm64RegisterGicrBaseGpa unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdAa64Dfr0El1 = switch (arch) {
+    .aarch64 => @as(i32, 139304),
+    else => @compileError("WHvArm64RegisterIdAa64Dfr0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdAa64Dfr1El1 = switch (arch) {
+    .aarch64 => @as(i32, 139305),
+    else => @compileError("WHvArm64RegisterIdAa64Dfr1El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdAa64Isar0El1 = switch (arch) {
+    .aarch64 => @as(i32, 139312),
+    else => @compileError("WHvArm64RegisterIdAa64Isar0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdAa64Isar1El1 = switch (arch) {
+    .aarch64 => @as(i32, 139313),
+    else => @compileError("WHvArm64RegisterIdAa64Isar1El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdAa64Isar2El1 = switch (arch) {
+    .aarch64 => @as(i32, 139314),
+    else => @compileError("WHvArm64RegisterIdAa64Isar2El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdAa64Mmfr0El1 = switch (arch) {
+    .aarch64 => @as(i32, 139320),
+    else => @compileError("WHvArm64RegisterIdAa64Mmfr0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdAa64Mmfr1El1 = switch (arch) {
+    .aarch64 => @as(i32, 139321),
+    else => @compileError("WHvArm64RegisterIdAa64Mmfr1El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdAa64Mmfr2El1 = switch (arch) {
+    .aarch64 => @as(i32, 139322),
+    else => @compileError("WHvArm64RegisterIdAa64Mmfr2El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdAa64Mmfr3El1 = switch (arch) {
+    .aarch64 => @as(i32, 139323),
+    else => @compileError("WHvArm64RegisterIdAa64Mmfr3El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdAa64Mmfr4El1 = switch (arch) {
+    .aarch64 => @as(i32, 139324),
+    else => @compileError("WHvArm64RegisterIdAa64Mmfr4El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdAa64Pfr0El1 = switch (arch) {
+    .aarch64 => @as(i32, 139296),
+    else => @compileError("WHvArm64RegisterIdAa64Pfr0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdAa64Pfr1El1 = switch (arch) {
+    .aarch64 => @as(i32, 139297),
+    else => @compileError("WHvArm64RegisterIdAa64Pfr1El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdAa64Pfr2El1 = switch (arch) {
+    .aarch64 => @as(i32, 139298),
+    else => @compileError("WHvArm64RegisterIdAa64Pfr2El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdAa64Smfr0El1 = switch (arch) {
+    .aarch64 => @as(i32, 139301),
+    else => @compileError("WHvArm64RegisterIdAa64Smfr0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdAa64Zfr0El1 = switch (arch) {
+    .aarch64 => @as(i32, 139300),
+    else => @compileError("WHvArm64RegisterIdAa64Zfr0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdDfr0El1 = switch (arch) {
+    .aarch64 => @as(i32, 139274),
+    else => @compileError("WHvArm64RegisterIdDfr0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdIsar0El1 = switch (arch) {
+    .aarch64 => @as(i32, 139280),
+    else => @compileError("WHvArm64RegisterIdIsar0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdIsar1El1 = switch (arch) {
+    .aarch64 => @as(i32, 139281),
+    else => @compileError("WHvArm64RegisterIdIsar1El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdIsar2El1 = switch (arch) {
+    .aarch64 => @as(i32, 139282),
+    else => @compileError("WHvArm64RegisterIdIsar2El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdIsar3El1 = switch (arch) {
+    .aarch64 => @as(i32, 139283),
+    else => @compileError("WHvArm64RegisterIdIsar3El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdIsar4El1 = switch (arch) {
+    .aarch64 => @as(i32, 139284),
+    else => @compileError("WHvArm64RegisterIdIsar4El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdIsar5El1 = switch (arch) {
+    .aarch64 => @as(i32, 139285),
+    else => @compileError("WHvArm64RegisterIdIsar5El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdMidrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 139264),
+    else => @compileError("WHvArm64RegisterIdMidrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdMmfr0El1 = switch (arch) {
+    .aarch64 => @as(i32, 139276),
+    else => @compileError("WHvArm64RegisterIdMmfr0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdMmfr1El1 = switch (arch) {
+    .aarch64 => @as(i32, 139277),
+    else => @compileError("WHvArm64RegisterIdMmfr1El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdMmfr2El1 = switch (arch) {
+    .aarch64 => @as(i32, 139278),
+    else => @compileError("WHvArm64RegisterIdMmfr2El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdMmfr3El1 = switch (arch) {
+    .aarch64 => @as(i32, 139279),
+    else => @compileError("WHvArm64RegisterIdMmfr3El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdMpidrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 139269),
+    else => @compileError("WHvArm64RegisterIdMpidrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdMvfr0El1 = switch (arch) {
+    .aarch64 => @as(i32, 139288),
+    else => @compileError("WHvArm64RegisterIdMvfr0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdMvfr1El1 = switch (arch) {
+    .aarch64 => @as(i32, 139289),
+    else => @compileError("WHvArm64RegisterIdMvfr1El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdMvfr2El1 = switch (arch) {
+    .aarch64 => @as(i32, 139290),
+    else => @compileError("WHvArm64RegisterIdMvfr2El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdPfr0El1 = switch (arch) {
+    .aarch64 => @as(i32, 139272),
+    else => @compileError("WHvArm64RegisterIdPfr0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdPfr1El1 = switch (arch) {
+    .aarch64 => @as(i32, 139273),
+    else => @compileError("WHvArm64RegisterIdPfr1El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdPfr2El1 = switch (arch) {
+    .aarch64 => @as(i32, 139292),
+    else => @compileError("WHvArm64RegisterIdPfr2El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes01El1 = switch (arch) {
+    .aarch64 => @as(i32, 139265),
+    else => @compileError("WHvArm64RegisterIdRes01El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes02El1 = switch (arch) {
+    .aarch64 => @as(i32, 139266),
+    else => @compileError("WHvArm64RegisterIdRes02El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes03El1 = switch (arch) {
+    .aarch64 => @as(i32, 139267),
+    else => @compileError("WHvArm64RegisterIdRes03El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes04El1 = switch (arch) {
+    .aarch64 => @as(i32, 139268),
+    else => @compileError("WHvArm64RegisterIdRes04El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes07El1 = switch (arch) {
+    .aarch64 => @as(i32, 139271),
+    else => @compileError("WHvArm64RegisterIdRes07El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes100El1 = switch (arch) {
+    .aarch64 => @as(i32, 139344),
+    else => @compileError("WHvArm64RegisterIdRes100El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes101El1 = switch (arch) {
+    .aarch64 => @as(i32, 139345),
+    else => @compileError("WHvArm64RegisterIdRes101El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes102El1 = switch (arch) {
+    .aarch64 => @as(i32, 139346),
+    else => @compileError("WHvArm64RegisterIdRes102El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes103El1 = switch (arch) {
+    .aarch64 => @as(i32, 139347),
+    else => @compileError("WHvArm64RegisterIdRes103El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes104El1 = switch (arch) {
+    .aarch64 => @as(i32, 139348),
+    else => @compileError("WHvArm64RegisterIdRes104El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes105El1 = switch (arch) {
+    .aarch64 => @as(i32, 139349),
+    else => @compileError("WHvArm64RegisterIdRes105El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes106El1 = switch (arch) {
+    .aarch64 => @as(i32, 139350),
+    else => @compileError("WHvArm64RegisterIdRes106El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes107El1 = switch (arch) {
+    .aarch64 => @as(i32, 139351),
+    else => @compileError("WHvArm64RegisterIdRes107El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes110El1 = switch (arch) {
+    .aarch64 => @as(i32, 139352),
+    else => @compileError("WHvArm64RegisterIdRes110El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes111El1 = switch (arch) {
+    .aarch64 => @as(i32, 139353),
+    else => @compileError("WHvArm64RegisterIdRes111El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes112El1 = switch (arch) {
+    .aarch64 => @as(i32, 139354),
+    else => @compileError("WHvArm64RegisterIdRes112El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes113El1 = switch (arch) {
+    .aarch64 => @as(i32, 139355),
+    else => @compileError("WHvArm64RegisterIdRes113El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes114El1 = switch (arch) {
+    .aarch64 => @as(i32, 139356),
+    else => @compileError("WHvArm64RegisterIdRes114El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes115El1 = switch (arch) {
+    .aarch64 => @as(i32, 139357),
+    else => @compileError("WHvArm64RegisterIdRes115El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes116El1 = switch (arch) {
+    .aarch64 => @as(i32, 139358),
+    else => @compileError("WHvArm64RegisterIdRes116El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes117El1 = switch (arch) {
+    .aarch64 => @as(i32, 139359),
+    else => @compileError("WHvArm64RegisterIdRes117El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes120El1 = switch (arch) {
+    .aarch64 => @as(i32, 139360),
+    else => @compileError("WHvArm64RegisterIdRes120El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes121El1 = switch (arch) {
+    .aarch64 => @as(i32, 139361),
+    else => @compileError("WHvArm64RegisterIdRes121El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes122El1 = switch (arch) {
+    .aarch64 => @as(i32, 139362),
+    else => @compileError("WHvArm64RegisterIdRes122El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes123El1 = switch (arch) {
+    .aarch64 => @as(i32, 139363),
+    else => @compileError("WHvArm64RegisterIdRes123El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes124El1 = switch (arch) {
+    .aarch64 => @as(i32, 139364),
+    else => @compileError("WHvArm64RegisterIdRes124El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes125El1 = switch (arch) {
+    .aarch64 => @as(i32, 139365),
+    else => @compileError("WHvArm64RegisterIdRes125El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes126El1 = switch (arch) {
+    .aarch64 => @as(i32, 139366),
+    else => @compileError("WHvArm64RegisterIdRes126El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes127El1 = switch (arch) {
+    .aarch64 => @as(i32, 139367),
+    else => @compileError("WHvArm64RegisterIdRes127El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes130El1 = switch (arch) {
+    .aarch64 => @as(i32, 139368),
+    else => @compileError("WHvArm64RegisterIdRes130El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes131El1 = switch (arch) {
+    .aarch64 => @as(i32, 139369),
+    else => @compileError("WHvArm64RegisterIdRes131El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes132El1 = switch (arch) {
+    .aarch64 => @as(i32, 139370),
+    else => @compileError("WHvArm64RegisterIdRes132El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes133El1 = switch (arch) {
+    .aarch64 => @as(i32, 139371),
+    else => @compileError("WHvArm64RegisterIdRes133El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes134El1 = switch (arch) {
+    .aarch64 => @as(i32, 139372),
+    else => @compileError("WHvArm64RegisterIdRes134El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes135El1 = switch (arch) {
+    .aarch64 => @as(i32, 139373),
+    else => @compileError("WHvArm64RegisterIdRes135El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes136El1 = switch (arch) {
+    .aarch64 => @as(i32, 139374),
+    else => @compileError("WHvArm64RegisterIdRes136El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes137El1 = switch (arch) {
+    .aarch64 => @as(i32, 139375),
+    else => @compileError("WHvArm64RegisterIdRes137El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes13El1 = switch (arch) {
+    .aarch64 => @as(i32, 139275),
+    else => @compileError("WHvArm64RegisterIdRes13El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes140El1 = switch (arch) {
+    .aarch64 => @as(i32, 139376),
+    else => @compileError("WHvArm64RegisterIdRes140El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes141El1 = switch (arch) {
+    .aarch64 => @as(i32, 139377),
+    else => @compileError("WHvArm64RegisterIdRes141El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes142El1 = switch (arch) {
+    .aarch64 => @as(i32, 139378),
+    else => @compileError("WHvArm64RegisterIdRes142El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes143El1 = switch (arch) {
+    .aarch64 => @as(i32, 139379),
+    else => @compileError("WHvArm64RegisterIdRes143El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes144El1 = switch (arch) {
+    .aarch64 => @as(i32, 139380),
+    else => @compileError("WHvArm64RegisterIdRes144El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes145El1 = switch (arch) {
+    .aarch64 => @as(i32, 139381),
+    else => @compileError("WHvArm64RegisterIdRes145El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes146El1 = switch (arch) {
+    .aarch64 => @as(i32, 139382),
+    else => @compileError("WHvArm64RegisterIdRes146El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes147El1 = switch (arch) {
+    .aarch64 => @as(i32, 139383),
+    else => @compileError("WHvArm64RegisterIdRes147El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes150El1 = switch (arch) {
+    .aarch64 => @as(i32, 139384),
+    else => @compileError("WHvArm64RegisterIdRes150El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes151El1 = switch (arch) {
+    .aarch64 => @as(i32, 139385),
+    else => @compileError("WHvArm64RegisterIdRes151El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes152El1 = switch (arch) {
+    .aarch64 => @as(i32, 139386),
+    else => @compileError("WHvArm64RegisterIdRes152El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes153El1 = switch (arch) {
+    .aarch64 => @as(i32, 139387),
+    else => @compileError("WHvArm64RegisterIdRes153El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes154El1 = switch (arch) {
+    .aarch64 => @as(i32, 139388),
+    else => @compileError("WHvArm64RegisterIdRes154El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes155El1 = switch (arch) {
+    .aarch64 => @as(i32, 139389),
+    else => @compileError("WHvArm64RegisterIdRes155El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes156El1 = switch (arch) {
+    .aarch64 => @as(i32, 139390),
+    else => @compileError("WHvArm64RegisterIdRes156El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes157El1 = switch (arch) {
+    .aarch64 => @as(i32, 139391),
+    else => @compileError("WHvArm64RegisterIdRes157El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes26El1 = switch (arch) {
+    .aarch64 => @as(i32, 139286),
+    else => @compileError("WHvArm64RegisterIdRes26El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes27El1 = switch (arch) {
+    .aarch64 => @as(i32, 139287),
+    else => @compileError("WHvArm64RegisterIdRes27El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes33El1 = switch (arch) {
+    .aarch64 => @as(i32, 139291),
+    else => @compileError("WHvArm64RegisterIdRes33El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes35El1 = switch (arch) {
+    .aarch64 => @as(i32, 139293),
+    else => @compileError("WHvArm64RegisterIdRes35El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes36El1 = switch (arch) {
+    .aarch64 => @as(i32, 139294),
+    else => @compileError("WHvArm64RegisterIdRes36El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes37El1 = switch (arch) {
+    .aarch64 => @as(i32, 139295),
+    else => @compileError("WHvArm64RegisterIdRes37El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes43El1 = switch (arch) {
+    .aarch64 => @as(i32, 139299),
+    else => @compileError("WHvArm64RegisterIdRes43El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes46El1 = switch (arch) {
+    .aarch64 => @as(i32, 139302),
+    else => @compileError("WHvArm64RegisterIdRes46El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes47El1 = switch (arch) {
+    .aarch64 => @as(i32, 139303),
+    else => @compileError("WHvArm64RegisterIdRes47El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes52El1 = switch (arch) {
+    .aarch64 => @as(i32, 139306),
+    else => @compileError("WHvArm64RegisterIdRes52El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes53El1 = switch (arch) {
+    .aarch64 => @as(i32, 139307),
+    else => @compileError("WHvArm64RegisterIdRes53El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes54El1 = switch (arch) {
+    .aarch64 => @as(i32, 139308),
+    else => @compileError("WHvArm64RegisterIdRes54El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes55El1 = switch (arch) {
+    .aarch64 => @as(i32, 139309),
+    else => @compileError("WHvArm64RegisterIdRes55El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes56El1 = switch (arch) {
+    .aarch64 => @as(i32, 139310),
+    else => @compileError("WHvArm64RegisterIdRes56El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes57El1 = switch (arch) {
+    .aarch64 => @as(i32, 139311),
+    else => @compileError("WHvArm64RegisterIdRes57El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes63El1 = switch (arch) {
+    .aarch64 => @as(i32, 139315),
+    else => @compileError("WHvArm64RegisterIdRes63El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes64El1 = switch (arch) {
+    .aarch64 => @as(i32, 139316),
+    else => @compileError("WHvArm64RegisterIdRes64El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes65El1 = switch (arch) {
+    .aarch64 => @as(i32, 139317),
+    else => @compileError("WHvArm64RegisterIdRes65El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes66El1 = switch (arch) {
+    .aarch64 => @as(i32, 139318),
+    else => @compileError("WHvArm64RegisterIdRes66El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes67El1 = switch (arch) {
+    .aarch64 => @as(i32, 139319),
+    else => @compileError("WHvArm64RegisterIdRes67El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes75El1 = switch (arch) {
+    .aarch64 => @as(i32, 139325),
+    else => @compileError("WHvArm64RegisterIdRes75El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes76El1 = switch (arch) {
+    .aarch64 => @as(i32, 139326),
+    else => @compileError("WHvArm64RegisterIdRes76El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes77El1 = switch (arch) {
+    .aarch64 => @as(i32, 139327),
+    else => @compileError("WHvArm64RegisterIdRes77El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes80El1 = switch (arch) {
+    .aarch64 => @as(i32, 139328),
+    else => @compileError("WHvArm64RegisterIdRes80El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes81El1 = switch (arch) {
+    .aarch64 => @as(i32, 139329),
+    else => @compileError("WHvArm64RegisterIdRes81El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes82El1 = switch (arch) {
+    .aarch64 => @as(i32, 139330),
+    else => @compileError("WHvArm64RegisterIdRes82El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes83El1 = switch (arch) {
+    .aarch64 => @as(i32, 139331),
+    else => @compileError("WHvArm64RegisterIdRes83El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes84El1 = switch (arch) {
+    .aarch64 => @as(i32, 139332),
+    else => @compileError("WHvArm64RegisterIdRes84El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes85El1 = switch (arch) {
+    .aarch64 => @as(i32, 139333),
+    else => @compileError("WHvArm64RegisterIdRes85El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes86El1 = switch (arch) {
+    .aarch64 => @as(i32, 139334),
+    else => @compileError("WHvArm64RegisterIdRes86El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes87El1 = switch (arch) {
+    .aarch64 => @as(i32, 139335),
+    else => @compileError("WHvArm64RegisterIdRes87El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes90El1 = switch (arch) {
+    .aarch64 => @as(i32, 139336),
+    else => @compileError("WHvArm64RegisterIdRes90El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes91El1 = switch (arch) {
+    .aarch64 => @as(i32, 139337),
+    else => @compileError("WHvArm64RegisterIdRes91El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes92El1 = switch (arch) {
+    .aarch64 => @as(i32, 139338),
+    else => @compileError("WHvArm64RegisterIdRes92El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes93El1 = switch (arch) {
+    .aarch64 => @as(i32, 139339),
+    else => @compileError("WHvArm64RegisterIdRes93El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes94El1 = switch (arch) {
+    .aarch64 => @as(i32, 139340),
+    else => @compileError("WHvArm64RegisterIdRes94El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes95El1 = switch (arch) {
+    .aarch64 => @as(i32, 139341),
+    else => @compileError("WHvArm64RegisterIdRes95El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes96El1 = switch (arch) {
+    .aarch64 => @as(i32, 139342),
+    else => @compileError("WHvArm64RegisterIdRes96El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRes97El1 = switch (arch) {
+    .aarch64 => @as(i32, 139343),
+    else => @compileError("WHvArm64RegisterIdRes97El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterIdRevidrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 139270),
+    else => @compileError("WHvArm64RegisterIdRevidrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterLr = switch (arch) {
+    .aarch64 => @as(i32, 131102),
+    else => @compileError("WHvArm64RegisterLr unsupported for target architecture"),
+};
+pub const WHvArm64RegisterMairEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262155),
+    else => @compileError("WHvArm64RegisterMairEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterMdrarEl1 = switch (arch) {
+    .aarch64 => @as(i32, 327756),
+    else => @compileError("WHvArm64RegisterMdrarEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterMdscrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 327757),
+    else => @compileError("WHvArm64RegisterMdscrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterMidrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262225),
+    else => @compileError("WHvArm64RegisterMidrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterMpidrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262145),
+    else => @compileError("WHvArm64RegisterMpidrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterOsdlrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 327758),
+    else => @compileError("WHvArm64RegisterOsdlrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterOslarEl1 = switch (arch) {
+    .aarch64 => @as(i32, 327762),
+    else => @compileError("WHvArm64RegisterOslarEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterOslsrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 327763),
+    else => @compileError("WHvArm64RegisterOslsrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterParEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262154),
+    else => @compileError("WHvArm64RegisterParEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPartitionInfoPage = switch (arch) {
+    .aarch64 => @as(i32, 589845),
+    else => @compileError("WHvArm64RegisterPartitionInfoPage unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPc = switch (arch) {
+    .aarch64 => @as(i32, 131106),
+    else => @compileError("WHvArm64RegisterPc unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmccfiltrEl0 = switch (arch) {
+    .aarch64 => @as(i32, 335872),
+    else => @compileError("WHvArm64RegisterPmccfiltrEl0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmccntrEl0 = switch (arch) {
+    .aarch64 => @as(i32, 335873),
+    else => @compileError("WHvArm64RegisterPmccntrEl0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmceid0El0 = switch (arch) {
+    .aarch64 => @as(i32, 335874),
+    else => @compileError("WHvArm64RegisterPmceid0El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmceid1El0 = switch (arch) {
+    .aarch64 => @as(i32, 335875),
+    else => @compileError("WHvArm64RegisterPmceid1El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmcntenclrEl0 = switch (arch) {
+    .aarch64 => @as(i32, 335876),
+    else => @compileError("WHvArm64RegisterPmcntenclrEl0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmcntensetEl0 = switch (arch) {
+    .aarch64 => @as(i32, 335877),
+    else => @compileError("WHvArm64RegisterPmcntensetEl0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmcrEl0 = switch (arch) {
+    .aarch64 => @as(i32, 335878),
+    else => @compileError("WHvArm64RegisterPmcrEl0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr0El0 = switch (arch) {
+    .aarch64 => @as(i32, 335879),
+    else => @compileError("WHvArm64RegisterPmevcntr0El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr10El0 = switch (arch) {
+    .aarch64 => @as(i32, 335889),
+    else => @compileError("WHvArm64RegisterPmevcntr10El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr11El0 = switch (arch) {
+    .aarch64 => @as(i32, 335890),
+    else => @compileError("WHvArm64RegisterPmevcntr11El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr12El0 = switch (arch) {
+    .aarch64 => @as(i32, 335891),
+    else => @compileError("WHvArm64RegisterPmevcntr12El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr13El0 = switch (arch) {
+    .aarch64 => @as(i32, 335892),
+    else => @compileError("WHvArm64RegisterPmevcntr13El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr14El0 = switch (arch) {
+    .aarch64 => @as(i32, 335893),
+    else => @compileError("WHvArm64RegisterPmevcntr14El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr15El0 = switch (arch) {
+    .aarch64 => @as(i32, 335894),
+    else => @compileError("WHvArm64RegisterPmevcntr15El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr16El0 = switch (arch) {
+    .aarch64 => @as(i32, 335895),
+    else => @compileError("WHvArm64RegisterPmevcntr16El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr17El0 = switch (arch) {
+    .aarch64 => @as(i32, 335896),
+    else => @compileError("WHvArm64RegisterPmevcntr17El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr18El0 = switch (arch) {
+    .aarch64 => @as(i32, 335897),
+    else => @compileError("WHvArm64RegisterPmevcntr18El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr19El0 = switch (arch) {
+    .aarch64 => @as(i32, 335898),
+    else => @compileError("WHvArm64RegisterPmevcntr19El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr1El0 = switch (arch) {
+    .aarch64 => @as(i32, 335880),
+    else => @compileError("WHvArm64RegisterPmevcntr1El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr20El0 = switch (arch) {
+    .aarch64 => @as(i32, 335899),
+    else => @compileError("WHvArm64RegisterPmevcntr20El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr21El0 = switch (arch) {
+    .aarch64 => @as(i32, 335900),
+    else => @compileError("WHvArm64RegisterPmevcntr21El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr22El0 = switch (arch) {
+    .aarch64 => @as(i32, 335901),
+    else => @compileError("WHvArm64RegisterPmevcntr22El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr23El0 = switch (arch) {
+    .aarch64 => @as(i32, 335902),
+    else => @compileError("WHvArm64RegisterPmevcntr23El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr24El0 = switch (arch) {
+    .aarch64 => @as(i32, 335903),
+    else => @compileError("WHvArm64RegisterPmevcntr24El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr25El0 = switch (arch) {
+    .aarch64 => @as(i32, 335904),
+    else => @compileError("WHvArm64RegisterPmevcntr25El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr26El0 = switch (arch) {
+    .aarch64 => @as(i32, 335905),
+    else => @compileError("WHvArm64RegisterPmevcntr26El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr27El0 = switch (arch) {
+    .aarch64 => @as(i32, 335906),
+    else => @compileError("WHvArm64RegisterPmevcntr27El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr28El0 = switch (arch) {
+    .aarch64 => @as(i32, 335907),
+    else => @compileError("WHvArm64RegisterPmevcntr28El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr29El0 = switch (arch) {
+    .aarch64 => @as(i32, 335908),
+    else => @compileError("WHvArm64RegisterPmevcntr29El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr2El0 = switch (arch) {
+    .aarch64 => @as(i32, 335881),
+    else => @compileError("WHvArm64RegisterPmevcntr2El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr30El0 = switch (arch) {
+    .aarch64 => @as(i32, 335909),
+    else => @compileError("WHvArm64RegisterPmevcntr30El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr3El0 = switch (arch) {
+    .aarch64 => @as(i32, 335882),
+    else => @compileError("WHvArm64RegisterPmevcntr3El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr4El0 = switch (arch) {
+    .aarch64 => @as(i32, 335883),
+    else => @compileError("WHvArm64RegisterPmevcntr4El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr5El0 = switch (arch) {
+    .aarch64 => @as(i32, 335884),
+    else => @compileError("WHvArm64RegisterPmevcntr5El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr6El0 = switch (arch) {
+    .aarch64 => @as(i32, 335885),
+    else => @compileError("WHvArm64RegisterPmevcntr6El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr7El0 = switch (arch) {
+    .aarch64 => @as(i32, 335886),
+    else => @compileError("WHvArm64RegisterPmevcntr7El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr8El0 = switch (arch) {
+    .aarch64 => @as(i32, 335887),
+    else => @compileError("WHvArm64RegisterPmevcntr8El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevcntr9El0 = switch (arch) {
+    .aarch64 => @as(i32, 335888),
+    else => @compileError("WHvArm64RegisterPmevcntr9El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper0El0 = switch (arch) {
+    .aarch64 => @as(i32, 335910),
+    else => @compileError("WHvArm64RegisterPmevtyper0El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper10El0 = switch (arch) {
+    .aarch64 => @as(i32, 335920),
+    else => @compileError("WHvArm64RegisterPmevtyper10El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper11El0 = switch (arch) {
+    .aarch64 => @as(i32, 335921),
+    else => @compileError("WHvArm64RegisterPmevtyper11El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper12El0 = switch (arch) {
+    .aarch64 => @as(i32, 335922),
+    else => @compileError("WHvArm64RegisterPmevtyper12El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper13El0 = switch (arch) {
+    .aarch64 => @as(i32, 335923),
+    else => @compileError("WHvArm64RegisterPmevtyper13El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper14El0 = switch (arch) {
+    .aarch64 => @as(i32, 335924),
+    else => @compileError("WHvArm64RegisterPmevtyper14El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper15El0 = switch (arch) {
+    .aarch64 => @as(i32, 335925),
+    else => @compileError("WHvArm64RegisterPmevtyper15El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper16El0 = switch (arch) {
+    .aarch64 => @as(i32, 335926),
+    else => @compileError("WHvArm64RegisterPmevtyper16El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper17El0 = switch (arch) {
+    .aarch64 => @as(i32, 335927),
+    else => @compileError("WHvArm64RegisterPmevtyper17El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper18El0 = switch (arch) {
+    .aarch64 => @as(i32, 335928),
+    else => @compileError("WHvArm64RegisterPmevtyper18El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper19El0 = switch (arch) {
+    .aarch64 => @as(i32, 335929),
+    else => @compileError("WHvArm64RegisterPmevtyper19El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper1El0 = switch (arch) {
+    .aarch64 => @as(i32, 335911),
+    else => @compileError("WHvArm64RegisterPmevtyper1El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper20El0 = switch (arch) {
+    .aarch64 => @as(i32, 335930),
+    else => @compileError("WHvArm64RegisterPmevtyper20El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper21El0 = switch (arch) {
+    .aarch64 => @as(i32, 335931),
+    else => @compileError("WHvArm64RegisterPmevtyper21El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper22El0 = switch (arch) {
+    .aarch64 => @as(i32, 335932),
+    else => @compileError("WHvArm64RegisterPmevtyper22El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper23El0 = switch (arch) {
+    .aarch64 => @as(i32, 335933),
+    else => @compileError("WHvArm64RegisterPmevtyper23El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper24El0 = switch (arch) {
+    .aarch64 => @as(i32, 335934),
+    else => @compileError("WHvArm64RegisterPmevtyper24El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper25El0 = switch (arch) {
+    .aarch64 => @as(i32, 335935),
+    else => @compileError("WHvArm64RegisterPmevtyper25El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper26El0 = switch (arch) {
+    .aarch64 => @as(i32, 335936),
+    else => @compileError("WHvArm64RegisterPmevtyper26El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper27El0 = switch (arch) {
+    .aarch64 => @as(i32, 335937),
+    else => @compileError("WHvArm64RegisterPmevtyper27El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper28El0 = switch (arch) {
+    .aarch64 => @as(i32, 335938),
+    else => @compileError("WHvArm64RegisterPmevtyper28El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper29El0 = switch (arch) {
+    .aarch64 => @as(i32, 335939),
+    else => @compileError("WHvArm64RegisterPmevtyper29El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper2El0 = switch (arch) {
+    .aarch64 => @as(i32, 335912),
+    else => @compileError("WHvArm64RegisterPmevtyper2El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper30El0 = switch (arch) {
+    .aarch64 => @as(i32, 335940),
+    else => @compileError("WHvArm64RegisterPmevtyper30El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper3El0 = switch (arch) {
+    .aarch64 => @as(i32, 335913),
+    else => @compileError("WHvArm64RegisterPmevtyper3El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper4El0 = switch (arch) {
+    .aarch64 => @as(i32, 335914),
+    else => @compileError("WHvArm64RegisterPmevtyper4El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper5El0 = switch (arch) {
+    .aarch64 => @as(i32, 335915),
+    else => @compileError("WHvArm64RegisterPmevtyper5El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper6El0 = switch (arch) {
+    .aarch64 => @as(i32, 335916),
+    else => @compileError("WHvArm64RegisterPmevtyper6El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper7El0 = switch (arch) {
+    .aarch64 => @as(i32, 335917),
+    else => @compileError("WHvArm64RegisterPmevtyper7El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper8El0 = switch (arch) {
+    .aarch64 => @as(i32, 335918),
+    else => @compileError("WHvArm64RegisterPmevtyper8El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmevtyper9El0 = switch (arch) {
+    .aarch64 => @as(i32, 335919),
+    else => @compileError("WHvArm64RegisterPmevtyper9El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmintenclrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 335941),
+    else => @compileError("WHvArm64RegisterPmintenclrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmintensetEl1 = switch (arch) {
+    .aarch64 => @as(i32, 335942),
+    else => @compileError("WHvArm64RegisterPmintensetEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmovsclrEl0 = switch (arch) {
+    .aarch64 => @as(i32, 335944),
+    else => @compileError("WHvArm64RegisterPmovsclrEl0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmovssetEl0 = switch (arch) {
+    .aarch64 => @as(i32, 335945),
+    else => @compileError("WHvArm64RegisterPmovssetEl0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmselrEl0 = switch (arch) {
+    .aarch64 => @as(i32, 335946),
+    else => @compileError("WHvArm64RegisterPmselrEl0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPmuserenrEl0 = switch (arch) {
+    .aarch64 => @as(i32, 335948),
+    else => @compileError("WHvArm64RegisterPmuserenrEl0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterPstate = switch (arch) {
+    .aarch64 => @as(i32, 131107),
+    else => @compileError("WHvArm64RegisterPstate unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ0 = switch (arch) {
+    .aarch64 => @as(i32, 196608),
+    else => @compileError("WHvArm64RegisterQ0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ1 = switch (arch) {
+    .aarch64 => @as(i32, 196609),
+    else => @compileError("WHvArm64RegisterQ1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ10 = switch (arch) {
+    .aarch64 => @as(i32, 196618),
+    else => @compileError("WHvArm64RegisterQ10 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ11 = switch (arch) {
+    .aarch64 => @as(i32, 196619),
+    else => @compileError("WHvArm64RegisterQ11 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ12 = switch (arch) {
+    .aarch64 => @as(i32, 196620),
+    else => @compileError("WHvArm64RegisterQ12 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ13 = switch (arch) {
+    .aarch64 => @as(i32, 196621),
+    else => @compileError("WHvArm64RegisterQ13 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ14 = switch (arch) {
+    .aarch64 => @as(i32, 196622),
+    else => @compileError("WHvArm64RegisterQ14 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ15 = switch (arch) {
+    .aarch64 => @as(i32, 196623),
+    else => @compileError("WHvArm64RegisterQ15 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ16 = switch (arch) {
+    .aarch64 => @as(i32, 196624),
+    else => @compileError("WHvArm64RegisterQ16 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ17 = switch (arch) {
+    .aarch64 => @as(i32, 196625),
+    else => @compileError("WHvArm64RegisterQ17 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ18 = switch (arch) {
+    .aarch64 => @as(i32, 196626),
+    else => @compileError("WHvArm64RegisterQ18 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ19 = switch (arch) {
+    .aarch64 => @as(i32, 196627),
+    else => @compileError("WHvArm64RegisterQ19 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ2 = switch (arch) {
+    .aarch64 => @as(i32, 196610),
+    else => @compileError("WHvArm64RegisterQ2 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ20 = switch (arch) {
+    .aarch64 => @as(i32, 196628),
+    else => @compileError("WHvArm64RegisterQ20 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ21 = switch (arch) {
+    .aarch64 => @as(i32, 196629),
+    else => @compileError("WHvArm64RegisterQ21 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ22 = switch (arch) {
+    .aarch64 => @as(i32, 196630),
+    else => @compileError("WHvArm64RegisterQ22 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ23 = switch (arch) {
+    .aarch64 => @as(i32, 196631),
+    else => @compileError("WHvArm64RegisterQ23 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ24 = switch (arch) {
+    .aarch64 => @as(i32, 196632),
+    else => @compileError("WHvArm64RegisterQ24 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ25 = switch (arch) {
+    .aarch64 => @as(i32, 196633),
+    else => @compileError("WHvArm64RegisterQ25 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ26 = switch (arch) {
+    .aarch64 => @as(i32, 196634),
+    else => @compileError("WHvArm64RegisterQ26 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ27 = switch (arch) {
+    .aarch64 => @as(i32, 196635),
+    else => @compileError("WHvArm64RegisterQ27 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ28 = switch (arch) {
+    .aarch64 => @as(i32, 196636),
+    else => @compileError("WHvArm64RegisterQ28 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ29 = switch (arch) {
+    .aarch64 => @as(i32, 196637),
+    else => @compileError("WHvArm64RegisterQ29 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ3 = switch (arch) {
+    .aarch64 => @as(i32, 196611),
+    else => @compileError("WHvArm64RegisterQ3 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ30 = switch (arch) {
+    .aarch64 => @as(i32, 196638),
+    else => @compileError("WHvArm64RegisterQ30 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ31 = switch (arch) {
+    .aarch64 => @as(i32, 196639),
+    else => @compileError("WHvArm64RegisterQ31 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ4 = switch (arch) {
+    .aarch64 => @as(i32, 196612),
+    else => @compileError("WHvArm64RegisterQ4 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ5 = switch (arch) {
+    .aarch64 => @as(i32, 196613),
+    else => @compileError("WHvArm64RegisterQ5 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ6 = switch (arch) {
+    .aarch64 => @as(i32, 196614),
+    else => @compileError("WHvArm64RegisterQ6 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ7 = switch (arch) {
+    .aarch64 => @as(i32, 196615),
+    else => @compileError("WHvArm64RegisterQ7 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ8 = switch (arch) {
+    .aarch64 => @as(i32, 196616),
+    else => @compileError("WHvArm64RegisterQ8 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterQ9 = switch (arch) {
+    .aarch64 => @as(i32, 196617),
+    else => @compileError("WHvArm64RegisterQ9 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterSctlrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262146),
+    else => @compileError("WHvArm64RegisterSctlrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterSmcrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262237),
+    else => @compileError("WHvArm64RegisterSmcrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterSmidrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262239),
+    else => @compileError("WHvArm64RegisterSmidrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterSmpriEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262240),
+    else => @compileError("WHvArm64RegisterSmpriEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterSp = switch (arch) {
+    .aarch64 => @as(i32, 131103),
+    else => @compileError("WHvArm64RegisterSp unsupported for target architecture"),
+};
+pub const WHvArm64RegisterSpEl0 = switch (arch) {
+    .aarch64 => @as(i32, 131104),
+    else => @compileError("WHvArm64RegisterSpEl0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterSpEl1 = switch (arch) {
+    .aarch64 => @as(i32, 131105),
+    else => @compileError("WHvArm64RegisterSpEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterSpsrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262164),
+    else => @compileError("WHvArm64RegisterSpsrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterSvcr = switch (arch) {
+    .aarch64 => @as(i32, 262274),
+    else => @compileError("WHvArm64RegisterSvcr unsupported for target architecture"),
+};
+pub const WHvArm64RegisterTcrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262151),
+    else => @compileError("WHvArm64RegisterTcrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterTpidr2El0 = switch (arch) {
+    .aarch64 => @as(i32, 262246),
+    else => @compileError("WHvArm64RegisterTpidr2El0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterTpidrEl0 = switch (arch) {
+    .aarch64 => @as(i32, 262161),
+    else => @compileError("WHvArm64RegisterTpidrEl0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterTpidrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262158),
+    else => @compileError("WHvArm64RegisterTpidrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterTpidrroEl0 = switch (arch) {
+    .aarch64 => @as(i32, 262160),
+    else => @compileError("WHvArm64RegisterTpidrroEl0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterTtbr0El1 = switch (arch) {
+    .aarch64 => @as(i32, 262149),
+    else => @compileError("WHvArm64RegisterTtbr0El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterTtbr1El1 = switch (arch) {
+    .aarch64 => @as(i32, 262150),
+    else => @compileError("WHvArm64RegisterTtbr1El1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterVbarEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262156),
+    else => @compileError("WHvArm64RegisterVbarEl1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX0 = switch (arch) {
+    .aarch64 => @as(i32, 131072),
+    else => @compileError("WHvArm64RegisterX0 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX1 = switch (arch) {
+    .aarch64 => @as(i32, 131073),
+    else => @compileError("WHvArm64RegisterX1 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX10 = switch (arch) {
+    .aarch64 => @as(i32, 131082),
+    else => @compileError("WHvArm64RegisterX10 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX11 = switch (arch) {
+    .aarch64 => @as(i32, 131083),
+    else => @compileError("WHvArm64RegisterX11 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX12 = switch (arch) {
+    .aarch64 => @as(i32, 131084),
+    else => @compileError("WHvArm64RegisterX12 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX13 = switch (arch) {
+    .aarch64 => @as(i32, 131085),
+    else => @compileError("WHvArm64RegisterX13 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX14 = switch (arch) {
+    .aarch64 => @as(i32, 131086),
+    else => @compileError("WHvArm64RegisterX14 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX15 = switch (arch) {
+    .aarch64 => @as(i32, 131087),
+    else => @compileError("WHvArm64RegisterX15 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX16 = switch (arch) {
+    .aarch64 => @as(i32, 131088),
+    else => @compileError("WHvArm64RegisterX16 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX17 = switch (arch) {
+    .aarch64 => @as(i32, 131089),
+    else => @compileError("WHvArm64RegisterX17 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX18 = switch (arch) {
+    .aarch64 => @as(i32, 131090),
+    else => @compileError("WHvArm64RegisterX18 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX19 = switch (arch) {
+    .aarch64 => @as(i32, 131091),
+    else => @compileError("WHvArm64RegisterX19 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX2 = switch (arch) {
+    .aarch64 => @as(i32, 131074),
+    else => @compileError("WHvArm64RegisterX2 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX20 = switch (arch) {
+    .aarch64 => @as(i32, 131092),
+    else => @compileError("WHvArm64RegisterX20 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX21 = switch (arch) {
+    .aarch64 => @as(i32, 131093),
+    else => @compileError("WHvArm64RegisterX21 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX22 = switch (arch) {
+    .aarch64 => @as(i32, 131094),
+    else => @compileError("WHvArm64RegisterX22 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX23 = switch (arch) {
+    .aarch64 => @as(i32, 131095),
+    else => @compileError("WHvArm64RegisterX23 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX24 = switch (arch) {
+    .aarch64 => @as(i32, 131096),
+    else => @compileError("WHvArm64RegisterX24 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX25 = switch (arch) {
+    .aarch64 => @as(i32, 131097),
+    else => @compileError("WHvArm64RegisterX25 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX26 = switch (arch) {
+    .aarch64 => @as(i32, 131098),
+    else => @compileError("WHvArm64RegisterX26 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX27 = switch (arch) {
+    .aarch64 => @as(i32, 131099),
+    else => @compileError("WHvArm64RegisterX27 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX28 = switch (arch) {
+    .aarch64 => @as(i32, 131100),
+    else => @compileError("WHvArm64RegisterX28 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX3 = switch (arch) {
+    .aarch64 => @as(i32, 131075),
+    else => @compileError("WHvArm64RegisterX3 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX4 = switch (arch) {
+    .aarch64 => @as(i32, 131076),
+    else => @compileError("WHvArm64RegisterX4 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX5 = switch (arch) {
+    .aarch64 => @as(i32, 131077),
+    else => @compileError("WHvArm64RegisterX5 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX6 = switch (arch) {
+    .aarch64 => @as(i32, 131078),
+    else => @compileError("WHvArm64RegisterX6 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX7 = switch (arch) {
+    .aarch64 => @as(i32, 131079),
+    else => @compileError("WHvArm64RegisterX7 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX8 = switch (arch) {
+    .aarch64 => @as(i32, 131080),
+    else => @compileError("WHvArm64RegisterX8 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterX9 = switch (arch) {
+    .aarch64 => @as(i32, 131081),
+    else => @compileError("WHvArm64RegisterX9 unsupported for target architecture"),
+};
+pub const WHvArm64RegisterZcrEl1 = switch (arch) {
+    .aarch64 => @as(i32, 262257),
+    else => @compileError("WHvArm64RegisterZcrEl1 unsupported for target architecture"),
+};
+pub const WHvArm64ResetTypePowerOff = switch (arch) {
+    .aarch64 => @as(i32, 0),
+    else => @compileError("WHvArm64ResetTypePowerOff unsupported for target architecture"),
+};
+pub const WHvArm64ResetTypeReboot = switch (arch) {
+    .aarch64 => @as(i32, 1),
+    else => @compileError("WHvArm64ResetTypeReboot unsupported for target architecture"),
+};
+pub const WHvArm64SyntheticExceptionTypeCrashdump = switch (arch) {
+    .aarch64 => @as(i32, 2),
+    else => @compileError("WHvArm64SyntheticExceptionTypeCrashdump unsupported for target architecture"),
+};
+pub const WHvArm64SyntheticExceptionTypeMax = switch (arch) {
+    .aarch64 => @as(i32, 64),
+    else => @compileError("WHvArm64SyntheticExceptionTypeMax unsupported for target architecture"),
+};
+pub const WHvArm64SyntheticExceptionTypeSecure = switch (arch) {
+    .aarch64 => @as(i32, 1),
+    else => @compileError("WHvArm64SyntheticExceptionTypeSecure unsupported for target architecture"),
+};
+pub const WHvArm64SyntheticExceptionTypeSmc = switch (arch) {
+    .aarch64 => @as(i32, 0),
+    else => @compileError("WHvArm64SyntheticExceptionTypeSmc unsupported for target architecture"),
+};
+pub const WHvArm64SyntheticExceptionTypeVirtualizationFault = switch (arch) {
+    .aarch64 => @as(i32, 3),
+    else => @compileError("WHvArm64SyntheticExceptionTypeVirtualizationFault unsupported for target architecture"),
+};
+pub const WHvCacheTypeUncached = switch (arch) {
+    .aarch64 => @as(i32, 0),
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvCacheTypeUncached unsupported for target architecture"),
+};
+pub const WHvCacheTypeWriteBack = switch (arch) {
+    .aarch64 => @as(i32, 6),
+    .x86_64 => @as(i32, 6),
+    else => @compileError("WHvCacheTypeWriteBack unsupported for target architecture"),
+};
+pub const WHvCacheTypeWriteCombining = switch (arch) {
+    .aarch64 => @as(i32, 1),
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvCacheTypeWriteCombining unsupported for target architecture"),
+};
+pub const WHvCacheTypeWriteProtected = switch (arch) {
+    .x86_64 => @as(i32, 5),
+    else => @compileError("WHvCacheTypeWriteProtected unsupported for target architecture"),
+};
+pub const WHvCacheTypeWriteThrough = switch (arch) {
+    .aarch64 => @as(i32, 4),
+    .x86_64 => @as(i32, 4),
+    else => @compileError("WHvCacheTypeWriteThrough unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeExceptionExitBitmap = switch (arch) {
+    .x86_64 => @as(i32, 3),
+    else => @compileError("WHvCapabilityCodeExceptionExitBitmap unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeExtendedVmExits = switch (arch) {
+    .aarch64 => @as(i32, 2),
+    .x86_64 => @as(i32, 2),
+    else => @compileError("WHvCapabilityCodeExtendedVmExits unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeFeatures = switch (arch) {
+    .aarch64 => @as(i32, 1),
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvCapabilityCodeFeatures unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeGicLpiIntIdBits = switch (arch) {
+    .aarch64 => @as(i32, 8209),
+    else => @compileError("WHvCapabilityCodeGicLpiIntIdBits unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeGpaRangePopulateFlags = switch (arch) {
+    .aarch64 => @as(i32, 5),
+    .x86_64 => @as(i32, 5),
+    else => @compileError("WHvCapabilityCodeGpaRangePopulateFlags unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeHypervisorPresent = switch (arch) {
+    .aarch64 => @as(i32, 0),
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvCapabilityCodeHypervisorPresent unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeInterruptClockFrequency = switch (arch) {
+    .x86_64 => @as(i32, 4101),
+    else => @compileError("WHvCapabilityCodeInterruptClockFrequency unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeMaxSmeStreamingVectorLength = switch (arch) {
+    .aarch64 => @as(i32, 8211),
+    else => @compileError("WHvCapabilityCodeMaxSmeStreamingVectorLength unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeMaxSveVectorLength = switch (arch) {
+    .aarch64 => @as(i32, 8210),
+    else => @compileError("WHvCapabilityCodeMaxSveVectorLength unsupported for target architecture"),
+};
+pub const WHvCapabilityCodePhysicalAddressWidth = switch (arch) {
+    .aarch64 => @as(i32, 4106),
+    .x86_64 => @as(i32, 4106),
+    else => @compileError("WHvCapabilityCodePhysicalAddressWidth unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeProcessorClFlushSize = switch (arch) {
+    .aarch64 => @as(i32, 4098),
+    .x86_64 => @as(i32, 4098),
+    else => @compileError("WHvCapabilityCodeProcessorClFlushSize unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeProcessorClockFrequency = switch (arch) {
+    .aarch64 => @as(i32, 4100),
+    .x86_64 => @as(i32, 4100),
+    else => @compileError("WHvCapabilityCodeProcessorClockFrequency unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeProcessorFeatures = switch (arch) {
+    .aarch64 => @as(i32, 4097),
+    .x86_64 => @as(i32, 4097),
+    else => @compileError("WHvCapabilityCodeProcessorFeatures unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeProcessorFeaturesBanks = switch (arch) {
+    .aarch64 => @as(i32, 4102),
+    .x86_64 => @as(i32, 4102),
+    else => @compileError("WHvCapabilityCodeProcessorFeaturesBanks unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeProcessorFrequencyCap = switch (arch) {
+    .aarch64 => @as(i32, 4103),
+    .x86_64 => @as(i32, 4103),
+    else => @compileError("WHvCapabilityCodeProcessorFrequencyCap unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeProcessorPerfmonFeatures = switch (arch) {
+    .x86_64 => @as(i32, 4105),
+    else => @compileError("WHvCapabilityCodeProcessorPerfmonFeatures unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeProcessorVendor = switch (arch) {
+    .aarch64 => @as(i32, 4096),
+    .x86_64 => @as(i32, 4096),
+    else => @compileError("WHvCapabilityCodeProcessorVendor unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeProcessorXsaveFeatures = switch (arch) {
+    .x86_64 => @as(i32, 4099),
+    else => @compileError("WHvCapabilityCodeProcessorXsaveFeatures unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeSchedulerFeatures = switch (arch) {
+    .aarch64 => @as(i32, 6),
+    .x86_64 => @as(i32, 6),
+    else => @compileError("WHvCapabilityCodeSchedulerFeatures unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeSyntheticProcessorFeaturesBanks = switch (arch) {
+    .aarch64 => @as(i32, 4104),
+    .x86_64 => @as(i32, 4104),
+    else => @compileError("WHvCapabilityCodeSyntheticProcessorFeaturesBanks unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxBasic = switch (arch) {
+    .x86_64 => @as(i32, 8192),
+    else => @compileError("WHvCapabilityCodeVmxBasic unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxCr0Fixed0 = switch (arch) {
+    .x86_64 => @as(i32, 8198),
+    else => @compileError("WHvCapabilityCodeVmxCr0Fixed0 unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxCr0Fixed1 = switch (arch) {
+    .x86_64 => @as(i32, 8199),
+    else => @compileError("WHvCapabilityCodeVmxCr0Fixed1 unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxCr4Fixed0 = switch (arch) {
+    .x86_64 => @as(i32, 8200),
+    else => @compileError("WHvCapabilityCodeVmxCr4Fixed0 unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxCr4Fixed1 = switch (arch) {
+    .x86_64 => @as(i32, 8201),
+    else => @compileError("WHvCapabilityCodeVmxCr4Fixed1 unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxEntryCtls = switch (arch) {
+    .x86_64 => @as(i32, 8196),
+    else => @compileError("WHvCapabilityCodeVmxEntryCtls unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxEptVpidCap = switch (arch) {
+    .x86_64 => @as(i32, 8204),
+    else => @compileError("WHvCapabilityCodeVmxEptVpidCap unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxExitCtls = switch (arch) {
+    .x86_64 => @as(i32, 8195),
+    else => @compileError("WHvCapabilityCodeVmxExitCtls unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxMisc = switch (arch) {
+    .x86_64 => @as(i32, 8197),
+    else => @compileError("WHvCapabilityCodeVmxMisc unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxPinbasedCtls = switch (arch) {
+    .x86_64 => @as(i32, 8193),
+    else => @compileError("WHvCapabilityCodeVmxPinbasedCtls unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxProcbasedCtls = switch (arch) {
+    .x86_64 => @as(i32, 8194),
+    else => @compileError("WHvCapabilityCodeVmxProcbasedCtls unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxProcbasedCtls2 = switch (arch) {
+    .x86_64 => @as(i32, 8203),
+    else => @compileError("WHvCapabilityCodeVmxProcbasedCtls2 unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxTrueEntryCtls = switch (arch) {
+    .x86_64 => @as(i32, 8208),
+    else => @compileError("WHvCapabilityCodeVmxTrueEntryCtls unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxTrueExitCtls = switch (arch) {
+    .x86_64 => @as(i32, 8207),
+    else => @compileError("WHvCapabilityCodeVmxTrueExitCtls unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxTruePinbasedCtls = switch (arch) {
+    .x86_64 => @as(i32, 8205),
+    else => @compileError("WHvCapabilityCodeVmxTruePinbasedCtls unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxTrueProcbasedCtls = switch (arch) {
+    .x86_64 => @as(i32, 8206),
+    else => @compileError("WHvCapabilityCodeVmxTrueProcbasedCtls unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeVmxVmcsEnum = switch (arch) {
+    .x86_64 => @as(i32, 8202),
+    else => @compileError("WHvCapabilityCodeVmxVmcsEnum unsupported for target architecture"),
+};
+pub const WHvCapabilityCodeX64MsrExitBitmap = switch (arch) {
+    .x86_64 => @as(i32, 4),
+    else => @compileError("WHvCapabilityCodeX64MsrExitBitmap unsupported for target architecture"),
+};
+pub const WHvCreateVpciDeviceFlagNone = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 0),
+    else => @compileError("WHvCreateVpciDeviceFlagNone unsupported for target architecture"),
+};
+pub const WHvCreateVpciDeviceFlagPhysicallyBacked = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 1),
+    else => @compileError("WHvCreateVpciDeviceFlagPhysicallyBacked unsupported for target architecture"),
+};
+pub const WHvCreateVpciDeviceFlagUseLogicalInterrupts = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 2),
+    else => @compileError("WHvCreateVpciDeviceFlagUseLogicalInterrupts unsupported for target architecture"),
+};
+pub const WHvMapGpaRangeFlagExecute = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 4),
+    else => @compileError("WHvMapGpaRangeFlagExecute unsupported for target architecture"),
+};
+pub const WHvMapGpaRangeFlagNone = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 0),
+    else => @compileError("WHvMapGpaRangeFlagNone unsupported for target architecture"),
+};
+pub const WHvMapGpaRangeFlagRead = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 1),
+    else => @compileError("WHvMapGpaRangeFlagRead unsupported for target architecture"),
+};
+pub const WHvMapGpaRangeFlagTrackDirtyPages = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 8),
+    else => @compileError("WHvMapGpaRangeFlagTrackDirtyPages unsupported for target architecture"),
+};
+pub const WHvMapGpaRangeFlagWrite = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 2),
+    else => @compileError("WHvMapGpaRangeFlagWrite unsupported for target architecture"),
+};
+pub const WHvMemoryAccessExecute = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 2),
+    else => @compileError("WHvMemoryAccessExecute unsupported for target architecture"),
+};
+pub const WHvMemoryAccessRead = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 0),
+    else => @compileError("WHvMemoryAccessRead unsupported for target architecture"),
+};
+pub const WHvMemoryAccessWrite = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 1),
+    else => @compileError("WHvMemoryAccessWrite unsupported for target architecture"),
+};
+pub const WHvMessageTypeRegisterIntercept = switch (arch) {
+    .aarch64 => @as(i32, -2147418106),
+    else => @compileError("WHvMessageTypeRegisterIntercept unsupported for target architecture"),
+};
+pub const WHvMsrActionArchitectureDefault = switch (arch) {
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvMsrActionArchitectureDefault unsupported for target architecture"),
+};
+pub const WHvMsrActionExit = switch (arch) {
+    .x86_64 => @as(i32, 2),
+    else => @compileError("WHvMsrActionExit unsupported for target architecture"),
+};
+pub const WHvMsrActionIgnoreWriteReadZero = switch (arch) {
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvMsrActionIgnoreWriteReadZero unsupported for target architecture"),
+};
+pub const WHvNestedStateTypeSvm = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 1),
+    else => @compileError("WHvNestedStateTypeSvm unsupported for target architecture"),
+};
+pub const WHvNestedStateTypeVmx = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 0),
+    else => @compileError("WHvNestedStateTypeVmx unsupported for target architecture"),
+};
+pub const WHvNotificationPortPropertyPreferredTargetDuration = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 5),
+    else => @compileError("WHvNotificationPortPropertyPreferredTargetDuration unsupported for target architecture"),
+};
+pub const WHvNotificationPortPropertyPreferredTargetVp = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 1),
+    else => @compileError("WHvNotificationPortPropertyPreferredTargetVp unsupported for target architecture"),
+};
+pub const WHvNotificationPortTypeDoorbell = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 4),
+    else => @compileError("WHvNotificationPortTypeDoorbell unsupported for target architecture"),
+};
+pub const WHvNotificationPortTypeEvent = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 2),
+    else => @compileError("WHvNotificationPortTypeEvent unsupported for target architecture"),
+};
+pub const WHvPartitionCounterSetMemory = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 0),
+    else => @compileError("WHvPartitionCounterSetMemory unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeAllowDeviceAssignment = switch (arch) {
+    .aarch64 => @as(i32, 12),
+    .x86_64 => @as(i32, 12),
+    else => @compileError("WHvPartitionPropertyCodeAllowDeviceAssignment unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeApicRemoteReadSupport = switch (arch) {
+    .x86_64 => @as(i32, 4105),
+    else => @compileError("WHvPartitionPropertyCodeApicRemoteReadSupport unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeArm64IcParameters = switch (arch) {
+    .aarch64 => @as(i32, 4114),
+    else => @compileError("WHvPartitionPropertyCodeArm64IcParameters unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeCpuCap = switch (arch) {
+    .aarch64 => @as(i32, 8),
+    .x86_64 => @as(i32, 8),
+    else => @compileError("WHvPartitionPropertyCodeCpuCap unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeCpuGroupId = switch (arch) {
+    .aarch64 => @as(i32, 10),
+    .x86_64 => @as(i32, 10),
+    else => @compileError("WHvPartitionPropertyCodeCpuGroupId unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeCpuidExitList = switch (arch) {
+    .x86_64 => @as(i32, 4099),
+    else => @compileError("WHvPartitionPropertyCodeCpuidExitList unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeCpuidResultList = switch (arch) {
+    .x86_64 => @as(i32, 4100),
+    else => @compileError("WHvPartitionPropertyCodeCpuidResultList unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeCpuidResultList2 = switch (arch) {
+    .x86_64 => @as(i32, 4109),
+    else => @compileError("WHvPartitionPropertyCodeCpuidResultList2 unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeCpuReserve = switch (arch) {
+    .aarch64 => @as(i32, 7),
+    .x86_64 => @as(i32, 7),
+    else => @compileError("WHvPartitionPropertyCodeCpuReserve unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeCpuWeight = switch (arch) {
+    .aarch64 => @as(i32, 9),
+    .x86_64 => @as(i32, 9),
+    else => @compileError("WHvPartitionPropertyCodeCpuWeight unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeDisableSmt = switch (arch) {
+    .aarch64 => @as(i32, 13),
+    .x86_64 => @as(i32, 13),
+    else => @compileError("WHvPartitionPropertyCodeDisableSmt unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeExceptionExitBitmap = switch (arch) {
+    .x86_64 => @as(i32, 2),
+    else => @compileError("WHvPartitionPropertyCodeExceptionExitBitmap unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeExtendedVmExits = switch (arch) {
+    .aarch64 => @as(i32, 1),
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvPartitionPropertyCodeExtendedVmExits unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeInterruptClockFrequency = switch (arch) {
+    .x86_64 => @as(i32, 4104),
+    else => @compileError("WHvPartitionPropertyCodeInterruptClockFrequency unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeLocalApicEmulationMode = switch (arch) {
+    .x86_64 => @as(i32, 4101),
+    else => @compileError("WHvPartitionPropertyCodeLocalApicEmulationMode unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeMsrActionList = switch (arch) {
+    .x86_64 => @as(i32, 4111),
+    else => @compileError("WHvPartitionPropertyCodeMsrActionList unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeNestedVirtualization = switch (arch) {
+    .aarch64 => @as(i32, 4),
+    .x86_64 => @as(i32, 4),
+    else => @compileError("WHvPartitionPropertyCodeNestedVirtualization unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodePhysicalAddressWidth = switch (arch) {
+    .aarch64 => @as(i32, 4113),
+    .x86_64 => @as(i32, 4113),
+    else => @compileError("WHvPartitionPropertyCodePhysicalAddressWidth unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodePrimaryNumaNode = switch (arch) {
+    .aarch64 => @as(i32, 6),
+    .x86_64 => @as(i32, 6),
+    else => @compileError("WHvPartitionPropertyCodePrimaryNumaNode unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeProcessorClFlushSize = switch (arch) {
+    .aarch64 => @as(i32, 4098),
+    .x86_64 => @as(i32, 4098),
+    else => @compileError("WHvPartitionPropertyCodeProcessorClFlushSize unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeProcessorClockFrequency = switch (arch) {
+    .aarch64 => @as(i32, 4103),
+    .x86_64 => @as(i32, 4103),
+    else => @compileError("WHvPartitionPropertyCodeProcessorClockFrequency unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeProcessorCount = switch (arch) {
+    .aarch64 => @as(i32, 8191),
+    .x86_64 => @as(i32, 8191),
+    else => @compileError("WHvPartitionPropertyCodeProcessorCount unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeProcessorFeatures = switch (arch) {
+    .aarch64 => @as(i32, 4097),
+    .x86_64 => @as(i32, 4097),
+    else => @compileError("WHvPartitionPropertyCodeProcessorFeatures unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeProcessorFeaturesBanks = switch (arch) {
+    .aarch64 => @as(i32, 4106),
+    .x86_64 => @as(i32, 4106),
+    else => @compileError("WHvPartitionPropertyCodeProcessorFeaturesBanks unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeProcessorFrequencyCap = switch (arch) {
+    .aarch64 => @as(i32, 11),
+    .x86_64 => @as(i32, 11),
+    else => @compileError("WHvPartitionPropertyCodeProcessorFrequencyCap unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeProcessorPerfmonFeatures = switch (arch) {
+    .x86_64 => @as(i32, 4110),
+    else => @compileError("WHvPartitionPropertyCodeProcessorPerfmonFeatures unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeProcessorXsaveFeatures = switch (arch) {
+    .x86_64 => @as(i32, 4102),
+    else => @compileError("WHvPartitionPropertyCodeProcessorXsaveFeatures unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeReferenceTime = switch (arch) {
+    .aarch64 => @as(i32, 4107),
+    .x86_64 => @as(i32, 4107),
+    else => @compileError("WHvPartitionPropertyCodeReferenceTime unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeSeparateSecurityDomain = switch (arch) {
+    .aarch64 => @as(i32, 3),
+    .x86_64 => @as(i32, 3),
+    else => @compileError("WHvPartitionPropertyCodeSeparateSecurityDomain unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeSyntheticProcessorFeaturesBanks = switch (arch) {
+    .aarch64 => @as(i32, 4108),
+    .x86_64 => @as(i32, 4108),
+    else => @compileError("WHvPartitionPropertyCodeSyntheticProcessorFeaturesBanks unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeUnimplementedMsrAction = switch (arch) {
+    .x86_64 => @as(i32, 4112),
+    else => @compileError("WHvPartitionPropertyCodeUnimplementedMsrAction unsupported for target architecture"),
+};
+pub const WHvPartitionPropertyCodeX64MsrExitBitmap = switch (arch) {
+    .x86_64 => @as(i32, 5),
+    else => @compileError("WHvPartitionPropertyCodeX64MsrExitBitmap unsupported for target architecture"),
+};
+pub const WHvProcessorCounterSetApic = switch (arch) {
+    .x86_64 => @as(i32, 3),
+    else => @compileError("WHvProcessorCounterSetApic unsupported for target architecture"),
+};
+pub const WHvProcessorCounterSetEvents = switch (arch) {
+    .aarch64 => @as(i32, 2),
+    .x86_64 => @as(i32, 2),
+    else => @compileError("WHvProcessorCounterSetEvents unsupported for target architecture"),
+};
+pub const WHvProcessorCounterSetIntercepts = switch (arch) {
+    .aarch64 => @as(i32, 1),
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvProcessorCounterSetIntercepts unsupported for target architecture"),
+};
+pub const WHvProcessorCounterSetRuntime = switch (arch) {
+    .aarch64 => @as(i32, 0),
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvProcessorCounterSetRuntime unsupported for target architecture"),
+};
+pub const WHvProcessorCounterSetSyntheticFeatures = switch (arch) {
+    .aarch64 => @as(i32, 4),
+    .x86_64 => @as(i32, 4),
+    else => @compileError("WHvProcessorCounterSetSyntheticFeatures unsupported for target architecture"),
+};
+pub const WHvProcessorVendorAmd = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 0),
+    else => @compileError("WHvProcessorVendorAmd unsupported for target architecture"),
+};
+pub const WHvProcessorVendorArm = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 16),
+    else => @compileError("WHvProcessorVendorArm unsupported for target architecture"),
+};
+pub const WHvProcessorVendorHygon = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 2),
+    else => @compileError("WHvProcessorVendorHygon unsupported for target architecture"),
+};
+pub const WHvProcessorVendorIntel = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 1),
+    else => @compileError("WHvProcessorVendorIntel unsupported for target architecture"),
+};
+pub const WHvRegisterCpuManagementFeaturesInfo = switch (arch) {
+    .aarch64 => @as(i32, 516),
+    else => @compileError("WHvRegisterCpuManagementFeaturesInfo unsupported for target architecture"),
+};
+pub const WHvRegisterDeliverabilityNotifications = switch (arch) {
+    .aarch64 => @as(i32, 65542),
+    .x86_64 => @as(i32, -2147483644),
+    else => @compileError("WHvRegisterDeliverabilityNotifications unsupported for target architecture"),
+};
+pub const WHvRegisterEom = switch (arch) {
+    .aarch64 => @as(i32, 655380),
+    .x86_64 => @as(i32, 16404),
+    else => @compileError("WHvRegisterEom unsupported for target architecture"),
+};
+pub const WHvRegisterFeaturesInfo = switch (arch) {
+    .aarch64 => @as(i32, 513),
+    else => @compileError("WHvRegisterFeaturesInfo unsupported for target architecture"),
+};
+pub const WHvRegisterGuestCrashCtl = switch (arch) {
+    .aarch64 => @as(i32, 533),
+    else => @compileError("WHvRegisterGuestCrashCtl unsupported for target architecture"),
+};
+pub const WHvRegisterGuestCrashP0 = switch (arch) {
+    .aarch64 => @as(i32, 528),
+    else => @compileError("WHvRegisterGuestCrashP0 unsupported for target architecture"),
+};
+pub const WHvRegisterGuestCrashP1 = switch (arch) {
+    .aarch64 => @as(i32, 529),
+    else => @compileError("WHvRegisterGuestCrashP1 unsupported for target architecture"),
+};
+pub const WHvRegisterGuestCrashP2 = switch (arch) {
+    .aarch64 => @as(i32, 530),
+    else => @compileError("WHvRegisterGuestCrashP2 unsupported for target architecture"),
+};
+pub const WHvRegisterGuestCrashP3 = switch (arch) {
+    .aarch64 => @as(i32, 531),
+    else => @compileError("WHvRegisterGuestCrashP3 unsupported for target architecture"),
+};
+pub const WHvRegisterGuestCrashP4 = switch (arch) {
+    .aarch64 => @as(i32, 532),
+    else => @compileError("WHvRegisterGuestCrashP4 unsupported for target architecture"),
+};
+pub const WHvRegisterGuestOsId = switch (arch) {
+    .aarch64 => @as(i32, 589826),
+    .x86_64 => @as(i32, 20482),
+    else => @compileError("WHvRegisterGuestOsId unsupported for target architecture"),
+};
+pub const WHvRegisterHardwareFeaturesInfo = switch (arch) {
+    .aarch64 => @as(i32, 515),
+    else => @compileError("WHvRegisterHardwareFeaturesInfo unsupported for target architecture"),
+};
+pub const WHvRegisterHypervisorVersion = switch (arch) {
+    .aarch64 => @as(i32, 256),
+    else => @compileError("WHvRegisterHypervisorVersion unsupported for target architecture"),
+};
+pub const WHvRegisterImplementationLimitsInfo = switch (arch) {
+    .aarch64 => @as(i32, 514),
+    else => @compileError("WHvRegisterImplementationLimitsInfo unsupported for target architecture"),
+};
+pub const WHvRegisterInternalActivityState = switch (arch) {
+    .aarch64 => @as(i32, 4),
+    .x86_64 => @as(i32, -2147483643),
+    else => @compileError("WHvRegisterInternalActivityState unsupported for target architecture"),
+};
+pub const WHvRegisterInterruptState = switch (arch) {
+    .x86_64 => @as(i32, -2147483647),
+    else => @compileError("WHvRegisterInterruptState unsupported for target architecture"),
+};
+pub const WHvRegisterPasidFeaturesInfo = switch (arch) {
+    .aarch64 => @as(i32, 517),
+    else => @compileError("WHvRegisterPasidFeaturesInfo unsupported for target architecture"),
+};
+pub const WHvRegisterPendingEvent = switch (arch) {
+    .x86_64 => @as(i32, -2147483646),
+    else => @compileError("WHvRegisterPendingEvent unsupported for target architecture"),
+};
+pub const WHvRegisterPendingEvent0 = switch (arch) {
+    .aarch64 => @as(i32, 65540),
+    else => @compileError("WHvRegisterPendingEvent0 unsupported for target architecture"),
+};
+pub const WHvRegisterPendingEvent1 = switch (arch) {
+    .aarch64 => @as(i32, 65541),
+    .x86_64 => @as(i32, -2147483645),
+    else => @compileError("WHvRegisterPendingEvent1 unsupported for target architecture"),
+};
+pub const WHvRegisterPendingEvent2 = switch (arch) {
+    .aarch64 => @as(i32, 65544),
+    .x86_64 => @as(i32, -2147483641),
+    else => @compileError("WHvRegisterPendingEvent2 unsupported for target architecture"),
+};
+pub const WHvRegisterPendingEvent3 = switch (arch) {
+    .aarch64 => @as(i32, 65545),
+    .x86_64 => @as(i32, -2147483640),
+    else => @compileError("WHvRegisterPendingEvent3 unsupported for target architecture"),
+};
+pub const WHvRegisterPendingInterruption = switch (arch) {
+    .x86_64 => @as(i32, -2147483648),
+    else => @compileError("WHvRegisterPendingInterruption unsupported for target architecture"),
+};
+pub const WHvRegisterPrivilegesAndFeaturesInfo = switch (arch) {
+    .aarch64 => @as(i32, 512),
+    else => @compileError("WHvRegisterPrivilegesAndFeaturesInfo unsupported for target architecture"),
+};
+pub const WHvRegisterReferenceTsc = switch (arch) {
+    .aarch64 => @as(i32, 589847),
+    .x86_64 => @as(i32, 20503),
+    else => @compileError("WHvRegisterReferenceTsc unsupported for target architecture"),
+};
+pub const WHvRegisterReferenceTscSequence = switch (arch) {
+    .aarch64 => @as(i32, 589850),
+    .x86_64 => @as(i32, 20506),
+    else => @compileError("WHvRegisterReferenceTscSequence unsupported for target architecture"),
+};
+pub const WHvRegisterScontrol = switch (arch) {
+    .aarch64 => @as(i32, 655376),
+    .x86_64 => @as(i32, 16400),
+    else => @compileError("WHvRegisterScontrol unsupported for target architecture"),
+};
+pub const WHvRegisterSiefp = switch (arch) {
+    .x86_64 => @as(i32, 16402),
+    else => @compileError("WHvRegisterSiefp unsupported for target architecture"),
+};
+pub const WHvRegisterSifp = switch (arch) {
+    .aarch64 => @as(i32, 655378),
+    else => @compileError("WHvRegisterSifp unsupported for target architecture"),
+};
+pub const WHvRegisterSimp = switch (arch) {
+    .x86_64 => @as(i32, 16403),
+    else => @compileError("WHvRegisterSimp unsupported for target architecture"),
+};
+pub const WHvRegisterSint0 = switch (arch) {
+    .aarch64 => @as(i32, 655360),
+    .x86_64 => @as(i32, 16384),
+    else => @compileError("WHvRegisterSint0 unsupported for target architecture"),
+};
+pub const WHvRegisterSint1 = switch (arch) {
+    .aarch64 => @as(i32, 655361),
+    .x86_64 => @as(i32, 16385),
+    else => @compileError("WHvRegisterSint1 unsupported for target architecture"),
+};
+pub const WHvRegisterSint10 = switch (arch) {
+    .aarch64 => @as(i32, 655370),
+    .x86_64 => @as(i32, 16394),
+    else => @compileError("WHvRegisterSint10 unsupported for target architecture"),
+};
+pub const WHvRegisterSint11 = switch (arch) {
+    .aarch64 => @as(i32, 655371),
+    .x86_64 => @as(i32, 16395),
+    else => @compileError("WHvRegisterSint11 unsupported for target architecture"),
+};
+pub const WHvRegisterSint12 = switch (arch) {
+    .aarch64 => @as(i32, 655372),
+    .x86_64 => @as(i32, 16396),
+    else => @compileError("WHvRegisterSint12 unsupported for target architecture"),
+};
+pub const WHvRegisterSint13 = switch (arch) {
+    .aarch64 => @as(i32, 655373),
+    .x86_64 => @as(i32, 16397),
+    else => @compileError("WHvRegisterSint13 unsupported for target architecture"),
+};
+pub const WHvRegisterSint14 = switch (arch) {
+    .aarch64 => @as(i32, 655374),
+    .x86_64 => @as(i32, 16398),
+    else => @compileError("WHvRegisterSint14 unsupported for target architecture"),
+};
+pub const WHvRegisterSint15 = switch (arch) {
+    .aarch64 => @as(i32, 655375),
+    .x86_64 => @as(i32, 16399),
+    else => @compileError("WHvRegisterSint15 unsupported for target architecture"),
+};
+pub const WHvRegisterSint2 = switch (arch) {
+    .aarch64 => @as(i32, 655362),
+    .x86_64 => @as(i32, 16386),
+    else => @compileError("WHvRegisterSint2 unsupported for target architecture"),
+};
+pub const WHvRegisterSint3 = switch (arch) {
+    .aarch64 => @as(i32, 655363),
+    .x86_64 => @as(i32, 16387),
+    else => @compileError("WHvRegisterSint3 unsupported for target architecture"),
+};
+pub const WHvRegisterSint4 = switch (arch) {
+    .aarch64 => @as(i32, 655364),
+    .x86_64 => @as(i32, 16388),
+    else => @compileError("WHvRegisterSint4 unsupported for target architecture"),
+};
+pub const WHvRegisterSint5 = switch (arch) {
+    .aarch64 => @as(i32, 655365),
+    .x86_64 => @as(i32, 16389),
+    else => @compileError("WHvRegisterSint5 unsupported for target architecture"),
+};
+pub const WHvRegisterSint6 = switch (arch) {
+    .aarch64 => @as(i32, 655366),
+    .x86_64 => @as(i32, 16390),
+    else => @compileError("WHvRegisterSint6 unsupported for target architecture"),
+};
+pub const WHvRegisterSint7 = switch (arch) {
+    .aarch64 => @as(i32, 655367),
+    .x86_64 => @as(i32, 16391),
+    else => @compileError("WHvRegisterSint7 unsupported for target architecture"),
+};
+pub const WHvRegisterSint8 = switch (arch) {
+    .aarch64 => @as(i32, 655368),
+    .x86_64 => @as(i32, 16392),
+    else => @compileError("WHvRegisterSint8 unsupported for target architecture"),
+};
+pub const WHvRegisterSint9 = switch (arch) {
+    .aarch64 => @as(i32, 655369),
+    .x86_64 => @as(i32, 16393),
+    else => @compileError("WHvRegisterSint9 unsupported for target architecture"),
+};
+pub const WHvRegisterSipp = switch (arch) {
+    .aarch64 => @as(i32, 655379),
+    else => @compileError("WHvRegisterSipp unsupported for target architecture"),
+};
+pub const WHvRegisterSversion = switch (arch) {
+    .aarch64 => @as(i32, 655377),
+    .x86_64 => @as(i32, 16401),
+    else => @compileError("WHvRegisterSversion unsupported for target architecture"),
+};
+pub const WHvRegisterVpAssistPage = switch (arch) {
+    .aarch64 => @as(i32, 589843),
+    .x86_64 => @as(i32, 20499),
+    else => @compileError("WHvRegisterVpAssistPage unsupported for target architecture"),
+};
+pub const WHvRegisterVpRuntime = switch (arch) {
+    .aarch64 => @as(i32, 589824),
+    .x86_64 => @as(i32, 20480),
+    else => @compileError("WHvRegisterVpRuntime unsupported for target architecture"),
+};
+pub const WHvRunVpCancelReasonUser = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 0),
+    else => @compileError("WHvRunVpCancelReasonUser unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonArm64Reset = switch (arch) {
+    .aarch64 => @as(i32, -2147418100),
+    else => @compileError("WHvRunVpExitReasonArm64Reset unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonCanceled = switch (arch) {
+    .aarch64 => @as(i32, -1),
+    .x86_64 => @as(i32, 8193),
+    else => @compileError("WHvRunVpExitReasonCanceled unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonException = switch (arch) {
+    .x86_64 => @as(i32, 4098),
+    else => @compileError("WHvRunVpExitReasonException unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonGpaIntercept = switch (arch) {
+    .aarch64 => @as(i32, -2147483647),
+    else => @compileError("WHvRunVpExitReasonGpaIntercept unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonHypercall = switch (arch) {
+    .aarch64 => @as(i32, -2147483568),
+    .x86_64 => @as(i32, 4101),
+    else => @compileError("WHvRunVpExitReasonHypercall unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonInvalidVpRegisterValue = switch (arch) {
+    .aarch64 => @as(i32, -2147483616),
+    .x86_64 => @as(i32, 5),
+    else => @compileError("WHvRunVpExitReasonInvalidVpRegisterValue unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonMemoryAccess = switch (arch) {
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvRunVpExitReasonMemoryAccess unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonNone = switch (arch) {
+    .aarch64 => @as(i32, 0),
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvRunVpExitReasonNone unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonSynicSintDeliverable = switch (arch) {
+    .aarch64 => @as(i32, -2147483550),
+    .x86_64 => @as(i32, 10),
+    else => @compileError("WHvRunVpExitReasonSynicSintDeliverable unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonUnmappedGpa = switch (arch) {
+    .aarch64 => @as(i32, -2147483648),
+    else => @compileError("WHvRunVpExitReasonUnmappedGpa unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonUnrecoverableException = switch (arch) {
+    .aarch64 => @as(i32, -2147483615),
+    .x86_64 => @as(i32, 4),
+    else => @compileError("WHvRunVpExitReasonUnrecoverableException unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonUnsupportedFeature = switch (arch) {
+    .aarch64 => @as(i32, -2147483614),
+    .x86_64 => @as(i32, 6),
+    else => @compileError("WHvRunVpExitReasonUnsupportedFeature unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonX64ApicEoi = switch (arch) {
+    .x86_64 => @as(i32, 9),
+    else => @compileError("WHvRunVpExitReasonX64ApicEoi unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonX64ApicInitSipiTrap = switch (arch) {
+    .x86_64 => @as(i32, 4102),
+    else => @compileError("WHvRunVpExitReasonX64ApicInitSipiTrap unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonX64ApicSmiTrap = switch (arch) {
+    .x86_64 => @as(i32, 4100),
+    else => @compileError("WHvRunVpExitReasonX64ApicSmiTrap unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonX64ApicWriteTrap = switch (arch) {
+    .x86_64 => @as(i32, 4103),
+    else => @compileError("WHvRunVpExitReasonX64ApicWriteTrap unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonX64Cpuid = switch (arch) {
+    .x86_64 => @as(i32, 4097),
+    else => @compileError("WHvRunVpExitReasonX64Cpuid unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonX64Halt = switch (arch) {
+    .x86_64 => @as(i32, 8),
+    else => @compileError("WHvRunVpExitReasonX64Halt unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonX64InterruptWindow = switch (arch) {
+    .x86_64 => @as(i32, 7),
+    else => @compileError("WHvRunVpExitReasonX64InterruptWindow unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonX64IoPortAccess = switch (arch) {
+    .x86_64 => @as(i32, 2),
+    else => @compileError("WHvRunVpExitReasonX64IoPortAccess unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonX64MsrAccess = switch (arch) {
+    .x86_64 => @as(i32, 4096),
+    else => @compileError("WHvRunVpExitReasonX64MsrAccess unsupported for target architecture"),
+};
+pub const WHvRunVpExitReasonX64Rdtsc = switch (arch) {
+    .x86_64 => @as(i32, 4099),
+    else => @compileError("WHvRunVpExitReasonX64Rdtsc unsupported for target architecture"),
+};
+pub const WHvTranslateGvaFlagEnforceSmap = switch (arch) {
+    .x86_64 => @as(i32, 256),
+    else => @compileError("WHvTranslateGvaFlagEnforceSmap unsupported for target architecture"),
+};
+pub const WHvTranslateGvaFlagNone = switch (arch) {
+    .aarch64 => @as(i32, 0),
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvTranslateGvaFlagNone unsupported for target architecture"),
+};
+pub const WHvTranslateGvaFlagOverrideSmap = switch (arch) {
+    .x86_64 => @as(i32, 512),
+    else => @compileError("WHvTranslateGvaFlagOverrideSmap unsupported for target architecture"),
+};
+pub const WHvTranslateGvaFlagPrivilegeExempt = switch (arch) {
+    .x86_64 => @as(i32, 8),
+    else => @compileError("WHvTranslateGvaFlagPrivilegeExempt unsupported for target architecture"),
+};
+pub const WHvTranslateGvaFlagSetPageTableBits = switch (arch) {
+    .aarch64 => @as(i32, 16),
+    .x86_64 => @as(i32, 16),
+    else => @compileError("WHvTranslateGvaFlagSetPageTableBits unsupported for target architecture"),
+};
+pub const WHvTranslateGvaFlagValidateExecute = switch (arch) {
+    .aarch64 => @as(i32, 4),
+    .x86_64 => @as(i32, 4),
+    else => @compileError("WHvTranslateGvaFlagValidateExecute unsupported for target architecture"),
+};
+pub const WHvTranslateGvaFlagValidateRead = switch (arch) {
+    .aarch64 => @as(i32, 1),
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvTranslateGvaFlagValidateRead unsupported for target architecture"),
+};
+pub const WHvTranslateGvaFlagValidateWrite = switch (arch) {
+    .aarch64 => @as(i32, 2),
+    .x86_64 => @as(i32, 2),
+    else => @compileError("WHvTranslateGvaFlagValidateWrite unsupported for target architecture"),
+};
+pub const WHvTranslateGvaResultGpaIllegalOverlayAccess = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 7),
+    else => @compileError("WHvTranslateGvaResultGpaIllegalOverlayAccess unsupported for target architecture"),
+};
+pub const WHvTranslateGvaResultGpaNoReadAccess = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 5),
+    else => @compileError("WHvTranslateGvaResultGpaNoReadAccess unsupported for target architecture"),
+};
+pub const WHvTranslateGvaResultGpaNoWriteAccess = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 6),
+    else => @compileError("WHvTranslateGvaResultGpaNoWriteAccess unsupported for target architecture"),
+};
+pub const WHvTranslateGvaResultGpaUnmapped = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 4),
+    else => @compileError("WHvTranslateGvaResultGpaUnmapped unsupported for target architecture"),
+};
+pub const WHvTranslateGvaResultIntercept = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 8),
+    else => @compileError("WHvTranslateGvaResultIntercept unsupported for target architecture"),
+};
+pub const WHvTranslateGvaResultInvalidPageTableFlags = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 3),
+    else => @compileError("WHvTranslateGvaResultInvalidPageTableFlags unsupported for target architecture"),
+};
+pub const WHvTranslateGvaResultPageNotPresent = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 1),
+    else => @compileError("WHvTranslateGvaResultPageNotPresent unsupported for target architecture"),
+};
+pub const WHvTranslateGvaResultPrivilegeViolation = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 2),
+    else => @compileError("WHvTranslateGvaResultPrivilegeViolation unsupported for target architecture"),
+};
+pub const WHvTranslateGvaResultSuccess = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 0),
+    else => @compileError("WHvTranslateGvaResultSuccess unsupported for target architecture"),
+};
+pub const WHvTriggerTypeDeviceInterrupt = switch (arch) {
+    .aarch64 => @as(i32, 2),
+    .x86_64 => @as(i32, 2),
+    else => @compileError("WHvTriggerTypeDeviceInterrupt unsupported for target architecture"),
+};
+pub const WHvTriggerTypeInterrupt = switch (arch) {
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvTriggerTypeInterrupt unsupported for target architecture"),
+};
+pub const WHvTriggerTypeSynicEvent = switch (arch) {
+    .aarch64 => @as(i32, 1),
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvTriggerTypeSynicEvent unsupported for target architecture"),
+};
+pub const WHvUnsupportedFeatureIntercept = switch (arch) {
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvUnsupportedFeatureIntercept unsupported for target architecture"),
+};
+pub const WHvUnsupportedFeatureTaskSwitchTss = switch (arch) {
+    .x86_64 => @as(i32, 2),
+    else => @compileError("WHvUnsupportedFeatureTaskSwitchTss unsupported for target architecture"),
+};
+pub const WHvVirtualProcessorPropertyCodeNumaNode = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 0),
+    else => @compileError("WHvVirtualProcessorPropertyCodeNumaNode unsupported for target architecture"),
+};
+pub const WHvVirtualProcessorStateTypeGlobalInterruptState = switch (arch) {
+    .aarch64 => @as(i32, -1073741818),
+    else => @compileError("WHvVirtualProcessorStateTypeGlobalInterruptState unsupported for target architecture"),
+};
+pub const WHvVirtualProcessorStateTypeInterruptControllerState = switch (arch) {
+    .aarch64 => @as(i32, -2147483648),
+    else => @compileError("WHvVirtualProcessorStateTypeInterruptControllerState unsupported for target architecture"),
+};
+pub const WHvVirtualProcessorStateTypeInterruptControllerState2 = switch (arch) {
+    .x86_64 => @as(i32, 4096),
+    else => @compileError("WHvVirtualProcessorStateTypeInterruptControllerState2 unsupported for target architecture"),
+};
+pub const WHvVirtualProcessorStateTypeNestedState = switch (arch) {
+    .x86_64 => @as(i32, 4098),
+    else => @compileError("WHvVirtualProcessorStateTypeNestedState unsupported for target architecture"),
+};
+pub const WHvVirtualProcessorStateTypeSmeState = switch (arch) {
+    .aarch64 => @as(i32, -2147483640),
+    else => @compileError("WHvVirtualProcessorStateTypeSmeState unsupported for target architecture"),
+};
+pub const WHvVirtualProcessorStateTypeSveState = switch (arch) {
+    .aarch64 => @as(i32, -2147483641),
+    else => @compileError("WHvVirtualProcessorStateTypeSveState unsupported for target architecture"),
+};
+pub const WHvVirtualProcessorStateTypeSynicEventFlagPage = switch (arch) {
+    .aarch64 => @as(i32, -2147483645),
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvVirtualProcessorStateTypeSynicEventFlagPage unsupported for target architecture"),
+};
+pub const WHvVirtualProcessorStateTypeSynicMessagePage = switch (arch) {
+    .aarch64 => @as(i32, -2147483646),
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvVirtualProcessorStateTypeSynicMessagePage unsupported for target architecture"),
+};
+pub const WHvVirtualProcessorStateTypeSynicTimerState = switch (arch) {
+    .aarch64 => @as(i32, 4),
+    .x86_64 => @as(i32, 2),
+    else => @compileError("WHvVirtualProcessorStateTypeSynicTimerState unsupported for target architecture"),
+};
+pub const WHvVirtualProcessorStateTypeXsaveState = switch (arch) {
+    .x86_64 => @as(i32, 4097),
+    else => @compileError("WHvVirtualProcessorStateTypeXsaveState unsupported for target architecture"),
+};
+pub const WHvVpciBar0 = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 0),
+    else => @compileError("WHvVpciBar0 unsupported for target architecture"),
+};
+pub const WHvVpciBar1 = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 1),
+    else => @compileError("WHvVpciBar1 unsupported for target architecture"),
+};
+pub const WHvVpciBar2 = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 2),
+    else => @compileError("WHvVpciBar2 unsupported for target architecture"),
+};
+pub const WHvVpciBar3 = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 3),
+    else => @compileError("WHvVpciBar3 unsupported for target architecture"),
+};
+pub const WHvVpciBar4 = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 4),
+    else => @compileError("WHvVpciBar4 unsupported for target architecture"),
+};
+pub const WHvVpciBar5 = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 5),
+    else => @compileError("WHvVpciBar5 unsupported for target architecture"),
+};
+pub const WHvVpciConfigSpace = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, -1),
+    else => @compileError("WHvVpciConfigSpace unsupported for target architecture"),
+};
+pub const WHvVpciDeviceNotificationMmioRemapping = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 1),
+    else => @compileError("WHvVpciDeviceNotificationMmioRemapping unsupported for target architecture"),
+};
+pub const WHvVpciDeviceNotificationSurpriseRemoval = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 2),
+    else => @compileError("WHvVpciDeviceNotificationSurpriseRemoval unsupported for target architecture"),
+};
+pub const WHvVpciDeviceNotificationUndefined = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 0),
+    else => @compileError("WHvVpciDeviceNotificationUndefined unsupported for target architecture"),
+};
+pub const WHvVpciDevicePropertyCodeHardwareIDs = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 1),
+    else => @compileError("WHvVpciDevicePropertyCodeHardwareIDs unsupported for target architecture"),
+};
+pub const WHvVpciDevicePropertyCodeProbedBARs = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 2),
+    else => @compileError("WHvVpciDevicePropertyCodeProbedBARs unsupported for target architecture"),
+};
+pub const WHvVpciDevicePropertyCodeUndefined = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 0),
+    else => @compileError("WHvVpciDevicePropertyCodeUndefined unsupported for target architecture"),
+};
+pub const WHvVpciInterruptTargetFlagMulticast = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 1),
+    else => @compileError("WHvVpciInterruptTargetFlagMulticast unsupported for target architecture"),
+};
+pub const WHvVpciInterruptTargetFlagNone = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 0),
+    else => @compileError("WHvVpciInterruptTargetFlagNone unsupported for target architecture"),
+};
+pub const WHvVpciMmioRangeFlagReadAccess = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 1),
+    else => @compileError("WHvVpciMmioRangeFlagReadAccess unsupported for target architecture"),
+};
+pub const WHvVpciMmioRangeFlagWriteAccess = switch (arch) {
+    .x86_64, .aarch64 => @as(i32, 2),
+    else => @compileError("WHvVpciMmioRangeFlagWriteAccess unsupported for target architecture"),
+};
+pub const WHvX64ApicWriteTypeDfr = switch (arch) {
+    .x86_64 => @as(i32, 224),
+    else => @compileError("WHvX64ApicWriteTypeDfr unsupported for target architecture"),
+};
+pub const WHvX64ApicWriteTypeLdr = switch (arch) {
+    .x86_64 => @as(i32, 208),
+    else => @compileError("WHvX64ApicWriteTypeLdr unsupported for target architecture"),
+};
+pub const WHvX64ApicWriteTypeLint0 = switch (arch) {
+    .x86_64 => @as(i32, 848),
+    else => @compileError("WHvX64ApicWriteTypeLint0 unsupported for target architecture"),
+};
+pub const WHvX64ApicWriteTypeLint1 = switch (arch) {
+    .x86_64 => @as(i32, 864),
+    else => @compileError("WHvX64ApicWriteTypeLint1 unsupported for target architecture"),
+};
+pub const WHvX64ApicWriteTypeSvr = switch (arch) {
+    .x86_64 => @as(i32, 240),
+    else => @compileError("WHvX64ApicWriteTypeSvr unsupported for target architecture"),
+};
+pub const WHvX64CpuidResult2FlagSubleafSpecific = switch (arch) {
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvX64CpuidResult2FlagSubleafSpecific unsupported for target architecture"),
+};
+pub const WHvX64CpuidResult2FlagVpSpecific = switch (arch) {
+    .x86_64 => @as(i32, 2),
+    else => @compileError("WHvX64CpuidResult2FlagVpSpecific unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeAlignmentCheckFault = switch (arch) {
+    .x86_64 => @as(i32, 17),
+    else => @compileError("WHvX64ExceptionTypeAlignmentCheckFault unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeBoundRangeFault = switch (arch) {
+    .x86_64 => @as(i32, 5),
+    else => @compileError("WHvX64ExceptionTypeBoundRangeFault unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeBreakpointTrap = switch (arch) {
+    .x86_64 => @as(i32, 3),
+    else => @compileError("WHvX64ExceptionTypeBreakpointTrap unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeControlProtectionFault = switch (arch) {
+    .x86_64 => @as(i32, 21),
+    else => @compileError("WHvX64ExceptionTypeControlProtectionFault unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeDebugTrapOrFault = switch (arch) {
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvX64ExceptionTypeDebugTrapOrFault unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeDeviceNotAvailableFault = switch (arch) {
+    .x86_64 => @as(i32, 7),
+    else => @compileError("WHvX64ExceptionTypeDeviceNotAvailableFault unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeDivideErrorFault = switch (arch) {
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvX64ExceptionTypeDivideErrorFault unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeDoubleFaultAbort = switch (arch) {
+    .x86_64 => @as(i32, 8),
+    else => @compileError("WHvX64ExceptionTypeDoubleFaultAbort unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeFloatingPointErrorFault = switch (arch) {
+    .x86_64 => @as(i32, 16),
+    else => @compileError("WHvX64ExceptionTypeFloatingPointErrorFault unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeGeneralProtectionFault = switch (arch) {
+    .x86_64 => @as(i32, 13),
+    else => @compileError("WHvX64ExceptionTypeGeneralProtectionFault unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeInvalidOpcodeFault = switch (arch) {
+    .x86_64 => @as(i32, 6),
+    else => @compileError("WHvX64ExceptionTypeInvalidOpcodeFault unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeInvalidTaskStateSegmentFault = switch (arch) {
+    .x86_64 => @as(i32, 10),
+    else => @compileError("WHvX64ExceptionTypeInvalidTaskStateSegmentFault unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeMachineCheckAbort = switch (arch) {
+    .x86_64 => @as(i32, 18),
+    else => @compileError("WHvX64ExceptionTypeMachineCheckAbort unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeOverflowTrap = switch (arch) {
+    .x86_64 => @as(i32, 4),
+    else => @compileError("WHvX64ExceptionTypeOverflowTrap unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypePageFault = switch (arch) {
+    .x86_64 => @as(i32, 14),
+    else => @compileError("WHvX64ExceptionTypePageFault unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeSegmentNotPresentFault = switch (arch) {
+    .x86_64 => @as(i32, 11),
+    else => @compileError("WHvX64ExceptionTypeSegmentNotPresentFault unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeSimdFloatingPointFault = switch (arch) {
+    .x86_64 => @as(i32, 19),
+    else => @compileError("WHvX64ExceptionTypeSimdFloatingPointFault unsupported for target architecture"),
+};
+pub const WHvX64ExceptionTypeStackFault = switch (arch) {
+    .x86_64 => @as(i32, 12),
+    else => @compileError("WHvX64ExceptionTypeStackFault unsupported for target architecture"),
+};
+pub const WHvX64InterruptDestinationModeLogical = switch (arch) {
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvX64InterruptDestinationModeLogical unsupported for target architecture"),
+};
+pub const WHvX64InterruptDestinationModePhysical = switch (arch) {
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvX64InterruptDestinationModePhysical unsupported for target architecture"),
+};
+pub const WHvX64InterruptTriggerModeEdge = switch (arch) {
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvX64InterruptTriggerModeEdge unsupported for target architecture"),
+};
+pub const WHvX64InterruptTriggerModeLevel = switch (arch) {
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvX64InterruptTriggerModeLevel unsupported for target architecture"),
+};
+pub const WHvX64InterruptTypeFixed = switch (arch) {
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvX64InterruptTypeFixed unsupported for target architecture"),
+};
+pub const WHvX64InterruptTypeInit = switch (arch) {
+    .x86_64 => @as(i32, 5),
+    else => @compileError("WHvX64InterruptTypeInit unsupported for target architecture"),
+};
+pub const WHvX64InterruptTypeLocalInt1 = switch (arch) {
+    .x86_64 => @as(i32, 9),
+    else => @compileError("WHvX64InterruptTypeLocalInt1 unsupported for target architecture"),
+};
+pub const WHvX64InterruptTypeLowestPriority = switch (arch) {
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvX64InterruptTypeLowestPriority unsupported for target architecture"),
+};
+pub const WHvX64InterruptTypeNmi = switch (arch) {
+    .x86_64 => @as(i32, 4),
+    else => @compileError("WHvX64InterruptTypeNmi unsupported for target architecture"),
+};
+pub const WHvX64InterruptTypeSipi = switch (arch) {
+    .x86_64 => @as(i32, 6),
+    else => @compileError("WHvX64InterruptTypeSipi unsupported for target architecture"),
+};
+pub const WHvX64LocalApicEmulationModeNone = switch (arch) {
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvX64LocalApicEmulationModeNone unsupported for target architecture"),
+};
+pub const WHvX64LocalApicEmulationModeX2Apic = switch (arch) {
+    .x86_64 => @as(i32, 2),
+    else => @compileError("WHvX64LocalApicEmulationModeX2Apic unsupported for target architecture"),
+};
+pub const WHvX64LocalApicEmulationModeXApic = switch (arch) {
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvX64LocalApicEmulationModeXApic unsupported for target architecture"),
+};
+pub const WHvX64PendingEventException = switch (arch) {
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvX64PendingEventException unsupported for target architecture"),
+};
+pub const WHvX64PendingEventExtInt = switch (arch) {
+    .x86_64 => @as(i32, 5),
+    else => @compileError("WHvX64PendingEventExtInt unsupported for target architecture"),
+};
+pub const WHvX64PendingEventSvmNestedExit = switch (arch) {
+    .x86_64 => @as(i32, 7),
+    else => @compileError("WHvX64PendingEventSvmNestedExit unsupported for target architecture"),
+};
+pub const WHvX64PendingEventVmxNestedExit = switch (arch) {
+    .x86_64 => @as(i32, 8),
+    else => @compileError("WHvX64PendingEventVmxNestedExit unsupported for target architecture"),
+};
+pub const WHvX64PendingException = switch (arch) {
+    .x86_64 => @as(i32, 3),
+    else => @compileError("WHvX64PendingException unsupported for target architecture"),
+};
+pub const WHvX64PendingInterrupt = switch (arch) {
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvX64PendingInterrupt unsupported for target architecture"),
+};
+pub const WHvX64PendingNmi = switch (arch) {
+    .x86_64 => @as(i32, 2),
+    else => @compileError("WHvX64PendingNmi unsupported for target architecture"),
+};
+pub const WHvX64RegisterACount = switch (arch) {
+    .x86_64 => @as(i32, 8319),
+    else => @compileError("WHvX64RegisterACount unsupported for target architecture"),
+};
+pub const WHvX64RegisterAmdVmCr = switch (arch) {
+    .x86_64 => @as(i32, 8372),
+    else => @compileError("WHvX64RegisterAmdVmCr unsupported for target architecture"),
+};
+pub const WHvX64RegisterAmdVmHsavePa = switch (arch) {
+    .x86_64 => @as(i32, 8371),
+    else => @compileError("WHvX64RegisterAmdVmHsavePa unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicBase = switch (arch) {
+    .x86_64 => @as(i32, 8195),
+    else => @compileError("WHvX64RegisterApicBase unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicCurrentCount = switch (arch) {
+    .x86_64 => @as(i32, 12345),
+    else => @compileError("WHvX64RegisterApicCurrentCount unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicDivide = switch (arch) {
+    .x86_64 => @as(i32, 12350),
+    else => @compileError("WHvX64RegisterApicDivide unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicEoi = switch (arch) {
+    .x86_64 => @as(i32, 12299),
+    else => @compileError("WHvX64RegisterApicEoi unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicEse = switch (arch) {
+    .x86_64 => @as(i32, 12328),
+    else => @compileError("WHvX64RegisterApicEse unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIcr = switch (arch) {
+    .x86_64 => @as(i32, 12336),
+    else => @compileError("WHvX64RegisterApicIcr unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicId = switch (arch) {
+    .x86_64 => @as(i32, 12290),
+    else => @compileError("WHvX64RegisterApicId unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicInitCount = switch (arch) {
+    .x86_64 => @as(i32, 12344),
+    else => @compileError("WHvX64RegisterApicInitCount unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIrr0 = switch (arch) {
+    .x86_64 => @as(i32, 12320),
+    else => @compileError("WHvX64RegisterApicIrr0 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIrr1 = switch (arch) {
+    .x86_64 => @as(i32, 12321),
+    else => @compileError("WHvX64RegisterApicIrr1 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIrr2 = switch (arch) {
+    .x86_64 => @as(i32, 12322),
+    else => @compileError("WHvX64RegisterApicIrr2 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIrr3 = switch (arch) {
+    .x86_64 => @as(i32, 12323),
+    else => @compileError("WHvX64RegisterApicIrr3 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIrr4 = switch (arch) {
+    .x86_64 => @as(i32, 12324),
+    else => @compileError("WHvX64RegisterApicIrr4 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIrr5 = switch (arch) {
+    .x86_64 => @as(i32, 12325),
+    else => @compileError("WHvX64RegisterApicIrr5 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIrr6 = switch (arch) {
+    .x86_64 => @as(i32, 12326),
+    else => @compileError("WHvX64RegisterApicIrr6 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIrr7 = switch (arch) {
+    .x86_64 => @as(i32, 12327),
+    else => @compileError("WHvX64RegisterApicIrr7 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIsr0 = switch (arch) {
+    .x86_64 => @as(i32, 12304),
+    else => @compileError("WHvX64RegisterApicIsr0 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIsr1 = switch (arch) {
+    .x86_64 => @as(i32, 12305),
+    else => @compileError("WHvX64RegisterApicIsr1 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIsr2 = switch (arch) {
+    .x86_64 => @as(i32, 12306),
+    else => @compileError("WHvX64RegisterApicIsr2 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIsr3 = switch (arch) {
+    .x86_64 => @as(i32, 12307),
+    else => @compileError("WHvX64RegisterApicIsr3 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIsr4 = switch (arch) {
+    .x86_64 => @as(i32, 12308),
+    else => @compileError("WHvX64RegisterApicIsr4 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIsr5 = switch (arch) {
+    .x86_64 => @as(i32, 12309),
+    else => @compileError("WHvX64RegisterApicIsr5 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIsr6 = switch (arch) {
+    .x86_64 => @as(i32, 12310),
+    else => @compileError("WHvX64RegisterApicIsr6 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicIsr7 = switch (arch) {
+    .x86_64 => @as(i32, 12311),
+    else => @compileError("WHvX64RegisterApicIsr7 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicLdr = switch (arch) {
+    .x86_64 => @as(i32, 12301),
+    else => @compileError("WHvX64RegisterApicLdr unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicLvtError = switch (arch) {
+    .x86_64 => @as(i32, 12343),
+    else => @compileError("WHvX64RegisterApicLvtError unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicLvtLint0 = switch (arch) {
+    .x86_64 => @as(i32, 12341),
+    else => @compileError("WHvX64RegisterApicLvtLint0 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicLvtLint1 = switch (arch) {
+    .x86_64 => @as(i32, 12342),
+    else => @compileError("WHvX64RegisterApicLvtLint1 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicLvtPerfmon = switch (arch) {
+    .x86_64 => @as(i32, 12340),
+    else => @compileError("WHvX64RegisterApicLvtPerfmon unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicLvtThermal = switch (arch) {
+    .x86_64 => @as(i32, 12339),
+    else => @compileError("WHvX64RegisterApicLvtThermal unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicLvtTimer = switch (arch) {
+    .x86_64 => @as(i32, 12338),
+    else => @compileError("WHvX64RegisterApicLvtTimer unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicPpr = switch (arch) {
+    .x86_64 => @as(i32, 12298),
+    else => @compileError("WHvX64RegisterApicPpr unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicSelfIpi = switch (arch) {
+    .x86_64 => @as(i32, 12351),
+    else => @compileError("WHvX64RegisterApicSelfIpi unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicSpurious = switch (arch) {
+    .x86_64 => @as(i32, 12303),
+    else => @compileError("WHvX64RegisterApicSpurious unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicTmr0 = switch (arch) {
+    .x86_64 => @as(i32, 12312),
+    else => @compileError("WHvX64RegisterApicTmr0 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicTmr1 = switch (arch) {
+    .x86_64 => @as(i32, 12313),
+    else => @compileError("WHvX64RegisterApicTmr1 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicTmr2 = switch (arch) {
+    .x86_64 => @as(i32, 12314),
+    else => @compileError("WHvX64RegisterApicTmr2 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicTmr3 = switch (arch) {
+    .x86_64 => @as(i32, 12315),
+    else => @compileError("WHvX64RegisterApicTmr3 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicTmr4 = switch (arch) {
+    .x86_64 => @as(i32, 12316),
+    else => @compileError("WHvX64RegisterApicTmr4 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicTmr5 = switch (arch) {
+    .x86_64 => @as(i32, 12317),
+    else => @compileError("WHvX64RegisterApicTmr5 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicTmr6 = switch (arch) {
+    .x86_64 => @as(i32, 12318),
+    else => @compileError("WHvX64RegisterApicTmr6 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicTmr7 = switch (arch) {
+    .x86_64 => @as(i32, 12319),
+    else => @compileError("WHvX64RegisterApicTmr7 unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicTpr = switch (arch) {
+    .x86_64 => @as(i32, 12296),
+    else => @compileError("WHvX64RegisterApicTpr unsupported for target architecture"),
+};
+pub const WHvX64RegisterApicVersion = switch (arch) {
+    .x86_64 => @as(i32, 12291),
+    else => @compileError("WHvX64RegisterApicVersion unsupported for target architecture"),
+};
+pub const WHvX64RegisterBndcfgs = switch (arch) {
+    .x86_64 => @as(i32, 8316),
+    else => @compileError("WHvX64RegisterBndcfgs unsupported for target architecture"),
+};
+pub const WHvX64RegisterCr0 = switch (arch) {
+    .x86_64 => @as(i32, 28),
+    else => @compileError("WHvX64RegisterCr0 unsupported for target architecture"),
+};
+pub const WHvX64RegisterCr2 = switch (arch) {
+    .x86_64 => @as(i32, 29),
+    else => @compileError("WHvX64RegisterCr2 unsupported for target architecture"),
+};
+pub const WHvX64RegisterCr3 = switch (arch) {
+    .x86_64 => @as(i32, 30),
+    else => @compileError("WHvX64RegisterCr3 unsupported for target architecture"),
+};
+pub const WHvX64RegisterCr4 = switch (arch) {
+    .x86_64 => @as(i32, 31),
+    else => @compileError("WHvX64RegisterCr4 unsupported for target architecture"),
+};
+pub const WHvX64RegisterCr8 = switch (arch) {
+    .x86_64 => @as(i32, 32),
+    else => @compileError("WHvX64RegisterCr8 unsupported for target architecture"),
+};
+pub const WHvX64RegisterCs = switch (arch) {
+    .x86_64 => @as(i32, 19),
+    else => @compileError("WHvX64RegisterCs unsupported for target architecture"),
+};
+pub const WHvX64RegisterCstar = switch (arch) {
+    .x86_64 => @as(i32, 8202),
+    else => @compileError("WHvX64RegisterCstar unsupported for target architecture"),
+};
+pub const WHvX64RegisterDeliverabilityNotifications = switch (arch) {
+    .x86_64 => @as(i32, -2147483644),
+    else => @compileError("WHvX64RegisterDeliverabilityNotifications unsupported for target architecture"),
+};
+pub const WHvX64RegisterDr0 = switch (arch) {
+    .x86_64 => @as(i32, 33),
+    else => @compileError("WHvX64RegisterDr0 unsupported for target architecture"),
+};
+pub const WHvX64RegisterDr1 = switch (arch) {
+    .x86_64 => @as(i32, 34),
+    else => @compileError("WHvX64RegisterDr1 unsupported for target architecture"),
+};
+pub const WHvX64RegisterDr2 = switch (arch) {
+    .x86_64 => @as(i32, 35),
+    else => @compileError("WHvX64RegisterDr2 unsupported for target architecture"),
+};
+pub const WHvX64RegisterDr3 = switch (arch) {
+    .x86_64 => @as(i32, 36),
+    else => @compileError("WHvX64RegisterDr3 unsupported for target architecture"),
+};
+pub const WHvX64RegisterDr6 = switch (arch) {
+    .x86_64 => @as(i32, 37),
+    else => @compileError("WHvX64RegisterDr6 unsupported for target architecture"),
+};
+pub const WHvX64RegisterDr7 = switch (arch) {
+    .x86_64 => @as(i32, 38),
+    else => @compileError("WHvX64RegisterDr7 unsupported for target architecture"),
+};
+pub const WHvX64RegisterDs = switch (arch) {
+    .x86_64 => @as(i32, 21),
+    else => @compileError("WHvX64RegisterDs unsupported for target architecture"),
+};
+pub const WHvX64RegisterEfer = switch (arch) {
+    .x86_64 => @as(i32, 8193),
+    else => @compileError("WHvX64RegisterEfer unsupported for target architecture"),
+};
+pub const WHvX64RegisterEs = switch (arch) {
+    .x86_64 => @as(i32, 18),
+    else => @compileError("WHvX64RegisterEs unsupported for target architecture"),
+};
+pub const WHvX64RegisterFpControlStatus = switch (arch) {
+    .x86_64 => @as(i32, 4120),
+    else => @compileError("WHvX64RegisterFpControlStatus unsupported for target architecture"),
+};
+pub const WHvX64RegisterFpMmx0 = switch (arch) {
+    .x86_64 => @as(i32, 4112),
+    else => @compileError("WHvX64RegisterFpMmx0 unsupported for target architecture"),
+};
+pub const WHvX64RegisterFpMmx1 = switch (arch) {
+    .x86_64 => @as(i32, 4113),
+    else => @compileError("WHvX64RegisterFpMmx1 unsupported for target architecture"),
+};
+pub const WHvX64RegisterFpMmx2 = switch (arch) {
+    .x86_64 => @as(i32, 4114),
+    else => @compileError("WHvX64RegisterFpMmx2 unsupported for target architecture"),
+};
+pub const WHvX64RegisterFpMmx3 = switch (arch) {
+    .x86_64 => @as(i32, 4115),
+    else => @compileError("WHvX64RegisterFpMmx3 unsupported for target architecture"),
+};
+pub const WHvX64RegisterFpMmx4 = switch (arch) {
+    .x86_64 => @as(i32, 4116),
+    else => @compileError("WHvX64RegisterFpMmx4 unsupported for target architecture"),
+};
+pub const WHvX64RegisterFpMmx5 = switch (arch) {
+    .x86_64 => @as(i32, 4117),
+    else => @compileError("WHvX64RegisterFpMmx5 unsupported for target architecture"),
+};
+pub const WHvX64RegisterFpMmx6 = switch (arch) {
+    .x86_64 => @as(i32, 4118),
+    else => @compileError("WHvX64RegisterFpMmx6 unsupported for target architecture"),
+};
+pub const WHvX64RegisterFpMmx7 = switch (arch) {
+    .x86_64 => @as(i32, 4119),
+    else => @compileError("WHvX64RegisterFpMmx7 unsupported for target architecture"),
+};
+pub const WHvX64RegisterFs = switch (arch) {
+    .x86_64 => @as(i32, 22),
+    else => @compileError("WHvX64RegisterFs unsupported for target architecture"),
+};
+pub const WHvX64RegisterGdtr = switch (arch) {
+    .x86_64 => @as(i32, 27),
+    else => @compileError("WHvX64RegisterGdtr unsupported for target architecture"),
+};
+pub const WHvX64RegisterGs = switch (arch) {
+    .x86_64 => @as(i32, 23),
+    else => @compileError("WHvX64RegisterGs unsupported for target architecture"),
+};
+pub const WHvX64RegisterHypercall = switch (arch) {
+    .x86_64 => @as(i32, 20481),
+    else => @compileError("WHvX64RegisterHypercall unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32FeatureControl = switch (arch) {
+    .x86_64 => @as(i32, 8353),
+    else => @compileError("WHvX64RegisterIa32FeatureControl unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxBasic = switch (arch) {
+    .x86_64 => @as(i32, 8354),
+    else => @compileError("WHvX64RegisterIa32VmxBasic unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxCr0Fixed0 = switch (arch) {
+    .x86_64 => @as(i32, 8360),
+    else => @compileError("WHvX64RegisterIa32VmxCr0Fixed0 unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxCr0Fixed1 = switch (arch) {
+    .x86_64 => @as(i32, 8361),
+    else => @compileError("WHvX64RegisterIa32VmxCr0Fixed1 unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxCr4Fixed0 = switch (arch) {
+    .x86_64 => @as(i32, 8362),
+    else => @compileError("WHvX64RegisterIa32VmxCr4Fixed0 unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxCr4Fixed1 = switch (arch) {
+    .x86_64 => @as(i32, 8363),
+    else => @compileError("WHvX64RegisterIa32VmxCr4Fixed1 unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxEntryCtls = switch (arch) {
+    .x86_64 => @as(i32, 8358),
+    else => @compileError("WHvX64RegisterIa32VmxEntryCtls unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxEptVpidCap = switch (arch) {
+    .x86_64 => @as(i32, 8366),
+    else => @compileError("WHvX64RegisterIa32VmxEptVpidCap unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxExitCtls = switch (arch) {
+    .x86_64 => @as(i32, 8357),
+    else => @compileError("WHvX64RegisterIa32VmxExitCtls unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxMisc = switch (arch) {
+    .x86_64 => @as(i32, 8359),
+    else => @compileError("WHvX64RegisterIa32VmxMisc unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxPinbasedCtls = switch (arch) {
+    .x86_64 => @as(i32, 8355),
+    else => @compileError("WHvX64RegisterIa32VmxPinbasedCtls unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxProcbasedCtls = switch (arch) {
+    .x86_64 => @as(i32, 8356),
+    else => @compileError("WHvX64RegisterIa32VmxProcbasedCtls unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxProcbasedCtls2 = switch (arch) {
+    .x86_64 => @as(i32, 8365),
+    else => @compileError("WHvX64RegisterIa32VmxProcbasedCtls2 unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxTrueEntryCtls = switch (arch) {
+    .x86_64 => @as(i32, 8370),
+    else => @compileError("WHvX64RegisterIa32VmxTrueEntryCtls unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxTrueExitCtls = switch (arch) {
+    .x86_64 => @as(i32, 8369),
+    else => @compileError("WHvX64RegisterIa32VmxTrueExitCtls unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxTruePinbasedCtls = switch (arch) {
+    .x86_64 => @as(i32, 8367),
+    else => @compileError("WHvX64RegisterIa32VmxTruePinbasedCtls unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxTrueProcbasedCtls = switch (arch) {
+    .x86_64 => @as(i32, 8368),
+    else => @compileError("WHvX64RegisterIa32VmxTrueProcbasedCtls unsupported for target architecture"),
+};
+pub const WHvX64RegisterIa32VmxVmcsEnum = switch (arch) {
+    .x86_64 => @as(i32, 8364),
+    else => @compileError("WHvX64RegisterIa32VmxVmcsEnum unsupported for target architecture"),
+};
+pub const WHvX64RegisterIdtr = switch (arch) {
+    .x86_64 => @as(i32, 26),
+    else => @compileError("WHvX64RegisterIdtr unsupported for target architecture"),
+};
+pub const WHvX64RegisterInitialApicId = switch (arch) {
+    .x86_64 => @as(i32, 8204),
+    else => @compileError("WHvX64RegisterInitialApicId unsupported for target architecture"),
+};
+pub const WHvX64RegisterInterruptSspTableAddr = switch (arch) {
+    .x86_64 => @as(i32, 8339),
+    else => @compileError("WHvX64RegisterInterruptSspTableAddr unsupported for target architecture"),
+};
+pub const WHvX64RegisterKernelGsBase = switch (arch) {
+    .x86_64 => @as(i32, 8194),
+    else => @compileError("WHvX64RegisterKernelGsBase unsupported for target architecture"),
+};
+pub const WHvX64RegisterLdtr = switch (arch) {
+    .x86_64 => @as(i32, 24),
+    else => @compileError("WHvX64RegisterLdtr unsupported for target architecture"),
+};
+pub const WHvX64RegisterLstar = switch (arch) {
+    .x86_64 => @as(i32, 8201),
+    else => @compileError("WHvX64RegisterLstar unsupported for target architecture"),
+};
+pub const WHvX64RegisterMCount = switch (arch) {
+    .x86_64 => @as(i32, 8318),
+    else => @compileError("WHvX64RegisterMCount unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrIa32MiscEnable = switch (arch) {
+    .x86_64 => @as(i32, 8352),
+    else => @compileError("WHvX64RegisterMsrIa32MiscEnable unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrCap = switch (arch) {
+    .x86_64 => @as(i32, 8205),
+    else => @compileError("WHvX64RegisterMsrMtrrCap unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrDefType = switch (arch) {
+    .x86_64 => @as(i32, 8206),
+    else => @compileError("WHvX64RegisterMsrMtrrDefType unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrFix16k80000 = switch (arch) {
+    .x86_64 => @as(i32, 8305),
+    else => @compileError("WHvX64RegisterMsrMtrrFix16k80000 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrFix16kA0000 = switch (arch) {
+    .x86_64 => @as(i32, 8306),
+    else => @compileError("WHvX64RegisterMsrMtrrFix16kA0000 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrFix4kC0000 = switch (arch) {
+    .x86_64 => @as(i32, 8307),
+    else => @compileError("WHvX64RegisterMsrMtrrFix4kC0000 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrFix4kC8000 = switch (arch) {
+    .x86_64 => @as(i32, 8308),
+    else => @compileError("WHvX64RegisterMsrMtrrFix4kC8000 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrFix4kD0000 = switch (arch) {
+    .x86_64 => @as(i32, 8309),
+    else => @compileError("WHvX64RegisterMsrMtrrFix4kD0000 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrFix4kD8000 = switch (arch) {
+    .x86_64 => @as(i32, 8310),
+    else => @compileError("WHvX64RegisterMsrMtrrFix4kD8000 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrFix4kE0000 = switch (arch) {
+    .x86_64 => @as(i32, 8311),
+    else => @compileError("WHvX64RegisterMsrMtrrFix4kE0000 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrFix4kE8000 = switch (arch) {
+    .x86_64 => @as(i32, 8312),
+    else => @compileError("WHvX64RegisterMsrMtrrFix4kE8000 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrFix4kF0000 = switch (arch) {
+    .x86_64 => @as(i32, 8313),
+    else => @compileError("WHvX64RegisterMsrMtrrFix4kF0000 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrFix4kF8000 = switch (arch) {
+    .x86_64 => @as(i32, 8314),
+    else => @compileError("WHvX64RegisterMsrMtrrFix4kF8000 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrFix64k00000 = switch (arch) {
+    .x86_64 => @as(i32, 8304),
+    else => @compileError("WHvX64RegisterMsrMtrrFix64k00000 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBase0 = switch (arch) {
+    .x86_64 => @as(i32, 8208),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBase0 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBase1 = switch (arch) {
+    .x86_64 => @as(i32, 8209),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBase1 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBase2 = switch (arch) {
+    .x86_64 => @as(i32, 8210),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBase2 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBase3 = switch (arch) {
+    .x86_64 => @as(i32, 8211),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBase3 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBase4 = switch (arch) {
+    .x86_64 => @as(i32, 8212),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBase4 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBase5 = switch (arch) {
+    .x86_64 => @as(i32, 8213),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBase5 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBase6 = switch (arch) {
+    .x86_64 => @as(i32, 8214),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBase6 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBase7 = switch (arch) {
+    .x86_64 => @as(i32, 8215),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBase7 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBase8 = switch (arch) {
+    .x86_64 => @as(i32, 8216),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBase8 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBase9 = switch (arch) {
+    .x86_64 => @as(i32, 8217),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBase9 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBaseA = switch (arch) {
+    .x86_64 => @as(i32, 8218),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBaseA unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBaseB = switch (arch) {
+    .x86_64 => @as(i32, 8219),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBaseB unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBaseC = switch (arch) {
+    .x86_64 => @as(i32, 8220),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBaseC unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBaseD = switch (arch) {
+    .x86_64 => @as(i32, 8221),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBaseD unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBaseE = switch (arch) {
+    .x86_64 => @as(i32, 8222),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBaseE unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysBaseF = switch (arch) {
+    .x86_64 => @as(i32, 8223),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysBaseF unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMask0 = switch (arch) {
+    .x86_64 => @as(i32, 8256),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMask0 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMask1 = switch (arch) {
+    .x86_64 => @as(i32, 8257),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMask1 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMask2 = switch (arch) {
+    .x86_64 => @as(i32, 8258),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMask2 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMask3 = switch (arch) {
+    .x86_64 => @as(i32, 8259),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMask3 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMask4 = switch (arch) {
+    .x86_64 => @as(i32, 8260),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMask4 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMask5 = switch (arch) {
+    .x86_64 => @as(i32, 8261),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMask5 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMask6 = switch (arch) {
+    .x86_64 => @as(i32, 8262),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMask6 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMask7 = switch (arch) {
+    .x86_64 => @as(i32, 8263),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMask7 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMask8 = switch (arch) {
+    .x86_64 => @as(i32, 8264),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMask8 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMask9 = switch (arch) {
+    .x86_64 => @as(i32, 8265),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMask9 unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMaskA = switch (arch) {
+    .x86_64 => @as(i32, 8266),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMaskA unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMaskB = switch (arch) {
+    .x86_64 => @as(i32, 8267),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMaskB unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMaskC = switch (arch) {
+    .x86_64 => @as(i32, 8268),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMaskC unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMaskD = switch (arch) {
+    .x86_64 => @as(i32, 8269),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMaskD unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMaskE = switch (arch) {
+    .x86_64 => @as(i32, 8270),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMaskE unsupported for target architecture"),
+};
+pub const WHvX64RegisterMsrMtrrPhysMaskF = switch (arch) {
+    .x86_64 => @as(i32, 8271),
+    else => @compileError("WHvX64RegisterMsrMtrrPhysMaskF unsupported for target architecture"),
+};
+pub const WHvX64RegisterNestedCurrentVmGpa = switch (arch) {
+    .x86_64 => @as(i32, 20561),
+    else => @compileError("WHvX64RegisterNestedCurrentVmGpa unsupported for target architecture"),
+};
+pub const WHvX64RegisterNestedGuestState = switch (arch) {
+    .x86_64 => @as(i32, 20560),
+    else => @compileError("WHvX64RegisterNestedGuestState unsupported for target architecture"),
+};
+pub const WHvX64RegisterNestedVmxInvEpt = switch (arch) {
+    .x86_64 => @as(i32, 20562),
+    else => @compileError("WHvX64RegisterNestedVmxInvEpt unsupported for target architecture"),
+};
+pub const WHvX64RegisterNestedVmxInvVpid = switch (arch) {
+    .x86_64 => @as(i32, 20563),
+    else => @compileError("WHvX64RegisterNestedVmxInvVpid unsupported for target architecture"),
+};
+pub const WHvX64RegisterPat = switch (arch) {
+    .x86_64 => @as(i32, 8196),
+    else => @compileError("WHvX64RegisterPat unsupported for target architecture"),
+};
+pub const WHvX64RegisterPendingDebugException = switch (arch) {
+    .x86_64 => @as(i32, -2147483642),
+    else => @compileError("WHvX64RegisterPendingDebugException unsupported for target architecture"),
+};
+pub const WHvX64RegisterPl0Ssp = switch (arch) {
+    .x86_64 => @as(i32, 8335),
+    else => @compileError("WHvX64RegisterPl0Ssp unsupported for target architecture"),
+};
+pub const WHvX64RegisterPl1Ssp = switch (arch) {
+    .x86_64 => @as(i32, 8336),
+    else => @compileError("WHvX64RegisterPl1Ssp unsupported for target architecture"),
+};
+pub const WHvX64RegisterPl2Ssp = switch (arch) {
+    .x86_64 => @as(i32, 8337),
+    else => @compileError("WHvX64RegisterPl2Ssp unsupported for target architecture"),
+};
+pub const WHvX64RegisterPl3Ssp = switch (arch) {
+    .x86_64 => @as(i32, 8338),
+    else => @compileError("WHvX64RegisterPl3Ssp unsupported for target architecture"),
+};
+pub const WHvX64RegisterPredCmd = switch (arch) {
+    .x86_64 => @as(i32, 8325),
+    else => @compileError("WHvX64RegisterPredCmd unsupported for target architecture"),
+};
+pub const WHvX64RegisterR10 = switch (arch) {
+    .x86_64 => @as(i32, 10),
+    else => @compileError("WHvX64RegisterR10 unsupported for target architecture"),
+};
+pub const WHvX64RegisterR11 = switch (arch) {
+    .x86_64 => @as(i32, 11),
+    else => @compileError("WHvX64RegisterR11 unsupported for target architecture"),
+};
+pub const WHvX64RegisterR12 = switch (arch) {
+    .x86_64 => @as(i32, 12),
+    else => @compileError("WHvX64RegisterR12 unsupported for target architecture"),
+};
+pub const WHvX64RegisterR13 = switch (arch) {
+    .x86_64 => @as(i32, 13),
+    else => @compileError("WHvX64RegisterR13 unsupported for target architecture"),
+};
+pub const WHvX64RegisterR14 = switch (arch) {
+    .x86_64 => @as(i32, 14),
+    else => @compileError("WHvX64RegisterR14 unsupported for target architecture"),
+};
+pub const WHvX64RegisterR15 = switch (arch) {
+    .x86_64 => @as(i32, 15),
+    else => @compileError("WHvX64RegisterR15 unsupported for target architecture"),
+};
+pub const WHvX64RegisterR8 = switch (arch) {
+    .x86_64 => @as(i32, 8),
+    else => @compileError("WHvX64RegisterR8 unsupported for target architecture"),
+};
+pub const WHvX64RegisterR9 = switch (arch) {
+    .x86_64 => @as(i32, 9),
+    else => @compileError("WHvX64RegisterR9 unsupported for target architecture"),
+};
+pub const WHvX64RegisterRax = switch (arch) {
+    .x86_64 => @as(i32, 0),
+    else => @compileError("WHvX64RegisterRax unsupported for target architecture"),
+};
+pub const WHvX64RegisterRbp = switch (arch) {
+    .x86_64 => @as(i32, 5),
+    else => @compileError("WHvX64RegisterRbp unsupported for target architecture"),
+};
+pub const WHvX64RegisterRbx = switch (arch) {
+    .x86_64 => @as(i32, 3),
+    else => @compileError("WHvX64RegisterRbx unsupported for target architecture"),
+};
+pub const WHvX64RegisterRcx = switch (arch) {
+    .x86_64 => @as(i32, 1),
+    else => @compileError("WHvX64RegisterRcx unsupported for target architecture"),
+};
+pub const WHvX64RegisterRdi = switch (arch) {
+    .x86_64 => @as(i32, 7),
+    else => @compileError("WHvX64RegisterRdi unsupported for target architecture"),
+};
+pub const WHvX64RegisterRdx = switch (arch) {
+    .x86_64 => @as(i32, 2),
+    else => @compileError("WHvX64RegisterRdx unsupported for target architecture"),
+};
+pub const WHvX64RegisterRflags = switch (arch) {
+    .x86_64 => @as(i32, 17),
+    else => @compileError("WHvX64RegisterRflags unsupported for target architecture"),
+};
+pub const WHvX64RegisterRip = switch (arch) {
+    .x86_64 => @as(i32, 16),
+    else => @compileError("WHvX64RegisterRip unsupported for target architecture"),
+};
+pub const WHvX64RegisterRsi = switch (arch) {
+    .x86_64 => @as(i32, 6),
+    else => @compileError("WHvX64RegisterRsi unsupported for target architecture"),
+};
+pub const WHvX64RegisterRsp = switch (arch) {
+    .x86_64 => @as(i32, 4),
+    else => @compileError("WHvX64RegisterRsp unsupported for target architecture"),
+};
+pub const WHvX64RegisterSCet = switch (arch) {
+    .x86_64 => @as(i32, 8333),
+    else => @compileError("WHvX64RegisterSCet unsupported for target architecture"),
+};
+pub const WHvX64RegisterSfmask = switch (arch) {
+    .x86_64 => @as(i32, 8203),
+    else => @compileError("WHvX64RegisterSfmask unsupported for target architecture"),
+};
+pub const WHvX64RegisterSpecCtrl = switch (arch) {
+    .x86_64 => @as(i32, 8324),
+    else => @compileError("WHvX64RegisterSpecCtrl unsupported for target architecture"),
+};
+pub const WHvX64RegisterSs = switch (arch) {
+    .x86_64 => @as(i32, 20),
+    else => @compileError("WHvX64RegisterSs unsupported for target architecture"),
+};
+pub const WHvX64RegisterSsp = switch (arch) {
+    .x86_64 => @as(i32, 8334),
+    else => @compileError("WHvX64RegisterSsp unsupported for target architecture"),
+};
+pub const WHvX64RegisterStar = switch (arch) {
+    .x86_64 => @as(i32, 8200),
+    else => @compileError("WHvX64RegisterStar unsupported for target architecture"),
+};
+pub const WHvX64RegisterSysenterCs = switch (arch) {
+    .x86_64 => @as(i32, 8197),
+    else => @compileError("WHvX64RegisterSysenterCs unsupported for target architecture"),
+};
+pub const WHvX64RegisterSysenterEip = switch (arch) {
+    .x86_64 => @as(i32, 8198),
+    else => @compileError("WHvX64RegisterSysenterEip unsupported for target architecture"),
+};
+pub const WHvX64RegisterSysenterEsp = switch (arch) {
+    .x86_64 => @as(i32, 8199),
+    else => @compileError("WHvX64RegisterSysenterEsp unsupported for target architecture"),
+};
+pub const WHvX64RegisterTr = switch (arch) {
+    .x86_64 => @as(i32, 25),
+    else => @compileError("WHvX64RegisterTr unsupported for target architecture"),
+};
+pub const WHvX64RegisterTsc = switch (arch) {
+    .x86_64 => @as(i32, 8192),
+    else => @compileError("WHvX64RegisterTsc unsupported for target architecture"),
+};
+pub const WHvX64RegisterTscAdjust = switch (arch) {
+    .x86_64 => @as(i32, 8342),
+    else => @compileError("WHvX64RegisterTscAdjust unsupported for target architecture"),
+};
+pub const WHvX64RegisterTscAux = switch (arch) {
+    .x86_64 => @as(i32, 8315),
+    else => @compileError("WHvX64RegisterTscAux unsupported for target architecture"),
+};
+pub const WHvX64RegisterTscDeadline = switch (arch) {
+    .x86_64 => @as(i32, 8341),
+    else => @compileError("WHvX64RegisterTscDeadline unsupported for target architecture"),
+};
+pub const WHvX64RegisterTscVirtualOffset = switch (arch) {
+    .x86_64 => @as(i32, 8327),
+    else => @compileError("WHvX64RegisterTscVirtualOffset unsupported for target architecture"),
+};
+pub const WHvX64RegisterTsxCtrl = switch (arch) {
+    .x86_64 => @as(i32, 8328),
+    else => @compileError("WHvX64RegisterTsxCtrl unsupported for target architecture"),
+};
+pub const WHvX64RegisterUCet = switch (arch) {
+    .x86_64 => @as(i32, 8332),
+    else => @compileError("WHvX64RegisterUCet unsupported for target architecture"),
+};
+pub const WHvX64RegisterUmwaitControl = switch (arch) {
+    .x86_64 => @as(i32, 8344),
+    else => @compileError("WHvX64RegisterUmwaitControl unsupported for target architecture"),
+};
+pub const WHvX64RegisterVirtualCr0 = switch (arch) {
+    .x86_64 => @as(i32, 40),
+    else => @compileError("WHvX64RegisterVirtualCr0 unsupported for target architecture"),
+};
+pub const WHvX64RegisterVirtualCr3 = switch (arch) {
+    .x86_64 => @as(i32, 41),
+    else => @compileError("WHvX64RegisterVirtualCr3 unsupported for target architecture"),
+};
+pub const WHvX64RegisterVirtualCr4 = switch (arch) {
+    .x86_64 => @as(i32, 42),
+    else => @compileError("WHvX64RegisterVirtualCr4 unsupported for target architecture"),
+};
+pub const WHvX64RegisterVirtualCr8 = switch (arch) {
+    .x86_64 => @as(i32, 43),
+    else => @compileError("WHvX64RegisterVirtualCr8 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXCr0 = switch (arch) {
+    .x86_64 => @as(i32, 39),
+    else => @compileError("WHvX64RegisterXCr0 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXfd = switch (arch) {
+    .x86_64 => @as(i32, 8345),
+    else => @compileError("WHvX64RegisterXfd unsupported for target architecture"),
+};
+pub const WHvX64RegisterXfdErr = switch (arch) {
+    .x86_64 => @as(i32, 8346),
+    else => @compileError("WHvX64RegisterXfdErr unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm0 = switch (arch) {
+    .x86_64 => @as(i32, 4096),
+    else => @compileError("WHvX64RegisterXmm0 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm1 = switch (arch) {
+    .x86_64 => @as(i32, 4097),
+    else => @compileError("WHvX64RegisterXmm1 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm10 = switch (arch) {
+    .x86_64 => @as(i32, 4106),
+    else => @compileError("WHvX64RegisterXmm10 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm11 = switch (arch) {
+    .x86_64 => @as(i32, 4107),
+    else => @compileError("WHvX64RegisterXmm11 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm12 = switch (arch) {
+    .x86_64 => @as(i32, 4108),
+    else => @compileError("WHvX64RegisterXmm12 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm13 = switch (arch) {
+    .x86_64 => @as(i32, 4109),
+    else => @compileError("WHvX64RegisterXmm13 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm14 = switch (arch) {
+    .x86_64 => @as(i32, 4110),
+    else => @compileError("WHvX64RegisterXmm14 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm15 = switch (arch) {
+    .x86_64 => @as(i32, 4111),
+    else => @compileError("WHvX64RegisterXmm15 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm2 = switch (arch) {
+    .x86_64 => @as(i32, 4098),
+    else => @compileError("WHvX64RegisterXmm2 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm3 = switch (arch) {
+    .x86_64 => @as(i32, 4099),
+    else => @compileError("WHvX64RegisterXmm3 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm4 = switch (arch) {
+    .x86_64 => @as(i32, 4100),
+    else => @compileError("WHvX64RegisterXmm4 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm5 = switch (arch) {
+    .x86_64 => @as(i32, 4101),
+    else => @compileError("WHvX64RegisterXmm5 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm6 = switch (arch) {
+    .x86_64 => @as(i32, 4102),
+    else => @compileError("WHvX64RegisterXmm6 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm7 = switch (arch) {
+    .x86_64 => @as(i32, 4103),
+    else => @compileError("WHvX64RegisterXmm7 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm8 = switch (arch) {
+    .x86_64 => @as(i32, 4104),
+    else => @compileError("WHvX64RegisterXmm8 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmm9 = switch (arch) {
+    .x86_64 => @as(i32, 4105),
+    else => @compileError("WHvX64RegisterXmm9 unsupported for target architecture"),
+};
+pub const WHvX64RegisterXmmControlStatus = switch (arch) {
+    .x86_64 => @as(i32, 4121),
+    else => @compileError("WHvX64RegisterXmmControlStatus unsupported for target architecture"),
+};
+pub const WHvX64RegisterXss = switch (arch) {
+    .x86_64 => @as(i32, 8331),
+    else => @compileError("WHvX64RegisterXss unsupported for target architecture"),
+};
 pub const WIA_ACTION_EVENT: u32 = 2;
 pub const WIA_ADVANCED_PREVIEW: u32 = 0;
 pub const WIA_ALARM_BEEP1: u32 = 1;
@@ -763158,11 +769837,6 @@ pub const WIN_TRUST_SUBJTYPE_RAW_FILE: GUID = .{ .Data1 = 2510144592, .Data2 = 3
 pub const WIN_TRUST_SUBJTYPE_RAW_FILEEX: GUID = .{ .Data1 = 1866826000, .Data2 = 49905, .Data3 = 4559, .Data4 = .{ 138, 105, 0, 170, 0, 108, 55, 6 } };
 pub const WIN_UNDEFINED: i32 = 255;
 pub const WIN32: u32 = 100;
-pub const WIN32_MEMORY_NUMA_PERFORMANCE_ALL_TARGET_NODE: u32 = 4294967295;
-pub const WIN32_MEMORY_NUMA_PERFORMANCE_READ_BANDWIDTH: u32 = 2;
-pub const WIN32_MEMORY_NUMA_PERFORMANCE_READ_LATENCY: u32 = 1;
-pub const WIN32_MEMORY_NUMA_PERFORMANCE_WRITE_BANDWIDTH: u32 = 8;
-pub const WIN32_MEMORY_NUMA_PERFORMANCE_WRITE_LATENCY: u32 = 4;
 pub const Win32Error: i32 = 7;
 pub const WIN32K_ATOMIC_CHECK_FAILURE: u32 = 352;
 pub const WIN32K_CALLOUT_UNREGISTER_FAILED: u32 = 508;
@@ -763378,6 +770052,7 @@ pub const WinBuiltinAuthorizationAccessSid: i32 = 59;
 pub const WinBuiltinBackupOperatorsSid: i32 = 33;
 pub const WinBuiltinCertSvcDComAccessGroup: i32 = 78;
 pub const WinBuiltinCryptoOperatorsSid: i32 = 64;
+pub const WinBuiltinCUAUsersSid: i32 = 122;
 pub const WinBuiltinDCOMUsersSid: i32 = 61;
 pub const WinBuiltinDefaultSystemManagedGroupSid: i32 = 111;
 pub const WinBuiltinDeviceOwnersSid: i32 = 119;
@@ -764873,7 +771548,9 @@ pub const WLDP_HOST_ID_WSH: i32 = 3;
 pub const WLDP_HOST_INFORMATION_REVISION: u32 = 1;
 pub const WLDP_HOST_JAVASCRIPT: GUID = .{ .Data1 = 1445589205, .Data2 = 7370, .Data3 = 20461, .Data4 = .{ 161, 163, 54, 168, 193, 141, 116, 192 } };
 pub const WLDP_HOST_MAX: i32 = 2;
+pub const WLDP_HOST_MCPB: GUID = .{ .Data1 = 3742710837, .Data2 = 5134, .Data3 = 17476, .Data4 = .{ 171, 58, 131, 214, 185, 183, 193, 95 } };
 pub const WLDP_HOST_MSI: GUID = .{ .Data1 = 1649325585, .Data2 = 28286, .Data3 = 20204, .Data4 = .{ 155, 254, 240, 236, 219, 252, 243, 144 } };
+pub const WLDP_HOST_MSIX: GUID = .{ .Data1 = 3916333379, .Data2 = 43610, .Data3 = 17271, .Data4 = .{ 187, 84, 59, 130, 252, 77, 144, 231 } };
 pub const WLDP_HOST_OTHER: GUID = .{ .Data1 = 1651293891, .Data2 = 57850, .Data3 = 16935, .Data4 = .{ 152, 0, 237, 33, 2, 116, 207, 124 } };
 pub const WLDP_HOST_POWERSHELL: GUID = .{ .Data1 = 2392500860, .Data2 = 6539, .Data3 = 18553, .Data4 = .{ 174, 65, 165, 13, 71, 173, 100, 88 } };
 pub const WLDP_HOST_PYTHON: GUID = .{ .Data1 = 3218429935, .Data2 = 9288, .Data3 = 17132, .Data4 = .{ 129, 11, 13, 159, 9, 53, 45, 74 } };
@@ -765176,6 +771853,7 @@ pub const WM_DWMSENDICONICLIVEPREVIEWBITMAP: u32 = 806;
 pub const WM_DWMSENDICONICTHUMBNAIL: u32 = 803;
 pub const WM_DWMWINDOWMAXIMIZEDCHANGE: u32 = 801;
 pub const WM_ENABLE: u32 = 10;
+pub const WM_ENDINERTIA: u32 = 572;
 pub const WM_ENDSESSION: u32 = 22;
 pub const WM_ENTERIDLE: u32 = 289;
 pub const WM_ENTERMENULOOP: u32 = 529;
@@ -765384,6 +772062,7 @@ pub const WM_SIZE: u32 = 5;
 pub const WM_SIZECLIPBOARD: u32 = 779;
 pub const WM_SIZING: u32 = 532;
 pub const WM_SPOOLERSTATUS: u32 = 42;
+pub const WM_STOPINERTIA: u32 = 571;
 pub const WM_STYLECHANGED: u32 = 125;
 pub const WM_STYLECHANGING: u32 = 124;
 pub const WM_SYNCPAINT: u32 = 136;
@@ -768057,6 +774736,8 @@ pub const WRDS_CLIENTADDRESS_LENGTH: u32 = 30;
 pub const WRDS_CLIENTNAME_LENGTH: u32 = 20;
 pub const WRDS_CONNECTION_SETTING_LEVEL_1: i32 = 1;
 pub const WRDS_CONNECTION_SETTING_LEVEL_INVALID: i32 = 0;
+pub const WRDS_CREDENTIAL_SCENARIO_INTERACTIVE_LOGON: GUID = .{ .Data1 = 1976331526, .Data2 = 14920, .Data3 = 17313, .Data4 = .{ 188, 208, 203, 70, 235, 143, 154, 174 } };
+pub const WRDS_CREDENTIAL_SCENARIO_INTERACTIVE_UNLOCK: GUID = .{ .Data1 = 3021597134, .Data2 = 9677, .Data3 = 17596, .Data4 = .{ 141, 165, 111, 247, 94, 221, 30, 40 } };
 pub const WRDS_DEVICE_NAME_LENGTH: u32 = 19;
 pub const WRDS_DIRECTORY_LENGTH: u32 = 256;
 pub const WRDS_DOMAIN_LENGTH: u32 = 255;
@@ -770553,6 +777234,9 @@ pub const WU_E_DS_UNABLETOSTART: HRESULT = -2145091567;
 pub const WU_E_DS_UNEXPECTED: HRESULT = -2145087489;
 pub const WU_E_DS_UNKNOWNHANDLER: HRESULT = -2145091574;
 pub const WU_E_DS_UNKNOWNSERVICE: HRESULT = -2145091564;
+pub const WU_E_DS_UNKNOWNSERVICE_DELETEPENDING: HRESULT = -2145091541;
+pub const WU_E_DS_UNKNOWNSERVICE_NOTFOUND: HRESULT = -2145091542;
+pub const WU_E_DS_UNKNOWNSERVICE_REMOVED: HRESULT = -2145091540;
 pub const WU_E_DUPLICATE_ITEM: HRESULT = -2145124333;
 pub const WU_E_EE_CLUSTER_ERROR: HRESULT = -2145067001;
 pub const WU_E_EE_INVALID_ATTRIBUTEDATA: HRESULT = -2145067002;
@@ -770567,6 +777251,7 @@ pub const WU_E_EULAS_DECLINED: HRESULT = -2145124317;
 pub const WU_E_EXCLUSIVE_INSTALL_CONFLICT: HRESULT = -2145124327;
 pub const WU_E_EXTENDEDERROR_FAILED: HRESULT = -2145124257;
 pub const WU_E_EXTENDEDERROR_NOTSET: HRESULT = -2145124258;
+pub const WU_E_FEATURE_CONTAINMENT_NOT_ENABLED: HRESULT = -2145124249;
 pub const WU_E_FILETRUST_DUALSIGNATURE_ECC: HRESULT = -2145078526;
 pub const WU_E_FILETRUST_DUALSIGNATURE_RSA: HRESULT = -2145078527;
 pub const WU_E_FILETRUST_SHA2SIGNATURE_MISSING: HRESULT = -2145124255;
@@ -770832,7 +777517,6 @@ pub const WU_E_SIH_VERIFY_STAGE_PAYLOAD: HRESULT = -2145103612;
 pub const WU_E_SKIPPED_UPDATE_INSTALLATION: HRESULT = -2145079035;
 pub const WU_E_SLS_INVALID_REVISION: HRESULT = -2145078783;
 pub const WU_E_SOURCE_ABSENT: HRESULT = -2145124307;
-pub const WU_E_STANDBY_ACTIVITY_NOT_ALLOWED: HRESULT = -2145124249;
 pub const WU_E_SYSPREP_IN_PROGRESS: HRESULT = -2145124287;
 pub const WU_E_SYSTEM_UNSUPPORTED: HRESULT = -2145124266;
 pub const WU_E_TIME_OUT: HRESULT = -2145124319;
@@ -770855,6 +777539,8 @@ pub const WU_E_UH_CANREQUIREINPUT: HRESULT = -2145116150;
 pub const WU_E_UH_CUSTOMINSTALLER_INVALID_SIGNATURE: HRESULT = -2145116135;
 pub const WU_E_UH_DECRYPTFAILURE: HRESULT = -2145116132;
 pub const WU_E_UH_DOESNOTSUPPORTACTION: HRESULT = -2145116156;
+pub const WU_E_UH_DRV_INSTALL_REJECTED_REBOOT_LEVEL: HRESULT = -2145116119;
+pub const WU_E_UH_DRV_PREINSTALL_OPERATION_FAILED: HRESULT = -2145116120;
 pub const WU_E_UH_FALLBACKERROR: HRESULT = -2145116144;
 pub const WU_E_UH_FALLBACKTOSELFCONTAINED: HRESULT = -2145116148;
 pub const WU_E_UH_HANDLER_DISABLEDUNTILREBOOT: HRESULT = -2145116131;
@@ -770875,6 +777561,7 @@ pub const WU_E_UH_POSTREBOOTUNEXPECTEDSTATE: HRESULT = -2145116138;
 pub const WU_E_UH_REMOTEALREADYACTIVE: HRESULT = -2145116157;
 pub const WU_E_UH_REMOTEUNAVAILABLE: HRESULT = -2145116160;
 pub const WU_E_UH_RESERVICING_REQUIRED_BASELINE: HRESULT = -2145116122;
+pub const WU_E_UH_TIMEOUT: HRESULT = -2145116121;
 pub const WU_E_UH_TOOMANYDOWNLOADREQUESTS: HRESULT = -2145116143;
 pub const WU_E_UH_UA_SESSION_INFO_VERSION_NOT_SUPPORTED: HRESULT = -2145116123;
 pub const WU_E_UH_UNEXPECTED: HRESULT = -2145112065;
@@ -770892,6 +777579,7 @@ pub const WU_E_UNSUPPORTED_SEARCHSCOPE: HRESULT = -2145124283;
 pub const WU_E_UPDATE_MERGE_NOT_ALLOWED: HRESULT = -2145079036;
 pub const WU_E_UPDATE_NOT_APPROVED: HRESULT = -2145124254;
 pub const WU_E_UPDATE_NOT_PROCESSED: HRESULT = -2145124299;
+pub const WU_E_UPDATE_SESSIONDATA_CONFLICT: HRESULT = -2145124244;
 pub const WU_E_URL_TOO_LONG: HRESULT = -2145124313;
 pub const WU_E_USER_ACCESS_DISABLED: HRESULT = -2145124315;
 pub const WU_E_WINHTTP_INVALID_FILE: HRESULT = -2145124296;
@@ -771335,7 +778023,7 @@ pub const XAPO_FLAG_FRAMERATE_MUST_MATCH: u32 = 2;
 pub const XAPO_FLAG_INPLACE_REQUIRED: u32 = 32;
 pub const XAPO_FLAG_INPLACE_SUPPORTED: u32 = 16;
 pub const XAPO_MAX_CHANNELS: u32 = 64;
-pub const XAPO_MAX_FRAMERATE: u32 = 200000;
+pub const XAPO_MAX_FRAMERATE: u32 = 384000;
 pub const XAPO_MIN_CHANNELS: u32 = 1;
 pub const XAPO_MIN_FRAMERATE: u32 = 1000;
 pub const XAPO_REGISTRATION_STRING_LENGTH: u32 = 256;
@@ -771380,7 +778068,7 @@ pub const XAUDIO2_MAX_LOOP_COUNT: u32 = 254;
 pub const XAUDIO2_MAX_QUEUED_BUFFERS: u32 = 64;
 pub const XAUDIO2_MAX_RATIO_TIMES_RATE_XMA_MONO: u32 = 600000;
 pub const XAUDIO2_MAX_RATIO_TIMES_RATE_XMA_MULTICHANNEL: u32 = 300000;
-pub const XAUDIO2_MAX_SAMPLE_RATE: u32 = 200000;
+pub const XAUDIO2_MAX_SAMPLE_RATE: u32 = 384000;
 pub const XAUDIO2_MAX_VOLUME_LEVEL: f32 = 16777216;
 pub const XAUDIO2_MIN_SAMPLE_RATE: u32 = 1000;
 pub const XAUDIO2_NO_LOOP_REGION: u32 = 0;
@@ -772678,6 +779366,9 @@ pub const XST_UNADVSENT: u32 = 12;
 pub const XSTATE_ALIGN_BIT: u32 = 1;
 pub const XSTATE_AMX_TILE_CONFIG: u32 = 17;
 pub const XSTATE_AMX_TILE_DATA: u32 = 18;
+pub const XSTATE_ARM64_SME_TPIDR2: u32 = 4;
+pub const XSTATE_ARM64_SME_ZA: u32 = 3;
+pub const XSTATE_ARM64_SME_ZT: u32 = 5;
 pub const XSTATE_ARM64_SVE: u32 = 2;
 pub const XSTATE_AVX: u32 = 2;
 pub const XSTATE_AVX512_KMASK: u32 = 5;
