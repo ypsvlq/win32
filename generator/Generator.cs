@@ -8,7 +8,8 @@ namespace ZigWin32;
 
 class Generator {
     readonly MetadataReader reader;
-    readonly StreamWriter output;
+    readonly StreamWriter src;
+    readonly StreamWriter test;
     readonly ZigTypeDecoder zigTypeDecoder = new();
     readonly SortedDictionary<string, TypeDefinition> typedefs = [];
     readonly SortedDictionary<string, List<TypeWithAttributes>> types = [];
@@ -18,12 +19,13 @@ class Generator {
     readonly SortedDictionary<string, FieldDefinition> fields = [];
     readonly Dictionary<string, int> names = [];
 
-    public Generator(StreamWriter writer) {
+    public Generator(StreamWriter src_, StreamWriter test_) {
         var file = File.OpenRead("Windows.Win32.winmd");
         var pe = new PEReader(file);
         reader = pe.GetMetadataReader();
 
-        output = writer;
+        src = src_;
+        test = test_;
 
         foreach (var type in reader.TypeDefinitions.Select(reader.GetTypeDefinition)) {
             var name = reader.GetString(type.Name);
@@ -94,12 +96,12 @@ class Generator {
 
     void Indent() {
         for (int i = 0; i < indent; i++) {
-            output.Write("    ");
+            src.Write("    ");
         }
     }
 
     public void Generate() {
-        output.WriteLine("""
+        src.WriteLine("""
             // Copyright (c) Microsoft Corporation
             //
             // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -124,28 +126,37 @@ class Generator {
             const FlexibleArrayType = std.zig.c_translation.helpers.FlexibleArrayType;
             pub const GUID = std.os.windows.GUID;
             pub const L = std.unicode.utf8ToUtf16LeStringLiteral;
-            test {
-                @setEvalBranchQuota(1000000);
-                std.testing.refAllDecls(@This());
-            }
+            """);
+
+        test.WriteLine("""
+            const w = @import("win32.zig");
+            test "typedefs" {
             """);
 
         foreach (var (name, type) in typedefs) {
             if (name == "PSTR" || name == "PWSTR") continue;
             var value = reader.GetFieldDefinition(type.GetFields().First());
             var target = value.DecodeSignature(zigTypeDecoder, null);
-            output.WriteLine($"pub const {name} = {target};");
+            src.WriteLine($"pub const {name} = {target};");
+            test.WriteLine($"    _ = w.{name};");
         }
+
+        test.WriteLine("""
+            }
+            test "types" {
+            """);
 
         foreach (var (name, list) in types) {
             if (zigTypeDecoder.Rename.Contains(name)) {
                 foreach (var info in list) {
-                    output.Write($"pub const {zigTypeDecoder.GetName(reader, info.Type)} = ");
+                    var renamed = zigTypeDecoder.GetName(reader, info.Type);
+                    src.Write($"pub const {renamed} = ");
                     GenerateType(info);
-                    output.WriteLine(';');
+                    src.WriteLine(';');
+                    test.WriteLine($"    _ = w.{renamed};");
                 }
             } else if (list.Count > 1) {
-                output.WriteLine($"pub const {name} = switch (arch) {{");
+                src.WriteLine($"pub const {name} = switch (arch) {{");
                 indent++;
                 foreach (var info in list) {
                     var architecture = (Architecture)info.Attributes["SupportedArchitecture"].FixedArguments[0];
@@ -153,16 +164,16 @@ class Generator {
                     var prefix = "";
                     foreach (var flag in Enum.GetValues<Architecture>()) {
                         if (architecture.HasFlag(flag)) {
-                            output.Write($"{prefix}.{flag}");
+                            src.Write($"{prefix}.{flag}");
                             prefix = ", ";
                         }
                     }
-                    output.Write(" => ");
+                    src.Write(" => ");
                     GenerateType(info);
-                    output.WriteLine(",");
+                    src.WriteLine(",");
                 }
                 indent--;
-                output.WriteLine($$"""
+                src.WriteLine($$"""
                         else => @compileError("{{name}} unsupported for target architecture"),
                     };
                     """);
@@ -170,24 +181,31 @@ class Generator {
                 var info = list[0];
                 if (info.Attributes.TryGetValue("Guid", out var attribute)) {
                     if (info.Type.GetFields().Count == 0) {
-                        output.Write("pub const ");
-                        if (!name.Contains('_')) output.Write("CLSID_");
-                        output.WriteLine($"{name}: GUID = {ZigGuid(attribute.FixedArguments)};");
+                        src.Write("pub const ");
+                        if (!name.Contains('_')) src.Write("CLSID_");
+                        src.WriteLine($"{name}: GUID = {ZigGuid(attribute.FixedArguments)};");
                         continue;
                     }
                 }
-                output.Write($"pub const {name} = ");
+                src.Write($"pub const {name} = ");
                 GenerateType(info);
-                output.WriteLine(';');
+                src.WriteLine(';');
+                test.WriteLine($"    _ = w.{name};");
             }
         }
+
+        test.WriteLine("""
+            }
+            test "interfaces" {
+            """);
 
         foreach (var list in interfaces.Values) {
             foreach (var info in list) {
                 var self = zigTypeDecoder.GetName(reader, info.Type);
 
                 if (info.Attributes.TryGetValue("Guid", out var attribute)) {
-                    output.WriteLine($"pub const IID_{self}: GUID = {ZigGuid(attribute.FixedArguments)};");
+                    src.WriteLine($"pub const IID_{self}: GUID = {ZigGuid(attribute.FixedArguments)};");
+                    test.WriteLine($"    _ = w.IID_{self};");
                 }
 
                 switch (self) {
@@ -199,7 +217,7 @@ class Generator {
                         continue;
                 }
 
-                output.WriteLine($$"""
+                src.WriteLine($$"""
                     pub const {{self}} = extern struct {
                         lpVtbl: *const Vtbl,
                         pub const Vtbl = extern struct {
@@ -234,19 +252,19 @@ class Generator {
                         var name = ZigName(method.Name);
                         badNames.Add(name);
                         Indent();
-                        output.Write($"{name}");
+                        src.Write($"{name}");
                         if (overloads.TryGetValue(method.Name, out var count)) {
-                            output.Write($"_{count}");
+                            src.Write($"_{count}");
                             overloads[method.Name]++;
                         }
-                        output.Write($": *const fn (self: *{self}");
+                        src.Write($": *const fn (self: *{self}");
                         GenerateMethodSignature(method, CallingConvention.ThisCall, ", ");
-                        output.WriteLine(',');
+                        src.WriteLine(',');
                     }
                 }
                 indent--;
                 Indent();
-                output.WriteLine("};");
+                src.WriteLine("};");
 
                 overloads = overloads.Keys.ToDictionary(x => x, _ => 1);
 
@@ -259,9 +277,9 @@ class Generator {
                         }
 
                         Indent();
-                        output.Write($"pub fn {name}(self: *{self}");
+                        src.Write($"pub fn {name}(self: *{self}");
                         var signature = GenerateMethodSignature(method, 0, ", ", badNames);
-                        output.WriteLine(" {");
+                        src.WriteLine(" {");
                         indent++;
 
                         var returnType = signature.ReturnType;
@@ -272,39 +290,45 @@ class Generator {
 
                         Indent();
                         if (!primitive) {
-                            output.WriteLine($"var result: {returnType} = undefined;");
+                            src.WriteLine($"var result: {returnType} = undefined;");
                             Indent();
                         } else {
-                            output.Write("return ");
+                            src.Write("return ");
                         }
 
-                        output.Write($"self.lpVtbl.{name}(self");
-                        if (!primitive) output.Write(", &result");
+                        src.Write($"self.lpVtbl.{name}(self");
+                        if (!primitive) src.Write(", &result");
                         var parameters = method.GetParameters()
                             .Select(reader.GetParameter)
                             .Select(parameter => parameter.Name)
                             .Select(name => ZigName(name, badNames))
                             .Where(name => name.Length > 0);
                         foreach (var parameter in parameters) {
-                            output.Write($", {parameter}");
+                            src.Write($", {parameter}");
                         }
-                        output.WriteLine(");");
+                        src.WriteLine(");");
 
                         if (!primitive) {
                             Indent();
-                            output.WriteLine("return result;");
+                            src.WriteLine("return result;");
                         }
 
                         indent--;
                         Indent();
-                        output.WriteLine("}");
+                        src.WriteLine("}");
                     }
                 }
 
                 indent--;
-                output.WriteLine("};");
+                src.WriteLine("};");
+                test.WriteLine($"    _ = w.{self};");
             }
         }
+
+        test.WriteLine("""
+            }
+            test "methods" {
+            """);
 
         foreach (var (name, list) in methods) {
             switch (name) {
@@ -317,7 +341,7 @@ class Generator {
             if (missingDlls.Contains(list[0].Dll)) {
                 continue;
             } else if (list[0].Attributes.ContainsKey("SupportedArchitecture")) {
-                output.WriteLine($"pub const {name} = switch (arch) {{");
+                src.WriteLine($"pub const {name} = switch (arch) {{");
                 indent++;
                 foreach (var info in list) {
                     var architecture = (Architecture)info.Attributes["SupportedArchitecture"].FixedArguments[0];
@@ -325,47 +349,48 @@ class Generator {
                     var prefix = "";
                     foreach (var flag in Enum.GetValues<Architecture>()) {
                         if (architecture.HasFlag(flag)) {
-                            output.Write($"{prefix}.{flag}");
+                            src.Write($"{prefix}.{flag}");
                             prefix = ", ";
                         }
                     }
-                    output.Write(" => @extern(*const fn (");
+                    src.Write(" => @extern(*const fn (");
                     GenerateMethodSignature(info.Method, info.CallingConvention);
-                    output.WriteLine($", .{{ .name = \"{name}\", .library_name = \"{info.Dll}\" }}),");
+                    src.WriteLine($", .{{ .name = \"{name}\", .library_name = \"{info.Dll}\" }}),");
                 }
                 if (methodAliases32.TryGetValue(name, out var alias)) {
                     Indent();
-                    output.WriteLine($".x86, .thumb => {alias},");
+                    src.WriteLine($".x86, .thumb => {alias},");
                 }
                 indent--;
-                output.WriteLine($$"""
+                src.WriteLine($$"""
                         else => @compileError("{{name}} unsupported for target architecture"),
                     };
                     """);
             } else if (list.Count > 1) {
-                output.WriteLine($"pub const {name} = @compileError(\"{name} is defined in multiple DLLs\");");
+                src.WriteLine($"pub const {name} = @compileError(\"{name} is defined in multiple DLLs\");");
             } else {
                 var info = list[0];
                 if (info.Dll == "forceinline") {
                     Indent();
-                    output.Write($"pub fn {name}(");
+                    src.Write($"pub fn {name}(");
                     var signature = GenerateMethodSignature(info.Method, 0);
-                    output.WriteLine(" {");
+                    src.WriteLine(" {");
                     indent++;
                     var returnType = signature.ReturnType;
                     if (typedefs.TryGetValue(returnType.ToString(), out var typedef)) {
                         returnType = reader.GetFieldDefinition(typedef.GetFields().First()).DecodeSignature(zigTypeDecoder, null);
                     }
                     Indent();
-                    output.WriteLine($"return {returnType.FormatConstant((string)info.Attributes["Constant"].FixedArguments[0])};");
+                    src.WriteLine($"return {returnType.FormatConstant((string)info.Attributes["Constant"].FixedArguments[0])};");
                     indent--;
-                    output.WriteLine("}");
+                    src.WriteLine("}");
                 } else {
                     Indent();
-                    output.Write($"pub extern \"{info.Dll}\" fn {name}(");
+                    src.Write($"pub extern \"{info.Dll}\" fn {name}(");
                     GenerateMethodSignature(info.Method, info.CallingConvention);
-                    output.WriteLine(';');
+                    src.WriteLine(';');
                 }
+                test.WriteLine($"    _ = w.{name};");
             }
         }
 
@@ -440,38 +465,46 @@ class Generator {
             (constants[$"{name}{suffix}"] = [])[0] = (typeName, value);
         }
 
+        test.WriteLine("""
+            }
+            test "constants" {
+            """);
+
         foreach (var (name, list) in constants) {
-            output.Write($"pub const {name}");
+            src.Write($"pub const {name}");
             if (list.Count == 1) {
                 var (architecture, (type, value)) = list.Single();
                 if (architecture == 0) {
-                    if (type != "String") output.Write($": {type}");
-                    output.WriteLine($" = {value};");
+                    if (type != "String") src.Write($": {type}");
+                    src.WriteLine($" = {value};");
+                    test.WriteLine($"    _ = w.{name};");
                     continue;
                 }
             }
-            output.WriteLine(" = switch (arch) {");
+            src.WriteLine(" = switch (arch) {");
             foreach (var (architecture, (type, value)) in list) {
                 var prefix = "    ";
                 foreach (var flag in Enum.GetValues<Architecture>()) {
                     if (architecture.HasFlag(flag)) {
-                        output.Write($"{prefix}.{flag}");
+                        src.Write($"{prefix}.{flag}");
                         prefix = ", ";
                     }
                 }
-                output.WriteLine($" => @as({type}, {value}),");
+                src.WriteLine($" => @as({type}, {value}),");
             }
-            output.WriteLine($$"""
+            src.WriteLine($$"""
                     else => @compileError("{{name}} unsupported for target architecture"),
                 };
                 """);
         }
+
+        test.WriteLine("}");
     }
 
     void GenerateType(TypeWithAttributes info) {
         if (info.Attributes.TryGetValue("UnmanagedFunctionPointer", out var attribute)) {
             var method = reader.GetMethodDefinition(info.Type.GetMethods().Skip(1).First());
-            output.Write("?*const fn (");
+            src.Write("?*const fn (");
             GenerateMethodSignature(method, (CallingConvention)attribute.FixedArguments[0]);
             return;
         }
@@ -486,54 +519,54 @@ class Generator {
         var pack = info.Type.GetLayout().PackingSize;
         var align = pack == 0 ? "" : $" align({pack})";
 
-        output.Write($"extern {keyword} {{");
+        src.Write($"extern {keyword} {{");
         indent++;
 
         var fields = info.Type.GetFields().Select(reader.GetFieldDefinition);
         foreach (var field in fields) {
-            output.WriteLine();
+            src.WriteLine();
             Indent();
             var fieldName = ZigName(field.Name);
             var fieldType = field.DecodeSignature(zigTypeDecoder, null);
             var fieldAttributes = new Attributes(reader, field);
             if (fieldAttributes.ContainsKey("FlexibleArray")) {
                 if (nested.TryGetValue(fieldType.Name, out var child)) {
-                    output.Write($"pub const {fieldType.Name} = ");
+                    src.Write($"pub const {fieldType.Name} = ");
                     GenerateType(new TypeWithAttributes(reader, child));
-                    output.WriteLine(';');
+                    src.WriteLine(';');
                     Indent();
                 }
                 if (fieldType.Name == fieldName) {
                     fieldType.Name = $"@This().{fieldType.Name}";
                 }
                 fieldType.Shape = new();
-                output.WriteLine($"pub fn {fieldName}(self: anytype) FlexibleArrayType(@TypeOf(self), {fieldType}) {{");
+                src.WriteLine($"pub fn {fieldName}(self: anytype) FlexibleArrayType(@TypeOf(self), {fieldType}) {{");
                 indent++;
                 Indent();
-                output.WriteLine("const Intermediate = FlexibleArrayType(@TypeOf(self), u8);");
+                src.WriteLine("const Intermediate = FlexibleArrayType(@TypeOf(self), u8);");
                 Indent();
-                output.WriteLine($"return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf({fieldType})));");
+                src.WriteLine($"return @ptrCast(@alignCast(@as(Intermediate, @ptrCast(self)) + @sizeOf(@TypeOf(self.*)) + @sizeOf(@TypeOf(self.*)) % @alignOf({fieldType})));");
                 indent--;
                 Indent();
-                output.Write('}');
+                src.Write('}');
             } else {
-                output.Write($"{fieldName}: ");
+                src.Write($"{fieldName}: ");
                 if (nested.TryGetValue(fieldType.Name, out var child)) {
                     GenerateType(new TypeWithAttributes(reader, child));
                 } else {
                     fieldType.Const = fieldAttributes.ContainsKey("Const");
-                    output.Write(fieldType);
+                    src.Write(fieldType);
                 }
-                output.Write($"{align},");
+                src.Write($"{align},");
             }
         }
 
         indent--;
         if (fields.Any()) {
-            output.WriteLine();
+            src.WriteLine();
             Indent();
         }
-        output.Write('}');
+        src.Write('}');
     }
 
     MethodSignature<ZigType> GenerateMethodSignature(MethodDefinition method, CallingConvention callingConvention, string prefix = "", HashSet<string>? badNames = null) {
@@ -550,32 +583,32 @@ class Generator {
                 returnType = reader.GetFieldDefinition(typedef.GetFields().First()).DecodeSignature(zigTypeDecoder, null);
             }
             if (!returnType.IsPrimitive()) {
-                output.Write($", result: *{returnType}");
+                src.Write($", result: *{returnType}");
                 returnTypeName = "void";
             }
         }
 
         foreach (var (name, parameter, type) in names.Zip(parameters, signature.ParameterTypes)) {
             type.Const = new Attributes(reader, parameter).ContainsKey("Const");
-            output.Write(prefix);
-            if (hasNames) output.Write($"{name}: ");
-            output.Write(type);
+            src.Write(prefix);
+            if (hasNames) src.Write($"{name}: ");
+            src.Write(type);
             prefix = ", ";
         }
         if (signature.Header.CallingConvention == SignatureCallingConvention.VarArgs) {
-            output.Write(", ...");
+            src.Write(", ...");
         }
-        output.Write(") ");
+        src.Write(") ");
 
         if (callingConvention != 0) {
             var callconv = callingConvention switch {
                 CallingConvention.Winapi or CallingConvention.ThisCall => "winapi",
                 CallingConvention.Cdecl => "c",
             };
-            output.Write($"callconv(.{callconv}) ");
+            src.Write($"callconv(.{callconv}) ");
         }
 
-        output.Write(returnTypeName);
+        src.Write(returnTypeName);
 
         return signature;
     }
@@ -648,6 +681,7 @@ class Generator {
         "api-ms-win-core-memory-l1-1-9",
         "api-ms-win-core-psm-appnotify-l1-1-1",
         "api-ms-win-dx-d3dkmt-l1-1-0",
+        "api-ms-win-gaming-experience-l1-1-0",
         "api-ms-win-mm-misc-l1-1-1",
         "api-ms-win-service-core-l1-1-5",
         "api-ms-win-wsl-api-l1-1-0",

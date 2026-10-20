@@ -22,10 +22,6 @@ const arch = @import("builtin").cpu.arch;
 const FlexibleArrayType = std.zig.c_translation.helpers.FlexibleArrayType;
 pub const GUID = std.os.windows.GUID;
 pub const L = std.unicode.utf8ToUtf16LeStringLiteral;
-test {
-    @setEvalBranchQuota(1000000);
-    std.testing.refAllDecls(@This());
-}
 pub const _ADAPTER_OBJECT = isize;
 pub const _HMAPPER = isize;
 pub const _NDR_PROC_CONTEXT = isize;
@@ -594438,7 +594434,6 @@ pub extern "kernel32" fn CancelThreadpoolIo(pio: PTP_IO) callconv(.winapi) void;
 pub extern "kernel32" fn CancelTimerQueueTimer(TimerQueue: HANDLE, Timer: HANDLE) callconv(.winapi) BOOL;
 pub extern "kernel32" fn CancelWaitableTimer(hTimer: HANDLE) callconv(.winapi) BOOL;
 pub extern "clusapi" fn CanResourceBeDependent(hResource: HRESOURCE, hResourceDependent: HRESOURCE) callconv(.winapi) BOOL;
-pub extern "api-ms-win-gaming-experience-l1-1-0" fn CanSetGamingFullScreenExperience() callconv(.winapi) BOOL;
 pub extern "powrprof" fn CanUserWritePwrScheme() callconv(.winapi) BOOLEAN;
 pub extern "dxva2" fn CapabilitiesRequestAndCapabilitiesReply(hMonitor: HANDLE, pszASCIICapabilitiesString: [*c]u8, dwCapabilitiesStringLengthInCharacters: u32) callconv(.winapi) i32;
 pub extern "avicap32" fn capCreateCaptureWindowA(lpszWindowName: [*c]const u8, dwStyle: u32, x: i32, y: i32, nWidth: i32, nHeight: i32, hwndParent: HWND, nID: i32) callconv(.winapi) HWND;
@@ -601130,8 +601125,6 @@ pub extern "wininet" fn IsDomainLegalCookieDomainW(pchDomain: [*c]const u16, pch
 pub extern "kernel32" fn IsEnclaveTypeSupported(flEnclaveType: u32) callconv(.winapi) BOOL;
 pub extern "api-ms-win-core-winrt-error-l1-1-1" fn IsErrorPropagationEnabled() callconv(.winapi) BOOL;
 pub extern "clusapi" fn IsFileOnClusterSharedVolume(lpszPathName: [*c]const u16, pbFileIsOnSharedVolume: [*c]BOOL) callconv(.winapi) u32;
-pub extern "api-ms-win-gaming-experience-l1-1-0" fn IsGamingFullScreenExperienceActive() callconv(.winapi) BOOL;
-pub extern "api-ms-win-gaming-experience-l1-1-0" fn IsGamingFullScreenExperienceSupported() callconv(.winapi) BOOL;
 pub extern "user32" fn IsGUIThread(bConvert: BOOL) callconv(.winapi) BOOL;
 pub extern "wininet" fn IsHostInProxyBypassList(tScheme: i32, lpszHost: [*c]const u8, cchHost: u32) callconv(.winapi) BOOL;
 pub extern "user32" fn IsHungAppWindow(hwnd: HWND) callconv(.winapi) BOOL;
@@ -604855,7 +604848,6 @@ pub extern "clfsw32" fn RegisterForLogWriteNotification(hLog: HANDLE, cbThreshol
 pub extern "urlmon" fn RegisterFormatEnumerator(pBC: [*c]IBindCtx, pEFetc: [*c]IEnumFORMATETC, reserved: u32) callconv(.winapi) HRESULT;
 pub extern "winspool" fn RegisterForPrintAsyncNotifications(pszName: [*c]const u16, pNotificationType: [*c]GUID, eUserFilter: i32, eConversationStyle: i32, pCallback: [*c]IPrintAsyncNotifyCallback, phNotify: [*c]HANDLE) callconv(.winapi) HRESULT;
 pub extern "user32" fn RegisterForTooltipDismissNotification(hWnd: HWND, tdFlags: i32) callconv(.winapi) BOOL;
-pub extern "api-ms-win-gaming-experience-l1-1-0" fn RegisterGamingFullScreenExperienceChangeNotification(routine: PGAMING_FULL_SCREEN_EXPERIENCE_CHANGE_ROUTINE, context: ?*anyopaque, registration: [*c]GAMING_FULL_SCREEN_EXPERIENCE_REGISTRATION) callconv(.winapi) HRESULT;
 pub extern "userenv" fn RegisterGPNotification(hEvent: HANDLE, bMachine: BOOL) callconv(.winapi) BOOL;
 pub extern "user32" fn RegisterHotKey(hWnd: HWND, id: i32, fsModifiers: u32, vk: u32) callconv(.winapi) BOOL;
 pub extern "iphlpapi" fn RegisterInterfaceTimestampConfigChange(Callback: PINTERFACE_TIMESTAMP_CONFIG_CHANGE_CALLBACK, CallerContext: ?*anyopaque, NotificationHandle: [*c]HIFTIMESTAMPCHANGE) callconv(.winapi) u32;
@@ -606142,7 +606134,6 @@ pub extern "user32" fn SetFocus(hWnd: HWND) callconv(.winapi) HWND;
 pub extern "user32" fn SetForegroundWindow(hWnd: HWND) callconv(.winapi) BOOL;
 pub extern "winspool" fn SetFormA(hPrinter: PRINTER_HANDLE, pFormName: [*c]const u8, Level: u32, pForm: [*c]u8) callconv(.winapi) BOOL;
 pub extern "winspool" fn SetFormW(hPrinter: PRINTER_HANDLE, pFormName: [*c]const u16, Level: u32, pForm: [*c]u8) callconv(.winapi) BOOL;
-pub extern "api-ms-win-gaming-experience-l1-1-0" fn SetGamingFullScreenExperience(active: BOOL) callconv(.winapi) HRESULT;
 pub extern "user32" fn SetGestureConfig(hwnd: HWND, dwReserved: u32, cIDs: u32, pGestureConfig: [*c]GESTURECONFIG, cbSize: u32) callconv(.winapi) BOOL;
 pub extern "gdi32" fn SetGraphicsMode(hdc: HDC, iMode: i32) callconv(.winapi) i32;
 pub extern "clusapi" fn SetGroupDependencyExpression(hGroup: HGROUP, lpszDependencyExpression: [*c]const u16) callconv(.winapi) u32;
@@ -608354,7 +608345,6 @@ pub extern "mscms" fn UnregisterCMMW(pMachineName: [*c]const u16, cmmID: u32) ca
 pub extern "kernel32" fn UnregisterConsoleIME() callconv(.winapi) BOOL;
 pub extern "user32" fn UnregisterDeviceNotification(Handle: HDEVNOTIFY) callconv(.winapi) BOOL;
 pub extern "winspool" fn UnRegisterForPrintAsyncNotifications(HANDLE) callconv(.winapi) HRESULT;
-pub extern "api-ms-win-gaming-experience-l1-1-0" fn UnregisterGamingFullScreenExperienceChangeNotification(registration: GAMING_FULL_SCREEN_EXPERIENCE_REGISTRATION) callconv(.winapi) void;
 pub extern "userenv" fn UnregisterGPNotification(hEvent: HANDLE) callconv(.winapi) BOOL;
 pub extern "user32" fn UnregisterHotKey(hWnd: HWND, id: i32) callconv(.winapi) BOOL;
 pub extern "iphlpapi" fn UnregisterInterfaceTimestampConfigChange(NotificationHandle: HIFTIMESTAMPCHANGE) callconv(.winapi) void;
